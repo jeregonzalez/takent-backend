@@ -1,16 +1,19 @@
-class InternalServerError(Exception):
+from werkzeug.exceptions import HTTPException
+
+
+class InternalServerError(HTTPException):
     pass
 
 
-class SchemaValidationError(Exception):
+class SchemaValidationError(HTTPException):
     pass
 
 
-class AccountAlreadyExistsError(Exception):
+class AccountAlreadyExistsError(HTTPException):
     pass
 
 
-class UnauthorizedError(Exception):
+class UnauthorizedError(HTTPException):
     pass
 
 

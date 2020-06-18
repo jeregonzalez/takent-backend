@@ -9,7 +9,6 @@ class User(db.Document):
     name = db.StringField(required=True)
     surname = db.StringField(required=True)
     dni = db.IntField(required=True)
-    birth_date = db.DateTimeField()
 
     def hash_password(self):
         self.password = generate_password_hash(self.password).decode('utf-8')
