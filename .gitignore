@@ -1,0 +1,10 @@
+# IDEs
+/.idea
+
+# Caches
+*.pyc
+*.pyo
+
+# Builds
+build
+dist
