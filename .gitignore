@@ -8,3 +8,9 @@
 # Builds
 build
 dist
+
+# Logs
+/logfile.log
+
+# Data files
+/temp_data

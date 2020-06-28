@@ -1,0 +1,24 @@
+data = {
+    'permission': [
+        {'name': 'admin', 'description': 'Permissions to do anything'},
+        {'name': 'member', 'description': 'Permissions to only query data'}
+    ],
+    'role': [
+        {'name': 'admin', 'description': 'Permissions to do anything', 'permissions': ['admin']},
+        {'name': 'member', 'description': 'Permissions to only query data', 'permissions': ['member']}
+    ],
+    'education_level': [
+        {'name': 'College'},
+        {'name': 'Degree'},
+        {'name': 'Postgraduate'},
+        {'name': 'Master'},
+        {'name': 'Tertiary'}
+    ],
+    'language_level': [
+        {'name': 'Basic'},
+        {'name': 'Limited basic'},
+        {'name': 'Basic professional'},
+        {'name': 'Complete professional'},
+        {'name': 'Native or bilingual'}
+    ]
+}
