@@ -5,7 +5,7 @@ from flask_jwt_extended import create_access_token
 from flask_restful import Resource
 from mongoengine import FieldDoesNotExist, NotUniqueError, DoesNotExist
 
-from database.models import User
+from database.models.users import User
 from resources.errors import SchemaValidationError, AccountAlreadyExistsError, InternalServerError, UnauthorizedError
 
 

@@ -11,6 +11,9 @@ flask-mongoengine = "*"
 flask-bcrypt = "*"
 flask-restful = "*"
 flask-jwt-extended = "*"
+requests = "*"
+pyyaml = "*"
+pandas = "*"
 
 [requires]
 python_version = "3.8"
