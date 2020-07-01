@@ -1,4 +1,4 @@
-from resources.apis.auth import SignUpApi, LoginApi
+from resources.apis.auth import SignUpApi, LoginApi, SignUpUser, SignUpCommonUser, SignUpEnterpriseUser
 from resources.apis.mongo import MongoManagerApi
 
 

@@ -5,7 +5,8 @@ from flask_jwt_extended import create_access_token
 from flask_restful import Resource
 from mongoengine import FieldDoesNotExist, NotUniqueError, DoesNotExist
 
-from database.models.users import User
+from database.models.enterprise import Enterprise
+from database.models.users import User, CommonUser, EnterpriseUser
 from resources.errors import SchemaValidationError, AccountAlreadyExistsError, InternalServerError, UnauthorizedError
 
 
@@ -51,8 +52,40 @@ class SignUpUser(Resource):
             body = request.get_json()
             enterprise = Enterprise(**body)
             enterprise.save()
-            return {'id': str(enterprise.id)} , 200
+            return {'id': str(enterprise.id)}, 200
         
+        except FieldDoesNotExist:
+            raise SchemaValidationError
+        except NotUniqueError:
+            raise AccountAlreadyExistsError
+        except Exception:
+            raise InternalServerError
+
+
+class SignUpCommonUser(Resource):
+    def post(self):
+        try:
+            body = request.get_json()
+            common_user = CommonUser(**body)
+            common_user.save()
+            return {'id': str(common_user.id)}, 200
+
+        except FieldDoesNotExist:
+            raise SchemaValidationError
+        except NotUniqueError:
+            raise AccountAlreadyExistsError
+        except Exception:
+            raise InternalServerError
+
+
+class SignUpEnterpriseUser(Resource):
+    def post(self):
+        try:
+            body = request.get_json()
+            user_enterprise = EnterpriseUser(**body)
+            user_enterprise.save()
+            return {'id': str(user_enterprise.id)}, 200
+
         except FieldDoesNotExist:
             raise SchemaValidationError
         except NotUniqueError:
