@@ -49,7 +49,6 @@ def _get(api):
     params = api_options.get('params')
     params['formato'] = 'csv'
     params['max'] = '5000'
-
     url = api_path + '?{}'.format('&'.join(['{}={}'.format(key, value) for key, value in params.items()]))
     logging.info('GET {}'.format(url))
     dataframe = pd.read_csv(url)
