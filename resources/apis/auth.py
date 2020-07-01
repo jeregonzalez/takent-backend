@@ -42,3 +42,20 @@ class LoginApi(Resource):
             raise UnauthorizedError
         except Exception:
             raise InternalServerError
+
+    
+class SignUpUser(Resource):
+
+    def post(self):
+        try:
+            body = request.get_json()
+            enterprise = Enterprise(**body)
+            enterprise.save()
+            return {'id': str(enterprise.id)} , 200
+        
+        except FieldDoesNotExist:
+            raise SchemaValidationError
+        except NotUniqueError:
+            raise AccountAlreadyExistsError
+        except Exception:
+            raise InternalServerError
