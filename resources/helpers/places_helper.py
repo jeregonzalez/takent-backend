@@ -2,6 +2,9 @@ import logging
 import os
 
 import pandas as pd
+from flask_restful import abort
+
+from resources.helpers.log_helper import LOGGER
 
 ENDPOINT = 'https://apis.datos.gob.ar'
 FILE_BASE_PATH = './temp_data'
@@ -36,8 +39,8 @@ API_OPTIONS = {
 
 def _get(api):
     if not API_OPTIONS.get(api):
-        logging.error('{} is not defined'.format(api))
-        return
+        LOGGER.error('{} is not defined'.format(api))
+        abort(500)
     api_options = API_OPTIONS.get(api)
 
     file_path = api_options.get('file_path')
