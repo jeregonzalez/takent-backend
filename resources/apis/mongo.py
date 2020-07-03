@@ -1,5 +1,3 @@
-import logging
-
 from flask_restful import Resource
 
 from database.initial_values import data
@@ -8,27 +6,24 @@ from database.models.roles import Permission, Role
 from resources.helpers import places_helper
 
 
-class MongoManagerApi(Resource):
+class MongoApi(Resource):
     def get(self):
-        try:
-            # Init permissions
-            init_permissions(data.get('permission'))
+        # Init permissions
+        init_permissions(data.get('permission'))
 
-            # Init roles
-            init_roles(data.get('role'))
+        # Init roles
+        init_roles(data.get('role'))
 
-            # Init Countries, Provinces, Cities
-            init_countries_provinces_cities()
+        # Init Countries, Provinces, Cities
+        init_countries_provinces_cities()
 
-            # Init education levels
-            init_education_levels(data.get('education_level'))
+        # Init education levels
+        init_education_levels(data.get('education_level'))
 
-            # Init language levels
-            init_language_levels(data.get('language_level'))
+        # Init language levels
+        init_language_levels(data.get('language_level'))
 
-            return {'code': 0, 'message': 'Database initialized correctly'}, 200
-        except Exception as e:
-            print(e)
+        return {'message': 'Database initialized correctly'}, 200
 
 
 def init_permissions(permissions):
@@ -65,7 +60,8 @@ def init_countries_provinces_cities():
     for city in places_helper.get_cities():
         new_city = City(**city)
         new_city.save()
-        argentina.provinces.filter(code=city.get('province_id')).first().cities.append(new_city)
+        province = list(filter(lambda obj: obj.code == city.get('province_id'), argentina.provinces))[0]
+        province.cities.append(new_city)
     argentina.save()
 
 
