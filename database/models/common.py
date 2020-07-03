@@ -2,21 +2,21 @@ from database.db import db
 
 
 class City(db.Document):
-    code = db.IntField(unique=True)
+    code = db.IntField(primary_key=True)
     name = db.StringField(required=True)
     province_id = db.IntField(required=True)
 
 
 class Province(db.EmbeddedDocument):
-    code = db.IntField(unique=True)
+    code = db.IntField(primary_key=True)
     name = db.StringField(required=True)
     cities = db.ListField(db.ReferenceField(City))
 
 
 class Country(db.Document):
-    code = db.IntField(unique=True)
+    code = db.IntField(primary_key=True)
     name = db.StringField(required=True)
-    provinces = db.EmbeddedDocumentListField(Province)
+    provinces = db.SortedListField(db.EmbeddedDocumentField(Province), ordering='_id')
 
 
 class Address(db.EmbeddedDocument):
@@ -30,7 +30,7 @@ class Address(db.EmbeddedDocument):
 
 
 class EducationLevel(db.Document):
-    name = db.StringField(unique=True, required=True)
+    name = db.StringField(required=True)
 
 
 class Education(db.EmbeddedDocument):
