@@ -1,8 +1,11 @@
-from resources.apis.auth import SignUpApi, LoginApi, SignUpUser, SignUpCommonUser, SignUpEnterpriseUser
-from resources.apis.mongo import MongoManagerApi
+from resources.apis.mongo import MongoApi
+from resources.apis.places import CountriesApi, ProvincesApi, CitiesApi
+from resources.apis.users import SignUpApi
 
 
 def initialize_routes(api):
-    api.add_resource(SignUpUser, '/api/v1/authentication/signup')
-    api.add_resource(LoginApi, '/api/v1/authentication/login')
-    api.add_resource(MongoManagerApi, '/api/v1/init/mongodb')
+    api.add_resource(MongoApi, '/api/v1/init/mongodb')
+    api.add_resource(CountriesApi, '/api/v1/countries')
+    api.add_resource(ProvincesApi, '/api/v1/provinces')
+    api.add_resource(CitiesApi, '/api/v1/cities/<int:province_id>')
+    api.add_resource(SignUpApi, '/api/v1/signup/<user_type>')

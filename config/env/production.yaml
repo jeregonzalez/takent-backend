@@ -1,0 +1,12 @@
+# Flask
+SECRET_KEY: "\x18k\xce\xf8\xc0\xb6\xd2e\x0e\xf9\xfb\x88N@\x0c\xa3\xb5\xd4\xc7\x02\x80c(\x87"
+
+# Mongo DB
+MONGODB_DB: "takent"
+MONGODB_HOST: "localhost"
+MONGODB_PORT: 27017
+MONGODB_USERNAME: "takent-frontend"
+MONGODB_PASSWORD: "takent123"
+
+# JWT Secret Key
+JWT_SECRET_KEY: "t1NP63m4wnBg6nyHYKfmc2TpCOGI4nss"
