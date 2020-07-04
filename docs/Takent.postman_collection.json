@@ -18,15 +18,11 @@
 					"file": {}
 				},
 				"url": {
-					"raw": "http://localhost:5000/api/v1/init/mongodb",
-					"protocol": "http",
+					"raw": "{{host}}/init/mongodb",
 					"host": [
-						"localhost"
+						"{{host}}"
 					],
-					"port": "5000",
 					"path": [
-						"api",
-						"v1",
 						"init",
 						"mongodb"
 					]
@@ -46,15 +42,11 @@
 					}
 				],
 				"url": {
-					"raw": "http://localhost:5000/api/v1/countries",
-					"protocol": "http",
+					"raw": "{{host}}/countries",
 					"host": [
-						"localhost"
+						"{{host}}"
 					],
-					"port": "5000",
 					"path": [
-						"api",
-						"v1",
 						"countries"
 					]
 				}
@@ -73,15 +65,11 @@
 					}
 				],
 				"url": {
-					"raw": "http://localhost:5000/api/v1/provinces",
-					"protocol": "http",
+					"raw": "{{host}}/provinces",
 					"host": [
-						"localhost"
+						"{{host}}"
 					],
-					"port": "5000",
 					"path": [
-						"api",
-						"v1",
 						"provinces"
 					]
 				}
@@ -100,15 +88,11 @@
 					}
 				],
 				"url": {
-					"raw": "http://localhost:5000/api/v1/cities/70",
-					"protocol": "http",
+					"raw": "{{host}}/cities/70",
 					"host": [
-						"localhost"
+						"{{host}}"
 					],
-					"port": "5000",
 					"path": [
-						"api",
-						"v1",
 						"cities",
 						"70"
 					]
@@ -132,15 +116,11 @@
 					"raw": "{\n    \"account\": \"jereegonzalez@gmail.com\",\n    \"password\": \"pass123\",\n    \"name\": \"Jeremias\",\n    \"surname\": \"Gonzalez\"\n}"
 				},
 				"url": {
-					"raw": "http://localhost:5000/api/v1/signup/common",
-					"protocol": "http",
+					"raw": "{{host}}/signup/common",
 					"host": [
-						"localhost"
+						"{{host}}"
 					],
-					"port": "5000",
 					"path": [
-						"api",
-						"v1",
 						"signup",
 						"common"
 					]
@@ -164,15 +144,11 @@
 					"raw": "{\n    \"account\": \"jereegonzalez@gmail.com\",\n    \"password\": \"pass123\",\n    \"name\": \"Jeremias\",\n    \"surname\": \"Gonzalez\"\n}"
 				},
 				"url": {
-					"raw": "http://localhost:5000/api/v1/signup/enterprise",
-					"protocol": "http",
+					"raw": "{{host}}/signup/enterprise",
 					"host": [
-						"localhost"
+						"{{host}}"
 					],
-					"port": "5000",
 					"path": [
-						"api",
-						"v1",
 						"signup",
 						"enterprise"
 					]
