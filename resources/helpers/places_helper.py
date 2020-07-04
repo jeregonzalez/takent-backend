@@ -56,6 +56,8 @@ def _get(api):
     logging.info('GET {}'.format(url))
     dataframe = pd.read_csv(url)
     dataframe = dataframe.rename(columns=api_options.get('columns_map'))
+    if not os.path.exists(FILE_BASE_PATH):
+        os.makedirs(FILE_BASE_PATH)
     dataframe.to_csv(file_path, index=False)
     return dataframe.to_dict(orient='records')
 
