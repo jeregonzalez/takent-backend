@@ -23,7 +23,7 @@ class MongoApi(Resource):
         # Init language levels
         init_language_levels(data.get('language_level'))
 
-        return {'message': 'Database initialized correctly'}, 200
+        return {'message': 'Success'}, 200
 
 
 def init_permissions(permissions):
