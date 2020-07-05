@@ -3,6 +3,7 @@ from database.models.common import Address, State
 from database.models.users import EnterpriseUser
 
 
+# TODO Investigar como guardar imagenes en la base de datos
 class Enterprise(db.Document):
     fantasy_name = db.StringField(unique=True, required=True)
     business_name = db.StringField()

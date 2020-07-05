@@ -6,6 +6,7 @@ from .common import Address, Education, Experience, Skill, UserLanguage
 from .roles import Role
 
 
+# TODO Agregar address como campo requerido
 class User(db.Document):
     account = db.EmailField(primary_key=True)
     password = db.StringField(required=True, min_length=6)
@@ -25,7 +26,6 @@ class User(db.Document):
 class CommonUser(User):
     address = db.EmbeddedDocumentField(Address)
     curriculum = db.FileField()
-    birth_date = db.DateTimeField()
     profile_photo = db.FileField()
     description = db.StringField()
     education = db.EmbeddedDocumentListField(Education)

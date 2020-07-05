@@ -10,12 +10,14 @@ formatters:
     datefmt: '%d-%m-%Y %H:%M:%S'
 
 handlers:
+  # Logger para consola
   console:
     class: logging.StreamHandler
     level: DEBUG
     formatter: standard
     stream: ext://flask.logging.wsgi_errors_stream
 
+  # Logger para archivo
   file_handler:
     class: logging.FileHandler
     level: DEBUG
