@@ -11,7 +11,7 @@ class AccountAlreadyExistsError(HTTPException):
 
 errors = {
     'SchemaValidationError': {
-        'message': 'Request fields are not correct',
+        'message': 'Request is missing required fields',
         'status': 400
     },
     'AccountAlreadyExistsError': {
