@@ -37,7 +37,13 @@
 				"header": [
 					{
 						"key": "Content-Type",
-						"value": "application/json",
+						"value": "text/csv",
+						"type": "text",
+						"disabled": true
+					},
+					{
+						"key": "Accept",
+						"value": "text/csv",
 						"type": "text"
 					}
 				],
@@ -88,13 +94,13 @@
 					}
 				],
 				"url": {
-					"raw": "{{host}}/cities/70",
+					"raw": "{{host}}/cities/6",
 					"host": [
 						"{{host}}"
 					],
 					"path": [
 						"cities",
-						"70"
+						"6"
 					]
 				}
 			},
@@ -151,6 +157,74 @@
 					"path": [
 						"signup",
 						"enterprise"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get user",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{host}}/user/common",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"user",
+						"common"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update user",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"skill\": [\n        {\n            \"name\": \"tongas\",\n            \"description\": \"culiado\"\n        }\n    ]\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{host}}/user/common/jereegonzalez@gmail.com",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"user",
+						"common",
+						"jereegonzalez@gmail.com"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete user",
+			"protocolProfileBehavior": {
+				"disabledSystemHeaders": {}
+			},
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{host}}/user/common/jereegonzalez@gmail.com",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"user",
+						"common",
+						"jereegonzalez@gmail.com"
 					]
 				}
 			},

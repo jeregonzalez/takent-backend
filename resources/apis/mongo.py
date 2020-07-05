@@ -8,6 +8,11 @@ from resources.helpers import places_helper
 
 class MongoApi(Resource):
     def get(self):
+        """
+        Metodo utilizado para iniciar la base de datos desde cero, para evitar errores ejecutar db.dropDatabase()
+        en la consola de mongo
+        :return:
+        """
         # Init permissions
         init_permissions(data.get('permission'))
 
