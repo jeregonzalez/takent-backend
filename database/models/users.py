@@ -27,6 +27,7 @@ class CommonUser(User):
     address = db.EmbeddedDocumentField(Address)
     curriculum = db.FileField()
     profile_photo = db.FileField()
+    birth_date = db.DateTimeField()
     description = db.StringField()
     education = db.EmbeddedDocumentListField(Education)
     experience = db.EmbeddedDocumentListField(Experience)
