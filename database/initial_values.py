@@ -22,5 +22,11 @@ data = {
         {'name': 'Basic professional'},
         {'name': 'Complete professional'},
         {'name': 'Native or bilingual'}
+    ],
+    'state': [
+        {'name': 'active', 'description': 'Active entity', 'scope': 'enterprise'},
+    ],
+    'scope': [
+        {'name': 'enterprise', 'description': 'Account of enterprise whith active state'}
     ]
 }
