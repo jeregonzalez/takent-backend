@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "cf1e6538-be76-44a8-af4a-15a606ed59e7",
+		"_postman_id": "c03635c0-4dd5-4616-b242-e95b5369f3ac",
 		"name": "Takent",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -225,6 +225,33 @@
 						"user",
 						"common",
 						"jereegonzalez@gmail.com"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Post enterprise",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"fantasy_name\": \"Takent SA\",\r\n    \"business_name\": \"Takent\",\r\n    \"adress\": \r\n    {\r\n        \"district\": \"Las flores\",\r\n        \"street\": \"Naciones Unidas\",\r\n        \"number\": 1050,\r\n        \"apartment\": \"Córdoba\",\r\n        \"floor\": 0,\r\n        \"postal_code\": 5000,\r\n        \"city\": \"Córdoba\"\r\n    },\r\n    \"phone\": 1234567,\r\n    \"email\": \"takent@gmail.com\",\r\n    \"location\": \"blabla\",\r\n    \"description\": \"Takent la mejor\",\r\n    \"admin_user\": 1,\r\n    \"member_users\": [\"mail1\", \"mail2\"],\r\n    \"state\": \"active\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{host}}/signup/EnterpriseUser",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"signup",
+						"EnterpriseUser"
 					]
 				}
 			},
