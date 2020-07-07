@@ -12,6 +12,7 @@ class User(db.Document):
     password = db.StringField(required=True, min_length=6)
     name = db.StringField(required=True)
     surname = db.StringField(required=True)
+    role = db.ReferenceField(Role)
     meta = {
         'abstract': True,
     }
@@ -36,4 +37,4 @@ class CommonUser(User):
 
 
 class EnterpriseUser(User):
-    role = db.ReferenceField(Role)
+    pass
