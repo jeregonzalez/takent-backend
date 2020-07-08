@@ -15,31 +15,15 @@ class MongoApi(Resource):
         en la consola de mongo
         :return:
         """
-        # Init permissions
         init_permissions(data.get('permission'))
-
-        # Init roles
         init_roles(data.get('role'))
-
-        # Init Countries, Provinces, Cities
         init_countries_provinces_cities()
-
-        # Init education levels
         init_education_levels(data.get('education_level'))
-
-        # Init language levels
         init_language_levels(data.get('language_level'))
-
-        # Init scopes
         init_scopes(data.get('scope'))
-
-        # Init states
         init_states(data.get('state'))
-
-        # Init enterprise_user
-        init_enterprise_user(data.get('enterprise_users'))
-
-        init_member_user(data.get('member_users'))
+        init_enterprise_users(data.get('enterprise_users'))
+        init_member_users(data.get('member_users'))
 
         return {'message': 'Database initialized correctly'}, 200
 
@@ -106,34 +90,26 @@ def init_scopes(scopes):
 
 def init_states(states):
     State.objects.delete()
-
     for state in states:
         state['scope'] = Scope.objects.get(name=state['scope'])
-
     State.objects.insert([
         State(**state) for state in states
     ])
 
 
-def init_enterprise_user(enterprise_users):
+def init_enterprise_users(enterprise_users):
     EnterpriseUser.objects.delete()
-
-    for euser in enterprise_users:
-        euser['role'] = Role.objects.get(name=euser['role'])
-
-        # EnterpriseUser(**euser).save()
-
-
+    for enterprise_user in enterprise_users:
+        enterprise_user['role'] = Role.objects.get(name=enterprise_user['role'])
     EnterpriseUser.objects.insert([
-        EnterpriseUser(**euser) for euser in enterprise_users
+        EnterpriseUser(**enterprise_user) for enterprise_user in enterprise_users
     ])
 
-def init_member_user(member_users):
+
+def init_member_users(member_users):
     CommonUser.objects.delete()
-
-    for muser in member_users:
-        muser['role'] = Role.objects.get(name=muser['role'])
-
+    for member_user in member_users:
+        member_user['role'] = Role.objects.get(name=member_user['role'])
     CommonUser.objects.insert([
-        CommonUser(**muser) for muser in member_users
+        CommonUser(**member_user) for member_user in member_users
     ])
