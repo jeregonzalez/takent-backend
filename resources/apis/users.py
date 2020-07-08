@@ -1,12 +1,9 @@
-import json
-
 from flask import request
 from flask_restful import Resource, abort
 from mongoengine import FieldDoesNotExist, NotUniqueError, ValidationError
 
 from database.models.users import CommonUser, EnterpriseUser
 from resources.errors import SchemaValidationError, AccountAlreadyExistsError
-from resources.helpers.log_helper import LOGGER
 
 USER_TYPES = {
     'common': CommonUser,
