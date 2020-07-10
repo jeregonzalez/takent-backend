@@ -1,3 +1,4 @@
+from flask_restful import abort
 from mongoengine import NotUniqueError
 
 from database.db import db
@@ -6,20 +7,17 @@ from .common import Address, Education, Experience, Skill, UserLanguage
 from .roles import Role
 
 
-# TODO Agregar address como campo requerido
 class User(db.Document):
     account = db.EmailField(primary_key=True)
     password = db.StringField(required=True, min_length=6)
     name = db.StringField(required=True)
     surname = db.StringField(required=True)
-    role = db.ReferenceField(Role)
+
     meta = {
         'abstract': True,
     }
 
     def save(self, *args, **kwargs):
-        if CommonUser.objects(account=self.account) or EnterpriseUser.objects(account=self.account):
-            raise NotUniqueError
         self.password = hash_password(self.password)
         return super(User, self).save(*args, **kwargs)
 
@@ -27,7 +25,7 @@ class User(db.Document):
 class CommonUser(User):
     address = db.EmbeddedDocumentField(Address)
     curriculum = db.FileField()
-    profile_photo = db.FileField()
+    profile_photo = db.ImageField()
     birth_date = db.DateTimeField()
     description = db.StringField()
     education = db.EmbeddedDocumentListField(Education)
@@ -37,4 +35,4 @@ class CommonUser(User):
 
 
 class EnterpriseUser(User):
-    pass
+    role = db.ReferenceField(Role, required=True)
