@@ -44,8 +44,8 @@ class Education(db.EmbeddedDocument):
 class Experience(db.EmbeddedDocument):
     company = db.StringField(required=True)
     start_date = db.DateTimeField(required=True)
-    end_date = db.DateTimeField(required=True)
-    position = db.StringField()
+    end_date = db.DateTimeField()
+    position = db.StringField(required=True)
     description = db.StringField()
 
 
@@ -55,24 +55,24 @@ class Skill(db.EmbeddedDocument):
 
 
 class UserLanguage(db.EmbeddedDocument):
-    name = db.StringField()
-    level = db.StringField()
+    name = db.StringField(required=True)
+    level = db.StringField(required=True)
 
 
 class LanguageLevel(db.Document):
-    name = db.StringField(unique=True)
+    name = db.StringField(primary_key=True)
 
 
 class Language(db.Document):
-    name = db.StringField(required=True)
+    name = db.StringField(primary_key=True)
 
 
 class Scope(db.Document):
-    name = db.StringField(required=True, unique=True)
+    name = db.StringField(primary_key=True)
     description = db.StringField()
 
 
 class State(db.Document):
-    name = db.StringField(required=True, unique=True)
+    name = db.StringField(primary_key=True)
     description = db.StringField()
     scope = db.ReferenceField(Scope)
