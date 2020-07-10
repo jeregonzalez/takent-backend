@@ -6,15 +6,15 @@ verify_ssl = true
 [dev-packages]
 
 [packages]
-flask = "*"
-flask-mongoengine = "*"
-flask-bcrypt = "*"
-flask-restful = "*"
-flask-jwt-extended = "*"
-requests = "*"
-pyyaml = "*"
-pandas = "*"
-pillow = "*"
+flask = "1.1.2"
+flask-mongoengine = "0.9.5"
+flask-bcrypt = "0.7.1"
+flask-restful = "0.3.8"
+flask-jwt-extended = "3.24.1"
+requests = "2.24.0"
+pyyaml = "5.3.1"
+pandas = "1.0.5"
+pillow = "7.2.0"
 
 [requires]
 python_version = "3.8"
