@@ -1,10 +1,9 @@
 from flask_restful import Resource
 
 from database.initial_values import data
-from database.models.common import Country, Province, City, EducationLevel, LanguageLevel
+from database.models.common import Country, Province, City, EducationLevel, LanguageLevel, State, Scope
 from database.models.roles import Permission, Role
 from database.models.users import EnterpriseUser, CommonUser
-from database.models.state import State, Scope
 from resources.helpers import places_helper
 
 
@@ -23,7 +22,6 @@ class MongoApi(Resource):
         init_scopes(data.get('scope'))
         init_states(data.get('state'))
         init_enterprise_users(data.get('enterprise_users'))
-        init_member_users(data.get('member_users'))
 
         return {'message': 'Database initialized correctly'}, 200
 
@@ -103,13 +101,4 @@ def init_enterprise_users(enterprise_users):
         enterprise_user['role'] = Role.objects.get(name=enterprise_user['role'])
     EnterpriseUser.objects.insert([
         EnterpriseUser(**enterprise_user) for enterprise_user in enterprise_users
-    ])
-
-
-def init_member_users(member_users):
-    CommonUser.objects.delete()
-    for member_user in member_users:
-        member_user['role'] = Role.objects.get(name=member_user['role'])
-    CommonUser.objects.insert([
-        CommonUser(**member_user) for member_user in member_users
     ])
