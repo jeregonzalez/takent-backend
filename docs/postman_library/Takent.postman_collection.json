@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "c03635c0-4dd5-4616-b242-e95b5369f3ac",
+		"_postman_id": "76d3cf5d-04b7-49e3-9ab5-d3ae973daf1a",
 		"name": "Takent",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -107,9 +107,9 @@
 			"response": []
 		},
 		{
-			"name": "Sign Up Common User",
+			"name": "Enterprise User",
 			"request": {
-				"method": "POST",
+				"method": "GET",
 				"header": [
 					{
 						"key": "Content-Type",
@@ -117,45 +117,42 @@
 						"type": "text"
 					}
 				],
-				"body": {
-					"mode": "raw",
-					"raw": "{\n    \"account\": \"jereegonzalez@gmail.com\",\n    \"password\": \"pass123\",\n    \"name\": \"Jeremias\",\n    \"surname\": \"Gonzalez\"\n}"
-				},
 				"url": {
-					"raw": "{{host}}/signup/common",
+					"raw": "{{host}}/user/enterprise/jereegonzalez@gmail.com",
 					"host": [
 						"{{host}}"
 					],
 					"path": [
-						"signup",
-						"common"
+						"user",
+						"enterprise",
+						"jereegonzalez@gmail.com"
 					]
 				}
 			},
 			"response": []
 		},
 		{
-			"name": "Sign Up Enterprise User",
+			"name": "Enterprise User",
 			"request": {
 				"method": "POST",
 				"header": [
 					{
 						"key": "Content-Type",
-						"value": "application/json",
-						"type": "text"
+						"type": "text",
+						"value": "application/json"
 					}
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"account\": \"jereegonzalez@gmail.com\",\n    \"password\": \"pass123\",\n    \"name\": \"Jeremias\",\n    \"surname\": \"Gonzalez\"\n}"
+					"raw": "{\n    \"account\": \"jereegonzalez@gmail.com\",\n    \"password\": \"pass123\",\n    \"name\": \"Jeremias\",\n    \"surname\": \"Gonzalez\",\n    \"role\": \"admin\"\n}"
 				},
 				"url": {
-					"raw": "{{host}}/signup/enterprise",
+					"raw": "{{host}}/user/enterprise",
 					"host": [
 						"{{host}}"
 					],
 					"path": [
-						"signup",
+						"user",
 						"enterprise"
 					]
 				}
@@ -163,10 +160,99 @@
 			"response": []
 		},
 		{
-			"name": "Get user",
+			"name": "Enterprise User",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\": \"Jeremias2\"\n}"
+				},
+				"url": {
+					"raw": "{{host}}/user/enterprise/jereegonzalez@gmail.com",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"user",
+						"enterprise",
+						"jereegonzalez@gmail.com"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Enterprise User",
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{host}}/user/enterprise/jereegonzalez@gmail.com",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"user",
+						"enterprise",
+						"jereegonzalez@gmail.com"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Common User",
 			"request": {
 				"method": "GET",
-				"header": [],
+				"header": [
+					{
+						"key": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"url": {
+					"raw": "{{host}}/user/common/jereegonzalez@gmail.com",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"user",
+						"common",
+						"jereegonzalez@gmail.com"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Common User",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"account\": \"jereegonzalez@gmail.com\",\n    \"password\": \"pass123\",\n    \"name\": \"Jeremias\",\n    \"surname\": \"Gonzalez\",\n    \"address\": {\n        \"district\": \"Córdoba\",\n        \"street\": \"Mza 19\",\n        \"number\": 7,\n        \"postal_code\": 5000,\n        \"city\": 2084010001\n    },\n    \"birth_date\": \"28/04/1996\",\n    \"description\": \"Hola soy jere\",\n    \"education\": [\n        {\n            \"start_date\": \"01/01/2014\",\n            \"end_date\": \"01/01/2019\",\n            \"name\": \"Ingeniero en sistemas\",\n            \"level\": \"Degree\",\n            \"description\": \"Alguna descripción\"\n        }\n    ],\n    \"experience\": [\n        {\n            \"company\": \"SimtTLiX\",\n            \"start_date\": \"01/12/2019\",\n            \"end_date\": \"01/12/2020\",\n            \"position\": \"Software Engineer\",\n            \"description\": \"hola\"\n        }\n    ],\n    \"skill\": [\n        {\n            \"name\": \"Dormir\",\n            \"description\": \"\"\n        }\n\n    ],\n    \"language\": [\n        {\n            \"name\": \"Ingles\",\n            \"level\": \"Basic\"\n        }\n    ]\n}"
+				},
 				"url": {
 					"raw": "{{host}}/user/common",
 					"host": [
@@ -181,18 +267,19 @@
 			"response": []
 		},
 		{
-			"name": "Update user",
+			"name": "Common User",
 			"request": {
 				"method": "PUT",
-				"header": [],
+				"header": [
+					{
+						"key": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"skill\": [\n        {\n            \"name\": \"tongas\",\n            \"description\": \"culiado\"\n        }\n    ]\n}",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
+					"raw": "{\n    \"education\": [\n        {\n            \"start_date\": \"01/01/2014\",\n            \"end_date\": \"01/01/2019\",\n            \"name\": \"Ingeniero en sistemas\",\n            \"level\": \"Degree\",\n            \"description\": \"Alguna descripción222222\"\n        }\n    ]\n}"
 				},
 				"url": {
 					"raw": "{{host}}/user/common/jereegonzalez@gmail.com",
@@ -209,13 +296,16 @@
 			"response": []
 		},
 		{
-			"name": "Delete user",
-			"protocolProfileBehavior": {
-				"disabledSystemHeaders": {}
-			},
+			"name": "Common User",
 			"request": {
 				"method": "DELETE",
-				"header": [],
+				"header": [
+					{
+						"key": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
 				"url": {
 					"raw": "{{host}}/user/common/jereegonzalez@gmail.com",
 					"host": [
@@ -224,6 +314,106 @@
 					"path": [
 						"user",
 						"common",
+						"jereegonzalez@gmail.com"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Post profile photo",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "profile_photo",
+							"type": "file",
+							"src": "/home/jgonzalez/Pictures/igor-kasalovic-tNDvFkxkBHo-unsplash.jpg"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{host}}/user/common/profile_photo/jereegonzalez@gmail.com",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"user",
+						"common",
+						"profile_photo",
+						"jereegonzalez@gmail.com"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get profile photo",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{host}}/user/common/profile_photo/jereegonzalez@gmail.com",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"user",
+						"common",
+						"profile_photo",
+						"jereegonzalez@gmail.com"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Post curriculum",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "curriculum",
+							"type": "file",
+							"src": "/home/jgonzalez/Downloads/Proyecto_Final_Documentación_a_Presentar_V1-4_(1).pdf"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{host}}/user/common/curriculum/jereegonzalez@gmail.com",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"user",
+						"common",
+						"curriculum",
+						"jereegonzalez@gmail.com"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get curriculum",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{host}}/user/common/curriculum/jereegonzalez@gmail.com",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"user",
+						"common",
+						"curriculum",
 						"jereegonzalez@gmail.com"
 					]
 				}

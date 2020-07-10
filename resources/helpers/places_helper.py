@@ -45,7 +45,7 @@ def _get(api):
 
     file_path = api_options.get('file_path')
     if os.path.exists(file_path):
-        logging.info('{} already exists. Returning existing info.'.format(file_path))
+        LOGGER.info('{} already exists. Returning existing info.'.format(file_path))
         return pd.read_csv(file_path).to_dict(orient='records')
 
     api_path = api_options.get('api')

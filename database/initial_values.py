@@ -30,9 +30,7 @@ data = {
         {'name': 'enterprise', 'description': 'Account of enterprise whith active state'}
     ],
     'enterprise_users': [
-        {'account': 'usertakent@gmail.com', 'password': '123', 'name': 'takent', 'surname': 'app', 'role': 'admin'}
-    ],
-    'member_users': [
+        {'account': 'usertakent@gmail.com', 'password': '123', 'name': 'takent', 'surname': 'app', 'role': 'admin'},
         {'account': 'rodri@gmail.com', 'password': '456', 'name': 'rodri', 'surname': 'EL CAPO', 'role': 'member'},
         {'account': 'jere@gmail.com', 'password': '678', 'name': 'jere', 'surname': 'EL DEVELOPER', 'role': 'member'}
     ]
