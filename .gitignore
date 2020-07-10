@@ -12,6 +12,7 @@ dist
 
 # Logs
 /logfile.log
+/nohup.out
 
 # Data files
 /temp_data
