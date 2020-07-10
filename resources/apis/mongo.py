@@ -3,7 +3,7 @@ from flask_restful import Resource
 from database.initial_values import data
 from database.models.common import Country, Province, City, EducationLevel, LanguageLevel, State, Scope
 from database.models.roles import Permission, Role
-from database.models.users import EnterpriseUser, CommonUser
+from database.models.users import EnterpriseUser
 from resources.helpers import places_helper
 
 

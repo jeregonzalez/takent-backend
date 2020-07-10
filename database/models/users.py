@@ -1,6 +1,3 @@
-from flask_restful import abort
-from mongoengine import NotUniqueError
-
 from database.db import db
 from resources.helpers.auth_helper import hash_password
 from .common import Address, Education, Experience, Skill, UserLanguage
