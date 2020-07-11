@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "76d3cf5d-04b7-49e3-9ab5-d3ae973daf1a",
+		"_postman_id": "1b536ac3-938a-4897-ab43-87122f7fff99",
 		"name": "Takent",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -427,7 +427,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"fantasy_name\": \"Takent SA\",\r\n    \"business_name\": \"Takent\",\r\n    \"adress\": \r\n    {\r\n        \"district\": \"Las flores\",\r\n        \"street\": \"Naciones Unidas\",\r\n        \"number\": 1050,\r\n        \"apartment\": \"Córdoba\",\r\n        \"floor\": 0,\r\n        \"postal_code\": 5000,\r\n        \"city\": \"Córdoba\"\r\n    },\r\n    \"phone\": 1234567,\r\n    \"email\": \"takent@gmail.com\",\r\n    \"location\": \"blabla\",\r\n    \"description\": \"Takent la mejor\",\r\n    \"admin_user\": 1,\r\n    \"member_users\": [\"mail1\", \"mail2\"],\r\n    \"state\": \"active\"\r\n}",
+					"raw": "{ \r\n    \"fantasy_name\" : \"Takent\", \r\n    \"business_name\" : \"Takent SA\", \r\n    \"address\" : \r\n    { \r\n        \"district\" : \"Las flores\", \r\n        \"street\" : \"Naciones Unidas\", \r\n        \"number\" : 1050, \"apartment\" : \"Córdoba\", \r\n        \"floor\" : 0, \"postal_code\" : 5000, \r\n        \"city\" : \"Córdoba\" \r\n    }, \r\n    \"phone\" : 1234567, \r\n    \"email\" : \"takent@gmail.com\", \r\n    \"location\" : \"blabla\", \r\n    \"photos\" : [ ], \r\n    \"description\" : \"Takent la mejor\", \r\n    \"admin_user\" : \"usertakent@gmail.com\", \r\n    \"member_users\" : [ ], \r\n    \"state\" : \"active_enterprise\" \r\n}\r\n",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -435,14 +435,53 @@
 					}
 				},
 				"url": {
-					"raw": "{{host}}/signup/EnterpriseUser",
+					"raw": "{{host}}/enterprise",
 					"host": [
 						"{{host}}"
 					],
 					"path": [
-						"signup",
-						"EnterpriseUser"
+						"enterprise"
 					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get enterprise",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": ""
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete enterprise",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{host}}/enterprise/usertakent@gmail.com",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"enterprise",
+						"usertakent@gmail.com"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Put enterprise",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"url": {
+					"raw": ""
 				}
 			},
 			"response": []
