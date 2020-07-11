@@ -1,3 +1,4 @@
+from resources.apis.enterprise import EnterpriseApi
 from resources.apis.mongo import MongoApi
 from resources.apis.places import CountriesApi, ProvincesApi, CitiesApi
 from resources.apis.users import CommonUserApi, EnterpriseUserApi, ImageApi, CurriculumApi
@@ -15,3 +16,5 @@ def initialize_routes(api):
     api.add_resource(EnterpriseUserApi, '/api/v1/user/enterprise', '/api/v1/user/enterprise/<user_account>')
     api.add_resource(ImageApi, '/api/v1/user/common/profile_photo/<user_account>')
     api.add_resource(CurriculumApi, '/api/v1/user/common/curriculum/<user_account>')
+    # Enterprise
+    api.add_resource(EnterpriseApi, '/api/v1/enterprise', '/api/v1/enterprise/<admin>')
