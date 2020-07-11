@@ -26,6 +26,7 @@ class Address(db.EmbeddedDocument):
     apartment = db.StringField()
     floor = db.IntField()
     postal_code = db.IntField()
+    province = db.IntField()
     city = db.ReferenceField(City)
 
 
