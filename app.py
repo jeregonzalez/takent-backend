@@ -1,17 +1,15 @@
-import json
 import os
 from logging.config import dictConfig
 
-from flask import Flask, make_response
+from flask import Flask
 from flask_bcrypt import Bcrypt
 from flask_jwt_extended import JWTManager
 from flask_restful import Api
 
 from database.db import init_db
-from resources.errors import errors
 from resources.helpers import yaml_helper
-from resources.helpers.encoder_helper import CustomEncoder
 from resources.routes import initialize_routes
+from resources.utils.representations import json_output
 
 CONFIG_BASE_DIR = 'config/'
 CONFIG_ENV_BASE_DIR = CONFIG_BASE_DIR + 'env/'
@@ -22,18 +20,10 @@ LOG_CONFIG_FILE = CONFIG_BASE_DIR + os.environ.get('LOG_CONFIG_FILE', DEFAULT_LO
 API_CONFIG_FILE = CONFIG_ENV_BASE_DIR + os.environ.get('API_CONFIG_FILE', DEFAULT_ENV_CONFIG_FILE)
 
 app = Flask(__name__)
-api = Api(app, errors=errors)
-
-
-def custom_json_output(data, code, headers=None):
-    dumped = json.dumps(data, cls=CustomEncoder)
-    resp = make_response(dumped, code)
-    resp.headers.extend(headers or {})
-    return resp
-
+api = Api(app)
 
 api.representations.update({
-    'application/json': custom_json_output
+    'application/json': json_output
 })
 
 bcrypt = Bcrypt(app)

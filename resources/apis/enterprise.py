@@ -5,7 +5,7 @@ from mongoengine import FieldDoesNotExist, DoesNotExist
 from database.models.common import State
 from database.models.enterprise import Enterprise
 from database.models.users import EnterpriseUser
-from resources.errors import SchemaValidationError
+from resources.utils.exceptions import MissingRequiredFieldsException
 
 
 class EnterpriseApi(Resource):
@@ -56,7 +56,7 @@ class EnterpriseApi(Resource):
             Enterprise.objects.insert(enterprise)
 
         except FieldDoesNotExist:
-            raise SchemaValidationError
+            raise MissingRequiredFieldsException
 
         return {'message': 'Enterprise {} created successfully'.format(enterprise.business_name)}, 201
 
