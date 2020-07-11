@@ -1,490 +1,665 @@
 {
 	"info": {
-		"_postman_id": "1b536ac3-938a-4897-ab43-87122f7fff99",
+		"_postman_id": "76d3cf5d-04b7-49e3-9ab5-d3ae973daf1a",
 		"name": "Takent",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
 	"item": [
 		{
-			"name": "MongoDB",
-			"protocolProfileBehavior": {
-				"disableBodyPruning": true
-			},
-			"request": {
-				"method": "GET",
-				"header": [],
-				"body": {
-					"mode": "file",
-					"file": {}
-				},
-				"url": {
-					"raw": "{{host}}/init/mongodb",
-					"host": [
-						"{{host}}"
-					],
-					"path": [
-						"init",
-						"mongodb"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Countries",
-			"request": {
-				"method": "GET",
-				"header": [
-					{
-						"key": "Content-Type",
-						"value": "text/csv",
-						"type": "text",
-						"disabled": true
+			"name": "Places",
+			"item": [
+				{
+					"name": "Countries",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "text/csv",
+								"type": "text",
+								"disabled": true
+							},
+							{
+								"key": "Accept",
+								"value": "text/csv",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/countries",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"countries"
+							]
+						}
 					},
-					{
-						"key": "Accept",
-						"value": "text/csv",
-						"type": "text"
-					}
-				],
-				"url": {
-					"raw": "{{host}}/countries",
-					"host": [
-						"{{host}}"
-					],
-					"path": [
-						"countries"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Provinces",
-			"request": {
-				"method": "GET",
-				"header": [
-					{
-						"key": "Content-Type",
-						"value": "application/json",
-						"type": "text"
-					}
-				],
-				"url": {
-					"raw": "{{host}}/provinces",
-					"host": [
-						"{{host}}"
-					],
-					"path": [
-						"provinces"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Cities",
-			"request": {
-				"method": "GET",
-				"header": [
-					{
-						"key": "Content-Type",
-						"value": "application/json",
-						"type": "text"
-					}
-				],
-				"url": {
-					"raw": "{{host}}/cities/6",
-					"host": [
-						"{{host}}"
-					],
-					"path": [
-						"cities",
-						"6"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Enterprise User",
-			"request": {
-				"method": "GET",
-				"header": [
-					{
-						"key": "Content-Type",
-						"value": "application/json",
-						"type": "text"
-					}
-				],
-				"url": {
-					"raw": "{{host}}/user/enterprise/jereegonzalez@gmail.com",
-					"host": [
-						"{{host}}"
-					],
-					"path": [
-						"user",
-						"enterprise",
-						"jereegonzalez@gmail.com"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Enterprise User",
-			"request": {
-				"method": "POST",
-				"header": [
-					{
-						"key": "Content-Type",
-						"type": "text",
-						"value": "application/json"
-					}
-				],
-				"body": {
-					"mode": "raw",
-					"raw": "{\n    \"account\": \"jereegonzalez@gmail.com\",\n    \"password\": \"pass123\",\n    \"name\": \"Jeremias\",\n    \"surname\": \"Gonzalez\",\n    \"role\": \"admin\"\n}"
+					"response": []
 				},
-				"url": {
-					"raw": "{{host}}/user/enterprise",
-					"host": [
-						"{{host}}"
-					],
-					"path": [
-						"user",
-						"enterprise"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Enterprise User",
-			"request": {
-				"method": "PUT",
-				"header": [
-					{
-						"key": "Content-Type",
-						"type": "text",
-						"value": "application/json"
-					}
-				],
-				"body": {
-					"mode": "raw",
-					"raw": "{\n    \"name\": \"Jeremias2\"\n}"
+				{
+					"name": "Provinces",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/provinces",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"provinces"
+							]
+						}
+					},
+					"response": []
 				},
-				"url": {
-					"raw": "{{host}}/user/enterprise/jereegonzalez@gmail.com",
-					"host": [
-						"{{host}}"
-					],
-					"path": [
-						"user",
-						"enterprise",
-						"jereegonzalez@gmail.com"
-					]
+				{
+					"name": "Cities",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/cities/6",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"cities",
+								"6"
+							]
+						}
+					},
+					"response": []
 				}
-			},
-			"response": []
+			],
+			"protocolProfileBehavior": {}
 		},
 		{
-			"name": "Enterprise User",
-			"request": {
-				"method": "DELETE",
-				"header": [
-					{
-						"key": "Content-Type",
-						"value": "application/json",
-						"type": "text"
-					}
-				],
-				"url": {
-					"raw": "{{host}}/user/enterprise/jereegonzalez@gmail.com",
-					"host": [
-						"{{host}}"
-					],
-					"path": [
-						"user",
-						"enterprise",
-						"jereegonzalez@gmail.com"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Common User",
-			"request": {
-				"method": "GET",
-				"header": [
-					{
-						"key": "Content-Type",
-						"type": "text",
-						"value": "application/json"
-					}
-				],
-				"url": {
-					"raw": "{{host}}/user/common/jereegonzalez@gmail.com",
-					"host": [
-						"{{host}}"
-					],
-					"path": [
-						"user",
-						"common",
-						"jereegonzalez@gmail.com"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Common User",
-			"request": {
-				"method": "POST",
-				"header": [
-					{
-						"key": "Content-Type",
-						"type": "text",
-						"value": "application/json"
-					}
-				],
-				"body": {
-					"mode": "raw",
-					"raw": "{\n    \"account\": \"jereegonzalez@gmail.com\",\n    \"password\": \"pass123\",\n    \"name\": \"Jeremias\",\n    \"surname\": \"Gonzalez\",\n    \"address\": {\n        \"district\": \"Córdoba\",\n        \"street\": \"Mza 19\",\n        \"number\": 7,\n        \"postal_code\": 5000,\n        \"city\": 2084010001\n    },\n    \"birth_date\": \"28/04/1996\",\n    \"description\": \"Hola soy jere\",\n    \"education\": [\n        {\n            \"start_date\": \"01/01/2014\",\n            \"end_date\": \"01/01/2019\",\n            \"name\": \"Ingeniero en sistemas\",\n            \"level\": \"Degree\",\n            \"description\": \"Alguna descripción\"\n        }\n    ],\n    \"experience\": [\n        {\n            \"company\": \"SimtTLiX\",\n            \"start_date\": \"01/12/2019\",\n            \"end_date\": \"01/12/2020\",\n            \"position\": \"Software Engineer\",\n            \"description\": \"hola\"\n        }\n    ],\n    \"skill\": [\n        {\n            \"name\": \"Dormir\",\n            \"description\": \"\"\n        }\n\n    ],\n    \"language\": [\n        {\n            \"name\": \"Ingles\",\n            \"level\": \"Basic\"\n        }\n    ]\n}"
-				},
-				"url": {
-					"raw": "{{host}}/user/common",
-					"host": [
-						"{{host}}"
-					],
-					"path": [
-						"user",
-						"common"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Common User",
-			"request": {
-				"method": "PUT",
-				"header": [
-					{
-						"key": "Content-Type",
-						"type": "text",
-						"value": "application/json"
-					}
-				],
-				"body": {
-					"mode": "raw",
-					"raw": "{\n    \"education\": [\n        {\n            \"start_date\": \"01/01/2014\",\n            \"end_date\": \"01/01/2019\",\n            \"name\": \"Ingeniero en sistemas\",\n            \"level\": \"Degree\",\n            \"description\": \"Alguna descripción222222\"\n        }\n    ]\n}"
-				},
-				"url": {
-					"raw": "{{host}}/user/common/jereegonzalez@gmail.com",
-					"host": [
-						"{{host}}"
-					],
-					"path": [
-						"user",
-						"common",
-						"jereegonzalez@gmail.com"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Common User",
-			"request": {
-				"method": "DELETE",
-				"header": [
-					{
-						"key": "Content-Type",
-						"type": "text",
-						"value": "application/json"
-					}
-				],
-				"url": {
-					"raw": "{{host}}/user/common/jereegonzalez@gmail.com",
-					"host": [
-						"{{host}}"
-					],
-					"path": [
-						"user",
-						"common",
-						"jereegonzalez@gmail.com"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Post profile photo",
-			"request": {
-				"method": "POST",
-				"header": [],
-				"body": {
-					"mode": "formdata",
-					"formdata": [
+			"name": "Authentication",
+			"item": [
+				{
+					"name": "Authentication common user",
+					"event": [
 						{
-							"key": "profile_photo",
-							"type": "file",
-							"src": "/home/jgonzalez/Pictures/igor-kasalovic-tNDvFkxkBHo-unsplash.jpg"
+							"listen": "test",
+							"script": {
+								"id": "fe7c559f-8710-4d90-b316-a690015818bf",
+								"exec": [
+									"pm.environment.set(\"user_token\", pm.response.json().token);"
+								],
+								"type": "text/javascript"
+							}
 						}
-					]
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"account\": \"jereegonzalez@gmail.com\",\n    \"password\": \"pass123\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/authentication/user/common",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"authentication",
+								"user",
+								"common"
+							]
+						}
+					},
+					"response": []
 				},
-				"url": {
-					"raw": "{{host}}/user/common/profile_photo/jereegonzalez@gmail.com",
-					"host": [
-						"{{host}}"
-					],
-					"path": [
-						"user",
-						"common",
-						"profile_photo",
-						"jereegonzalez@gmail.com"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Get profile photo",
-			"request": {
-				"method": "GET",
-				"header": [],
-				"url": {
-					"raw": "{{host}}/user/common/profile_photo/jereegonzalez@gmail.com",
-					"host": [
-						"{{host}}"
-					],
-					"path": [
-						"user",
-						"common",
-						"profile_photo",
-						"jereegonzalez@gmail.com"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Post curriculum",
-			"request": {
-				"method": "POST",
-				"header": [],
-				"body": {
-					"mode": "formdata",
-					"formdata": [
+				{
+					"name": "Authentication enterprise user",
+					"event": [
 						{
-							"key": "curriculum",
-							"type": "file",
-							"src": "/home/jgonzalez/Downloads/Proyecto_Final_Documentación_a_Presentar_V1-4_(1).pdf"
+							"listen": "test",
+							"script": {
+								"id": "fe7c559f-8710-4d90-b316-a690015818bf",
+								"exec": [
+									"pm.environment.set(\"user_token\", pm.response.json().token);"
+								],
+								"type": "text/javascript"
+							}
 						}
-					]
-				},
-				"url": {
-					"raw": "{{host}}/user/common/curriculum/jereegonzalez@gmail.com",
-					"host": [
-						"{{host}}"
 					],
-					"path": [
-						"user",
-						"common",
-						"curriculum",
-						"jereegonzalez@gmail.com"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Get curriculum",
-			"request": {
-				"method": "GET",
-				"header": [],
-				"url": {
-					"raw": "{{host}}/user/common/curriculum/jereegonzalez@gmail.com",
-					"host": [
-						"{{host}}"
-					],
-					"path": [
-						"user",
-						"common",
-						"curriculum",
-						"jereegonzalez@gmail.com"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Post enterprise",
-			"request": {
-				"method": "POST",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "{ \r\n    \"fantasy_name\" : \"Takent\", \r\n    \"business_name\" : \"Takent SA\", \r\n    \"address\" : \r\n    { \r\n        \"district\" : \"Las flores\", \r\n        \"street\" : \"Naciones Unidas\", \r\n        \"number\" : 1050, \"apartment\" : \"Córdoba\", \r\n        \"floor\" : 0, \"postal_code\" : 5000, \r\n        \"city\" : \"Córdoba\" \r\n    }, \r\n    \"phone\" : 1234567, \r\n    \"email\" : \"takent@gmail.com\", \r\n    \"location\" : \"blabla\", \r\n    \"photos\" : [ ], \r\n    \"description\" : \"Takent la mejor\", \r\n    \"admin_user\" : \"usertakent@gmail.com\", \r\n    \"member_users\" : [ ], \r\n    \"state\" : \"active_enterprise\" \r\n}\r\n",
-					"options": {
-						"raw": {
-							"language": "json"
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"account\": \"jereegonzalez@gmail.com\",\n    \"password\": \"pass123\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/authentication/user/enterprise",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"authentication",
+								"user",
+								"enterprise"
+							]
 						}
-					}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "Common user",
+			"item": [
+				{
+					"name": "Common User",
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {}
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{user_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/user/common",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"user",
+								"common"
+							]
+						}
+					},
+					"response": []
 				},
-				"url": {
-					"raw": "{{host}}/enterprise",
-					"host": [
-						"{{host}}"
-					],
-					"path": [
-						"enterprise"
-					]
+				{
+					"name": "Common User",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"account\": \"jereegonzalez@gmail.com\",\n    \"password\": \"pass123\",\n    \"name\": \"Jeremias\",\n    \"surname\": \"Gonzalez\",\n    \"address\": {\n        \"district\": \"Córdoba\",\n        \"street\": \"Mza 19\",\n        \"number\": 7,\n        \"postal_code\": 5000,\n        \"city\": 2084010001\n    },\n    \"birth_date\": \"28/04/1996\",\n    \"description\": \"Hola soy jere\",\n    \"education\": [\n        {\n            \"start_date\": \"01/01/2014\",\n            \"end_date\": \"01/01/2019\",\n            \"name\": \"Ingeniero en sistemas\",\n            \"level\": \"Degree\",\n            \"description\": \"Alguna descripción\"\n        }\n    ],\n    \"experience\": [\n        {\n            \"company\": \"SimtTLiX\",\n            \"start_date\": \"01/12/2019\",\n            \"end_date\": \"01/12/2020\",\n            \"position\": \"Software Engineer\",\n            \"description\": \"hola\"\n        }\n    ],\n    \"skill\": [\n        {\n            \"name\": \"Dormir\",\n            \"description\": \"\"\n        }\n\n    ],\n    \"language\": [\n        {\n            \"name\": \"Ingles\",\n            \"level\": \"Basic\"\n        }\n    ]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/user/common",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"user",
+								"common"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Common User",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{user_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"education\": [\n        {\n            \"start_date\": \"01/01/2014\",\n            \"end_date\": \"01/01/2019\",\n            \"name\": \"Ingeniero en sistemas\",\n            \"level\": \"Degree\",\n            \"description\": \"Alguna descripción222222\"\n        }\n    ]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/user/common",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"user",
+								"common"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Common User",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{user_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/user/common",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"user",
+								"common"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Profile photo",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{user_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/user/common/profile_photo",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"user",
+								"common",
+								"profile_photo"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Profile photo",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{user_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "profile_photo",
+									"type": "file",
+									"src": "/home/jgonzalez/Pictures/igor-kasalovic-tNDvFkxkBHo-unsplash.jpg"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{host}}/user/common/profile_photo",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"user",
+								"common",
+								"profile_photo"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Curriculum",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{user_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/user/common/curriculum",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"user",
+								"common",
+								"curriculum"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Curriculum",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{user_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "curriculum",
+									"type": "file",
+									"src": "/home/jgonzalez/Downloads/Proyecto_Final_Documentación_a_Presentar_V1-4_(1).pdf"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{host}}/user/common/curriculum",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"user",
+								"common",
+								"curriculum"
+							]
+						}
+					},
+					"response": []
 				}
-			},
-			"response": []
+			],
+			"protocolProfileBehavior": {}
 		},
 		{
-			"name": "Get enterprise",
-			"request": {
-				"method": "GET",
-				"header": [],
-				"url": {
-					"raw": ""
+			"name": "Enterprise user",
+			"item": [
+				{
+					"name": "Enterprise User",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{user_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/user/enterprise",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"user",
+								"enterprise"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Enterprise User",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"account\": \"jereegonzalez@gmail.com\",\n    \"password\": \"pass123\",\n    \"name\": \"Jeremias\",\n    \"surname\": \"Gonzalez\",\n    \"role\": \"admin\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/user/enterprise",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"user",
+								"enterprise"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Enterprise User",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{user_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Jeremias2\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/user/enterprise",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"user",
+								"enterprise"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Enterprise User",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{user_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/user/enterprise",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"user",
+								"enterprise"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Enterprise",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": ""
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Enterprise",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{ \r\n    \"fantasy_name\" : \"Takent\", \r\n    \"business_name\" : \"Takent SA\", \r\n    \"address\" : \r\n    { \r\n        \"district\" : \"Las flores\", \r\n        \"street\" : \"Naciones Unidas\", \r\n        \"number\" : 1050, \"apartment\" : \"Córdoba\", \r\n        \"floor\" : 0, \"postal_code\" : 5000, \r\n        \"city\" : \"Córdoba\" \r\n    }, \r\n    \"phone\" : 1234567, \r\n    \"email\" : \"takent@gmail.com\", \r\n    \"location\" : \"blabla\", \r\n    \"photos\" : [ ], \r\n    \"description\" : \"Takent la mejor\", \r\n    \"admin_user\" : \"usertakent@gmail.com\", \r\n    \"member_users\" : [ ], \r\n    \"state\" : \"active_enterprise\" \r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/enterprise",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"enterprise"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Enterprise",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"url": {
+							"raw": ""
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Enterprise",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/enterprise/usertakent@gmail.com",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"enterprise",
+								"usertakent@gmail.com"
+							]
+						}
+					},
+					"response": []
 				}
-			},
-			"response": []
+			],
+			"protocolProfileBehavior": {}
 		},
 		{
-			"name": "Delete enterprise",
-			"request": {
-				"method": "DELETE",
-				"header": [],
-				"url": {
-					"raw": "{{host}}/enterprise/usertakent@gmail.com",
-					"host": [
-						"{{host}}"
-					],
-					"path": [
-						"enterprise",
-						"usertakent@gmail.com"
-					]
+			"name": "Development apis",
+			"item": [
+				{
+					"name": "MongoDB",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "file",
+							"file": {}
+						},
+						"url": {
+							"raw": "{{host}}/init/mongodb",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"init",
+								"mongodb"
+							]
+						}
+					},
+					"response": []
 				}
-			},
-			"response": []
-		},
-		{
-			"name": "Put enterprise",
-			"request": {
-				"method": "PUT",
-				"header": [],
-				"url": {
-					"raw": ""
-				}
-			},
-			"response": []
+			],
+			"protocolProfileBehavior": {}
 		}
 	],
 	"protocolProfileBehavior": {}
