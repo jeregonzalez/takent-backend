@@ -1,86 +1,109 @@
 from flask import request, Response
+from flask_jwt_extended import get_jwt_identity
 from flask_restful import Resource, abort
 from mongoengine import FieldDoesNotExist, NotUniqueError, ValidationError
 
 from database.models.users import CommonUser, EnterpriseUser
-from resources.errors import SchemaValidationError, AccountAlreadyExistsError
-
-USER_TYPES = {
-    'common': CommonUser,
-    'enterprise': EnterpriseUser
-}
+from resources.helpers.auth_helper import hash_password
+from resources.utils.decorators import validate_headers, common_user_must_exist, authentication_required, \
+    enterprise_user_must_exist, user_must_not_exist
+from resources.utils.exceptions import MissingRequiredFieldsException, UserAlreadyExistsException
 
 
 class CommonUserApi(Resource):
-    def get(self, user_account=None):
-        validate_user_exists(user_type='common', user_account=user_account)
+
+    method_decorators = {
+        'get': [common_user_must_exist, authentication_required, validate_headers],
+        'post': [user_must_not_exist, validate_headers],
+        'put': [common_user_must_exist, authentication_required, validate_headers],
+        'delete': [common_user_must_exist, authentication_required, validate_headers]
+    }
+
+    def get(self):
+        user_account = get_jwt_identity()
         return CommonUser.objects.exclude('password', 'profile_photo').get(account=user_account).to_mongo()
 
     def post(self):
         body = request.get_json()
-        validate_user_not_exists(user_type='common', user_account=body.get('account'))
+        if body.get('password'):
+            body['password'] = hash_password(body['password'])
         try:
             new_user = CommonUser(**body).save()
         except (FieldDoesNotExist, ValidationError):
-            raise SchemaValidationError
+            raise MissingRequiredFieldsException
         except NotUniqueError:
-            raise AccountAlreadyExistsError
+            raise UserAlreadyExistsException(new_user.id)
         return {'message': 'Common user {} created successfully'.format(new_user.id)}, 201
 
-    def put(self, user_account=None):
-        validate_user_exists(user_type='common', user_account=user_account)
+    def put(self):
+        user_account = get_jwt_identity()
         body = request.get_json()
         if any(field in ['account', 'password'] for field in body.keys()):
             abort(403, message='Account or password fields cannot be updated')
         CommonUser.objects.get(account=user_account).update(**body)
         return '', 204
 
-    def delete(self, user_account=None):
-        validate_user_exists(user_type='common', user_account=user_account)
+    def delete(self):
+        user_account = get_jwt_identity()
         CommonUser.objects.get(account=user_account).delete()
         return '', 204
 
 
 class EnterpriseUserApi(Resource):
-    def get(self, user_account):
-        validate_user_exists(user_type='enterprise', user_account=user_account)
+
+    method_decorators = {
+        'get': [enterprise_user_must_exist, authentication_required, validate_headers],
+        'post': [user_must_not_exist, validate_headers],
+        'put': [enterprise_user_must_exist, authentication_required, validate_headers],
+        'delete': [enterprise_user_must_exist, authentication_required, validate_headers]
+    }
+
+    def get(self):
+        user_account = get_jwt_identity()
         return EnterpriseUser.objects.exclude('password').get(account=user_account).to_mongo()
 
     def post(self):
         body = request.get_json()
-        validate_user_not_exists(user_type='common', user_account=body.get('account'))
+        if body.get('password'):
+            body['password'] = hash_password(body['password'])
         try:
             new_user = EnterpriseUser(**body).save()
         except (FieldDoesNotExist, ValidationError):
-            raise SchemaValidationError
+            raise MissingRequiredFieldsException
         except NotUniqueError:
-            raise AccountAlreadyExistsError
+            raise UserAlreadyExistsException(new_user.id)
         return {'message': 'Enterprise user {} created successfully'.format(new_user.id)}, 201
 
-    def put(self, user_account=None):
-        validate_user_exists(user_type='enterprise', user_account=user_account)
+    def put(self):
+        user_account = get_jwt_identity()
         body = request.get_json()
         if any(field in ['account', 'password'] for field in body.keys()):
             abort(403, message='Account or password fields cannot be updated')
         EnterpriseUser.objects.get(account=user_account).update(**body)
         return '', 204
 
-    def delete(self, user_account=None):
-        validate_user_exists(user_type='enterprise', user_account=user_account)
+    def delete(self):
+        user_account = get_jwt_identity()
         EnterpriseUser.objects.get(account=user_account).delete()
         return '', 204
 
 
 class ImageApi(Resource):
-    def get(self, user_account=None):
-        validate_user_exists(user_type='common', user_account=user_account)
+
+    method_decorators = {
+        'get': [common_user_must_exist, authentication_required],
+        'post': [common_user_must_exist, authentication_required]
+    }
+
+    def get(self):
+        user_account = get_jwt_identity()
         user = CommonUser.objects.get(account=user_account)
         if not user.profile_photo:
-            abort(200, message='User {} does not have profile photo'.format(user_account))
+            return {'message': 'User {} does not have profile photo'.format(user_account)}, 200
         return Response(user.profile_photo.read(), mimetype=user.profile_photo.content_type, status=200)
 
-    def post(self, user_account=None):
-        validate_user_exists(user_type='common', user_account=user_account)
+    def post(self):
+        user_account = get_jwt_identity()
         if not request.files or not request.files.get('profile_photo'):
             abort(400, message='No image sent')
         user = CommonUser.objects.get(account=user_account)
@@ -93,15 +116,21 @@ class ImageApi(Resource):
 
 
 class CurriculumApi(Resource):
-    def get(self, user_account=None):
-        validate_user_exists(user_type='common', user_account=user_account)
+
+    method_decorators = {
+        'get': [common_user_must_exist, authentication_required],
+        'post': [common_user_must_exist, authentication_required]
+    }
+
+    def get(self):
+        user_account = get_jwt_identity()
         user = CommonUser.objects.get(account=user_account)
         if not user.curriculum:
-            abort(200, message='User {} does not have curriculum'.format(user_account))
+            return {'message': 'User {} does not have curriculum'.format(user_account)}, 200
         return Response(user.curriculum.read(), mimetype=user.curriculum.content_type, status=200)
 
-    def post(self, user_account=None):
-        validate_user_exists(user_type='common', user_account=user_account)
+    def post(self):
+        user_account = get_jwt_identity()
         if not request.files or not request.files.get('curriculum'):
             abort(400, message='No curriculum sent')
         user = CommonUser.objects.get(account=user_account)
@@ -111,17 +140,3 @@ class CurriculumApi(Resource):
         user.curriculum.put(new_curriculum, content_type=new_curriculum.content_type)
         user.save()
         return {'message': 'Curriculum uploaded successfully'}, 201
-
-
-def validate_user_exists(user_type, user_account):
-    if not user_account:
-        abort(400, message='You must enter an user')
-    exist = USER_TYPES[user_type].objects(account=user_account).count()
-    if not exist:
-        abort(400, message='User {} does not exist'.format(user_account))
-
-
-def validate_user_not_exists(user_type, user_account):
-    exist = USER_TYPES[user_type].objects(account=user_account).count()
-    if exist:
-        abort(400, message='User {} already exists'.format(user_account))
