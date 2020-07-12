@@ -1,10 +1,10 @@
 from functools import wraps
 
 from flask import request
-from flask_jwt_extended import verify_jwt_in_request, get_jwt_identity
+from flask_jwt_extended import verify_jwt_in_request
 from jwt import ExpiredSignatureError
 
-from resources.helpers.user_helper import validate_user_exists, validate_user_not_exists
+from resources.helpers.user_helper import validate_user_exists, validate_user_not_exists, get_user_account
 from resources.utils.exceptions import AuthorizationHeaderMissingException, AuthorizationTokenExpiredException, \
     UnauthorizedException, UnsupportedContentTypeException, UnsupportedResponseType
 
@@ -40,7 +40,7 @@ def authentication_required(func):
 def common_user_must_exist(func):
     @wraps(func)
     def wrapper(*args, **kwargs):
-        user_account = get_jwt_identity()
+        user_account = get_user_account()
         validate_user_exists(user_type='common', user_account=user_account)
         return func(*args, **kwargs)
     return wrapper
@@ -58,7 +58,7 @@ def common_user_must_not_exist(func):
 def enterprise_user_must_exist(func):
     @wraps(func)
     def wrapper(*args, **kwargs):
-        user_account = get_jwt_identity()
+        user_account = get_user_account()
         validate_user_exists(user_type='enterprise', user_account=user_account)
         return func(*args, **kwargs)
     return wrapper
