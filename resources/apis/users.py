@@ -1,10 +1,10 @@
 from flask import request, Response
-from flask_jwt_extended import get_jwt_identity
 from flask_restful import Resource, abort
 from mongoengine import FieldDoesNotExist, NotUniqueError, ValidationError
 
 from database.models.users import CommonUser, EnterpriseUser
 from resources.helpers.auth_helper import hash_password
+from resources.helpers.user_helper import get_user_account
 from resources.utils.decorators import validate_headers, common_user_must_exist, authentication_required, \
     enterprise_user_must_exist, user_must_not_exist
 from resources.utils.exceptions import MissingRequiredFieldsException, UserAlreadyExistsException
@@ -20,7 +20,7 @@ class CommonUserApi(Resource):
     }
 
     def get(self):
-        user_account = get_jwt_identity()
+        user_account = get_user_account()
         return CommonUser.objects.exclude('password', 'profile_photo').get(account=user_account).to_mongo()
 
     def post(self):
@@ -36,7 +36,7 @@ class CommonUserApi(Resource):
         return {'message': 'Common user {} created successfully'.format(new_user.id)}, 201
 
     def put(self):
-        user_account = get_jwt_identity()
+        user_account = get_user_account()
         body = request.get_json()
         if any(field in ['account', 'password'] for field in body.keys()):
             abort(403, message='Account or password fields cannot be updated')
@@ -44,7 +44,7 @@ class CommonUserApi(Resource):
         return '', 204
 
     def delete(self):
-        user_account = get_jwt_identity()
+        user_account = get_user_account()
         CommonUser.objects.get(account=user_account).delete()
         return '', 204
 
@@ -59,7 +59,7 @@ class EnterpriseUserApi(Resource):
     }
 
     def get(self):
-        user_account = get_jwt_identity()
+        user_account = get_user_account()
         return EnterpriseUser.objects.exclude('password').get(account=user_account).to_mongo()
 
     def post(self):
@@ -75,7 +75,7 @@ class EnterpriseUserApi(Resource):
         return {'message': 'Enterprise user {} created successfully'.format(new_user.id)}, 201
 
     def put(self):
-        user_account = get_jwt_identity()
+        user_account = get_user_account()
         body = request.get_json()
         if any(field in ['account', 'password'] for field in body.keys()):
             abort(403, message='Account or password fields cannot be updated')
@@ -83,7 +83,7 @@ class EnterpriseUserApi(Resource):
         return '', 204
 
     def delete(self):
-        user_account = get_jwt_identity()
+        user_account = get_user_account()
         EnterpriseUser.objects.get(account=user_account).delete()
         return '', 204
 
@@ -96,14 +96,14 @@ class ImageApi(Resource):
     }
 
     def get(self):
-        user_account = get_jwt_identity()
+        user_account = get_user_account()
         user = CommonUser.objects.get(account=user_account)
         if not user.profile_photo:
             return {'message': 'User {} does not have profile photo'.format(user_account)}, 200
         return Response(user.profile_photo.read(), mimetype=user.profile_photo.content_type, status=200)
 
     def post(self):
-        user_account = get_jwt_identity()
+        user_account = get_user_account()
         if not request.files or not request.files.get('profile_photo'):
             abort(400, message='No image sent')
         user = CommonUser.objects.get(account=user_account)
@@ -123,14 +123,14 @@ class CurriculumApi(Resource):
     }
 
     def get(self):
-        user_account = get_jwt_identity()
+        user_account = get_user_account()
         user = CommonUser.objects.get(account=user_account)
         if not user.curriculum:
             return {'message': 'User {} does not have curriculum'.format(user_account)}, 200
         return Response(user.curriculum.read(), mimetype=user.curriculum.content_type, status=200)
 
     def post(self):
-        user_account = get_jwt_identity()
+        user_account = get_user_account()
         if not request.files or not request.files.get('curriculum'):
             abort(400, message='No curriculum sent')
         user = CommonUser.objects.get(account=user_account)
