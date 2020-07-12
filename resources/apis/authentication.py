@@ -22,7 +22,7 @@ class AuthenticationApi(Resource):
         authorized = check_password(hash_pw=user.password, password=user_password)
         if not authorized:
             abort(403, message='Account or password invalid')
-        expires = datetime.timedelta(hours=1)
+        expires = datetime.timedelta(hours=4)
         access_token = create_access_token(identity={'user_type': user_type, 'user_account': user.account},
                                            expires_delta=expires)
         return {'token': access_token}, 200
