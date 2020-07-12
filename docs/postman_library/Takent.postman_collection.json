@@ -91,7 +91,7 @@
 			"name": "Authentication",
 			"item": [
 				{
-					"name": "Authentication common user",
+					"name": "Authentication",
 					"event": [
 						{
 							"listen": "test",
@@ -117,54 +117,12 @@
 							}
 						},
 						"url": {
-							"raw": "{{host}}/authentication/user/common",
+							"raw": "{{host}}/authentication",
 							"host": [
 								"{{host}}"
 							],
 							"path": [
-								"authentication",
-								"user",
-								"common"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Authentication enterprise user",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"id": "fe7c559f-8710-4d90-b316-a690015818bf",
-								"exec": [
-									"pm.environment.set(\"user_token\", pm.response.json().token);"
-								],
-								"type": "text/javascript"
-							}
-						}
-					],
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n    \"account\": \"jereegonzalez@gmail.com\",\n    \"password\": \"pass123\"\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{host}}/authentication/user/enterprise",
-							"host": [
-								"{{host}}"
-							],
-							"path": [
-								"authentication",
-								"user",
-								"enterprise"
+								"authentication"
 							]
 						}
 					},
