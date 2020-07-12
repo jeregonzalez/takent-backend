@@ -37,6 +37,6 @@ class CitiesApi(Resource):
         :return:
         """
         cities = []
-        for city in City.objects(province_id=province_id):
+        for city in City.objects(province_id=province_id).order_by('name'):
             cities.append({'code': city.code, 'name': city.name})
         return cities, 200

@@ -20,4 +20,4 @@ def initialize_routes(api):
     # Enterprise
     api.add_resource(EnterpriseApi, '/api/v1/enterprise', '/api/v1/enterprise/<admin>')
     # Authentication
-    api.add_resource(AuthenticationApi, '/api/v1/authentication/user/<user_type>')
+    api.add_resource(AuthenticationApi, '/api/v1/authentication')
