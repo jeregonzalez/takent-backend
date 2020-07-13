@@ -1,4 +1,5 @@
 from database.db import db
+from resources.utils.exceptions import ImmutableFieldsException
 from .common import Address, Education, Experience, Skill, UserLanguage
 from .roles import Role
 
@@ -13,12 +14,17 @@ class User(db.Document):
         'abstract': True,
     }
 
+    def update(self, *args, **kwargs):
+        if any(field in ['account', 'password'] for field in kwargs.keys()):
+            raise ImmutableFieldsException
+        return super(User, self).update(*args, **kwargs)
+
 
 class CommonUser(User):
+    birth_date = db.DateTimeField(required=True)
     address = db.EmbeddedDocumentField(Address)
     curriculum = db.FileField()
     profile_photo = db.ImageField()
-    birth_date = db.DateTimeField(required=True)
     description = db.StringField()
     education = db.EmbeddedDocumentListField(Education)
     experience = db.EmbeddedDocumentListField(Experience)
