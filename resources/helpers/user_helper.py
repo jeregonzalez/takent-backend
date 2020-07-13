@@ -9,18 +9,25 @@ USER_TYPES = {
 }
 
 
-def validate_user_exists(user_type, user_account):
-    if not user_account:
-        abort(400, message='You must enter an user')
+def validate_user_exists():
+    user_type = get_jwt_identity().get('user_type')
+    user_account = get_jwt_identity().get('user_account')
     exist = USER_TYPES[user_type].objects(account=user_account).count()
     if not exist:
         abort(400, message='User {} does not exist'.format(user_account))
 
 
-def validate_user_not_exists(user_type, user_account):
-    exist = USER_TYPES[user_type].objects(account=user_account).count()
+def validate_user_not_exists(user_account=None):
+    exist = bool(USER_TYPES['common'].objects(account=user_account).count()) or \
+            bool(USER_TYPES['enterprise'].objects(account=user_account).count())
     if exist:
         abort(400, message='User {} already exists'.format(user_account))
+
+
+def get_user():
+    user_type = get_jwt_identity().get('user_type')
+    user_account = get_jwt_identity().get('user_account')
+    return USER_TYPES[user_type].objects.get(account=user_account)
 
 
 def get_user_type(user_account):
@@ -29,7 +36,3 @@ def get_user_type(user_account):
     if EnterpriseUser.objects(account=user_account).count():
         return 'enterprise'
     return None
-
-
-def get_user_account():
-    return get_jwt_identity().get('user_account')
