@@ -17,7 +17,7 @@ class AuthenticationApi(Resource):
             abort(400, message='Missing fields account or password')
         user_type = get_user_type(user_account)
         if not user_type:
-            abort(400, message='User {} does not exist'.format(user_type))
+            abort(400, message='User {} does not exist'.format(user_account))
         user = USER_TYPES[user_type].objects.get(account=user_account)
         authorized = check_password(hash_pw=user.password, password=user_password)
         if not authorized:
