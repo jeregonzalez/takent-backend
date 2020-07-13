@@ -1,12 +1,13 @@
 from functools import wraps
 
 from flask import request
-from flask_jwt_extended import verify_jwt_in_request
+from flask_jwt_extended import verify_jwt_in_request, get_jwt_identity
+from flask_restful import abort
 from jwt import ExpiredSignatureError
 
-from resources.helpers.user_helper import validate_user_exists, validate_user_not_exists, get_user_account
+from resources.helpers.user_helper import validate_user_exists, validate_user_not_exists, USER_TYPES
 from resources.utils.exceptions import AuthorizationHeaderMissingException, AuthorizationTokenExpiredException, \
-    UnauthorizedException, UnsupportedContentTypeException, UnsupportedResponseType
+    UnauthorizedException, UnsupportedContentTypeException, UnsupportedResponseTypeException
 
 
 def validate_headers(func):
@@ -17,7 +18,7 @@ def validate_headers(func):
         if content_type and not (content_type in ['application/json', '*/*']):
             raise UnsupportedContentTypeException(content_type)
         if accept and not (accept in ['application/json', '*/*']):
-            raise UnsupportedResponseType(accept)
+            raise UnsupportedResponseTypeException(accept)
         return func(*args, **kwargs)
     return wrapper
 
@@ -37,38 +38,10 @@ def authentication_required(func):
     return wrapper
 
 
-def common_user_must_exist(func):
+def user_must_exist(func):
     @wraps(func)
     def wrapper(*args, **kwargs):
-        user_account = get_user_account()
-        validate_user_exists(user_type='common', user_account=user_account)
-        return func(*args, **kwargs)
-    return wrapper
-
-
-def common_user_must_not_exist(func):
-    @wraps(func)
-    def wrapper(*args, **kwargs):
-        user_account = request.get_json().get('account')
-        validate_user_not_exists(user_type='common', user_account=user_account)
-        return func(*args, **kwargs)
-    return wrapper
-
-
-def enterprise_user_must_exist(func):
-    @wraps(func)
-    def wrapper(*args, **kwargs):
-        user_account = get_user_account()
-        validate_user_exists(user_type='enterprise', user_account=user_account)
-        return func(*args, **kwargs)
-    return wrapper
-
-
-def enterprise_user_must_not_exist(func):
-    @wraps(func)
-    def wrapper(*args, **kwargs):
-        user_account = request.get_json().get('account')
-        validate_user_not_exists(user_type='enterprise', user_account=user_account)
+        validate_user_exists()
         return func(*args, **kwargs)
     return wrapper
 
@@ -76,8 +49,20 @@ def enterprise_user_must_not_exist(func):
 def user_must_not_exist(func):
     @wraps(func)
     def wrapper(*args, **kwargs):
+        # user_type = request.args.get('user_type')
+        user_type = kwargs.get('user_type')
+        if user_type not in USER_TYPES:
+            abort(404)
         user_account = request.get_json().get('account')
-        validate_user_not_exists(user_type='enterprise', user_account=user_account)
-        validate_user_not_exists(user_type='common', user_account=user_account)
+        validate_user_not_exists(user_account=user_account)
+        return func(*args, **kwargs)
+    return wrapper
+
+
+def user_must_be_common(func):
+    @wraps(func)
+    def wrapper(*args, **kwargs):
+        if get_jwt_identity().get('user_type') != 'common':
+            abort(400, message='User must be common')
         return func(*args, **kwargs)
     return wrapper

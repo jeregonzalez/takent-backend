@@ -1,6 +1,7 @@
 from werkzeug.exceptions import HTTPException
 
 MSG_MISSING_REQUIRED_FIELDS = 'Missing required fields'
+MSG_SCHEMA_VALIDATION_ERROR = 'Schema is not valid'
 MSG_USER_ALREADY_EXISTS = 'User {} already exists'
 MSG_USER_NOT_EXISTS = 'User {} not exists'
 MSG_AUTHORIZATION_HEADER_MISSING = 'Authorization header is missing'
@@ -8,6 +9,7 @@ MSG_AUTHORIZATION_TOKEN_EXPIRED = 'Authorization token expired'
 MSG_UNAUTHORIZED = 'Unauthorized'
 MSG_UNSUPPORTED_CONTENT_TYPE = 'Unsupported content type {}'
 MSG_UNSUPPORTED_RESPONSE_TYPE = 'Unsupported response type {}'
+MSG_IMMUTABLE_FIELDS = 'There are fields that cannot be updated'
 
 
 def message(code, info):
@@ -17,6 +19,11 @@ def message(code, info):
 class MissingRequiredFieldsException(HTTPException):
     code = 400
     data = message(400, MSG_MISSING_REQUIRED_FIELDS)
+
+
+class SchemaValidationErrorException(HTTPException):
+    code = 400
+    data = message(400, MSG_SCHEMA_VALIDATION_ERROR)
 
 
 class UserAlreadyExistsException(HTTPException):
@@ -55,8 +62,13 @@ class UnsupportedContentTypeException(HTTPException):
         super().__init__()
 
 
-class UnsupportedResponseType(HTTPException):
+class UnsupportedResponseTypeException(HTTPException):
     def __init__(self, accept):
         self.code = 403
         self.data = message(403, MSG_UNSUPPORTED_RESPONSE_TYPE.format(accept))
         super().__init__()
+
+
+class ImmutableFieldsException(HTTPException):
+    code = 400
+    data = message(400, MSG_IMMUTABLE_FIELDS)
