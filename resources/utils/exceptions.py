@@ -41,31 +41,31 @@ class UserNotExistsException(HTTPException):
 
 
 class AuthorizationHeaderMissingException(HTTPException):
-    code = 400
-    data = message(400, MSG_AUTHORIZATION_HEADER_MISSING)
+    code = 401
+    data = message(401, MSG_AUTHORIZATION_HEADER_MISSING)
 
 
 class AuthorizationTokenExpiredException(HTTPException):
-    code = 403
-    data = message(403, MSG_AUTHORIZATION_TOKEN_EXPIRED)
+    code = 401
+    data = message(401, MSG_AUTHORIZATION_TOKEN_EXPIRED)
 
 
 class UnauthorizedException(HTTPException):
-    code = 403
-    data = message(403, MSG_UNAUTHORIZED)
+    code = 401
+    data = message(401, MSG_UNAUTHORIZED)
 
 
 class UnsupportedContentTypeException(HTTPException):
     def __init__(self, content_type):
-        self.code = 403
-        self.data = message(403, MSG_UNSUPPORTED_CONTENT_TYPE.format(content_type))
+        self.code = 400
+        self.data = message(400, MSG_UNSUPPORTED_CONTENT_TYPE.format(content_type))
         super().__init__()
 
 
 class UnsupportedResponseTypeException(HTTPException):
     def __init__(self, accept):
-        self.code = 403
-        self.data = message(403, MSG_UNSUPPORTED_RESPONSE_TYPE.format(accept))
+        self.code = 400
+        self.data = message(400, MSG_UNSUPPORTED_RESPONSE_TYPE.format(accept))
         super().__init__()
 
 
