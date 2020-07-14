@@ -1,6 +1,6 @@
 from database.db import db
 from resources.utils.exceptions import ImmutableFieldsException
-from .common import Address, Education, Experience, Skill, UserLanguage
+from .common import Address, Education, Experience, Skill, UserLanguage, Image
 from .roles import Role
 
 
@@ -24,7 +24,7 @@ class CommonUser(User):
     birth_date = db.DateTimeField(required=True)
     address = db.EmbeddedDocumentField(Address)
     curriculum = db.FileField()
-    profile_photo = db.ImageField()
+    profile_photo = db.ReferenceField(Image)
     description = db.StringField()
     education = db.EmbeddedDocumentListField(Education)
     experience = db.EmbeddedDocumentListField(Experience)

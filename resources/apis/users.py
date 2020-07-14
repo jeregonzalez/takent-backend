@@ -2,6 +2,8 @@ from flask import request, Response
 from flask_restful import Resource, abort
 from mongoengine import FieldDoesNotExist, NotUniqueError, ValidationError
 
+from database.models.common import Image
+from resources.helpers import image_helper
 from resources.helpers.auth_helper import hash_password
 from resources.helpers.log_helper import LOGGER
 from resources.helpers.user_helper import get_user, USER_TYPES
@@ -52,25 +54,24 @@ class UserApi(Resource):
 class ImageApi(Resource):
 
     method_decorators = {
-        'get': [user_must_exist, user_must_be_common, authentication_required],
-        'post': [user_must_exist, user_must_be_common, authentication_required]
+        'get': [user_must_exist, user_must_be_common, authentication_required, validate_headers],
+        'post': [user_must_exist, user_must_be_common, authentication_required, validate_headers]
     }
 
     def get(self):
         user = get_user()
         if not user.profile_photo:
             return {'message': 'User {} does not have profile photo'.format(user.account)}, 200
-        return Response(user.profile_photo.read(), mimetype=user.profile_photo.content_type, status=200)
+        return {'profile_photo': user.profile_photo.base64}, 200
 
     def post(self):
-        if not request.files or not request.files.get('profile_photo'):
+        profile_photo = request.get_json().get('profile_photo')
+        if not profile_photo:
             abort(400, message='No image sent')
         user = get_user()
-        new_photo = request.files.get('profile_photo')
-        if user.profile_photo:
-            user.profile_photo.delete()
-        user.profile_photo.put(new_photo, content_type=new_photo.content_type)
-        user.save()
+        new_image = Image(base64=profile_photo)
+        new_image.save()
+        user.update(profile_photo=new_image)
         return {'message': 'Profile photo uploaded successfully'}, 201
 
 
