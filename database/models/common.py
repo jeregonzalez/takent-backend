@@ -77,3 +77,7 @@ class State(db.Document):
     name = db.StringField(primary_key=True)
     description = db.StringField()
     scope = db.ReferenceField(Scope)
+
+
+class Image(db.Document):
+    base64 = db.StringField()
