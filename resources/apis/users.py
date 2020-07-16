@@ -3,9 +3,7 @@ from flask_restful import Resource, abort
 from mongoengine import FieldDoesNotExist, NotUniqueError, ValidationError
 
 from database.models.common import Image
-from resources.helpers import image_helper
 from resources.helpers.auth_helper import hash_password
-from resources.helpers.log_helper import LOGGER
 from resources.helpers.user_helper import get_user, USER_TYPES
 from resources.utils.decorators import validate_headers, authentication_required, user_must_not_exist, \
     user_must_exist, user_must_be_common
@@ -31,7 +29,6 @@ class UserApi(Resource):
         if body.get('password'):
             body['password'] = hash_password(body['password'])
         try:
-            LOGGER.debug(user_type)
             new_user = USER_TYPES[user_type](**body).save()
         except FieldDoesNotExist:
             raise SchemaValidationErrorException

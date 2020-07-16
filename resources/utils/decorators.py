@@ -49,7 +49,6 @@ def user_must_exist(func):
 def user_must_not_exist(func):
     @wraps(func)
     def wrapper(*args, **kwargs):
-        # user_type = request.args.get('user_type')
         user_type = kwargs.get('user_type')
         if user_type not in USER_TYPES:
             abort(404)
