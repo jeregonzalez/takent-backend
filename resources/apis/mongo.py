@@ -4,9 +4,10 @@ import os
 from flask_restful import Resource
 
 from database.initial_values import data
-from database.models.common import Country, Province, City, EducationLevel, LanguageLevel, State, Language
+from database.models.common import Country, City, Province, EducationLevel, LanguageLevel, State, Language
+from database.models.enterprise import Enterprise
 from database.models.roles import Permission, Role
-from database.models.users import EnterpriseUser
+from database.models.users import EnterpriseUser, CommonUser
 from resources.helpers import places_helper
 
 
@@ -91,9 +92,28 @@ def init_states(states):
 def init_enterprise_users(enterprise_users):
     EnterpriseUser.objects.delete()
     for enterprise_user in enterprise_users:
+        enterprise_user['state'] = State.objects.get(name='active')
         enterprise_user['role'] = Role.objects.get(name=enterprise_user['role'])
-    EnterpriseUser.objects.insert([
-        EnterpriseUser(**enterprise_user) for enterprise_user in enterprise_users
+        for eu in enterprise_users:
+            EnterpriseUser(**eu).save()
+
+
+def init_common_users(common_users):
+    CommonUser.objects.delete()
+    CommonUser.objects.insert([
+        CommonUser(**common_user) for common_user in common_users
+    ])
+
+
+def init_enterprises(enterprises):
+    Enterprise.objects.delete()
+    for enterprise in enterprises:
+        enterprise['state'] = State.objects.get(name='active')
+        enterprise['admin_user'] = EnterpriseUser.objects.get(account=enterprise['admin_user'])
+        enterprise['member_users'] = [EnterpriseUser.objects.get(account=member)
+                                      for member in enterprise.get('member_users')]
+    Enterprise.objects.insert([
+        Enterprise(**enterprise) for enterprise in enterprises
     ])
 
 

@@ -1,13 +1,13 @@
 from mongoengine import NULLIFY
 
 from database.db import db
+from database.models.common import State, Address, CurriculumVitae, Image, Education, Experience, Skill, UserLanguage
+from database.models.roles import Role
 from resources.utils.exceptions import ImmutableFieldsException
-from .common import Address, Education, Experience, Skill, UserLanguage, Image, CurriculumVitae, State
-from .roles import Role
 
 
 class User(db.Document):
-    account = db.EmailField(primary_key=True)
+    account = db.StringField(primary_key=True)
     password = db.StringField(required=True, min_length=6)
     name = db.StringField(required=True)
     surname = db.StringField(required=True)

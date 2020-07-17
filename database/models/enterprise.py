@@ -15,4 +15,4 @@ class Enterprise(db.Document):
     description = db.StringField()
     admin_user = db.ReferenceField(EnterpriseUser, required=True)
     member_users = db.ListField(db.ReferenceField(EnterpriseUser))
-    state = db.ReferenceField(State)
+    state = db.ReferenceField(State, default=lambda:State.objects.get(name='active'))

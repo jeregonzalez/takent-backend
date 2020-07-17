@@ -22,7 +22,7 @@ def initialize_routes(api):
     api.add_resource(UserExistsValidationApi, '/api/v1/user/exists')
     api.add_resource(ActivateAccountApi, '/api/v1/user/activate')
     # Enterprise
-    api.add_resource(EnterpriseApi, '/api/v1/enterprise', '/api/v1/enterprise/<admin>')
+    api.add_resource(EnterpriseApi, '/api/v1/enterprise')
     # Authentication
     api.add_resource(AuthenticationApi, '/api/v1/authentication')
     # Language

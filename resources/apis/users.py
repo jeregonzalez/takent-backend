@@ -4,10 +4,13 @@ from flask import request
 from flask_restful import Resource, abort
 from mongoengine import FieldDoesNotExist, ValidationError
 
-from database.models.common import Image, CurriculumVitae, ActivationTicket
+from database.models.common import Image, State, ActivationTicket, CurriculumVitae
+from database.models.enterprise import Enterprise
+from database.models.roles import Role
+from database.models.users import EnterpriseUser
 from resources.helpers import password_helper
 from resources.helpers.auth_helper import hash_password
-from resources.helpers.email_helper.email_helper import EmailChangePassword, EmailActivation
+from resources.helpers.email_helper.email_helper import EmailAdmin, EmailActivation, EmailChangePassword
 from resources.helpers.log_helper import LOGGER
 from resources.helpers.user_helper import get_user, USER_TYPES, get_user_type
 from resources.utils.decorators import validate_headers, authentication_required, user_must_not_exist, \
@@ -17,7 +20,6 @@ from resources.utils.exceptions import MissingRequiredFieldsException, SchemaVal
 
 
 class UserApi(Resource):
-
     method_decorators = {
         'get': [user_must_exist, authentication_required, validate_headers],
         'post': [user_must_not_exist, validate_headers],
@@ -51,12 +53,34 @@ class UserApi(Resource):
         return '', 204
 
     def delete(self, user_type=None):
-        get_user().delete()
+        user = get_user()
+        if get_user_type(user.account) == 'common':
+            user.update(state=State.objects.get(name='inactive'))
+        elif user.role == Role.objects.get(name='member'):
+            user.update(state=State.objects.get(name='inactive'))
+        else:
+            user.update(state=State.objects.get(name='inactive'))
+            ent = Enterprise.objects.get(admin_user=user.account)
+
+            for member in ent.member_users:
+                if member.state.name == 'inactive':
+                    continue
+                EnterpriseUser.objects.get(account=member.account).update(
+                    state=State.objects.get(name='inactive'))
+
+            def send_emails():
+                for mb in ent.member_users:
+                    email = EmailAdmin(destination_email=mb.account)
+                    email.send_email()
+
+            email_process = Thread(target=send_emails)
+            email_process.start()
+            ent.update(state=State.objects.get(name='inactive'))
+
         return '', 204
 
 
 class ImageApi(Resource):
-
     method_decorators = {
         'get': [user_must_exist, user_must_be_common, authentication_required, validate_headers],
         'post': [user_must_exist, user_must_be_common, authentication_required, validate_headers],
@@ -87,7 +111,6 @@ class ImageApi(Resource):
 
 
 class CurriculumApi(Resource):
-
     method_decorators = {
         'get': [user_must_exist, user_must_be_common, authentication_required, validate_headers],
         'post': [user_must_exist, user_must_be_common, authentication_required, validate_headers],
