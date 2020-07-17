@@ -24,6 +24,7 @@ data = {
         {'name': 'Completo profesional'},
         {'name': 'Nativo o bilingüe'}
     ],
+
     'state': [
         {'name': 'active', 'description': 'Active entity'},
         {'name': 'inactive', 'description': 'Inactive entity'}

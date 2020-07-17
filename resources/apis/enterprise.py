@@ -1,34 +1,42 @@
+import time
+
 from flask import request
 from flask_restful import Resource, abort
-from mongoengine import FieldDoesNotExist, DoesNotExist
+from mongoengine import FieldDoesNotExist, DoesNotExist, NotUniqueError
+
+from database.models.roles import Role
+from resources.helpers.log_helper import LOGGER
 
 from database.models.common import State
 from database.models.enterprise import Enterprise
 from database.models.users import EnterpriseUser
-from resources.utils.exceptions import MissingRequiredFieldsException
+from resources.helpers.user_helper import get_user
+from resources.helpers.auth_helper import hash_password
+from resources.utils.exceptions import MissingRequiredFieldsException, SchemaValidationErrorException, \
+    UserAlreadyExistsException
+from resources.utils.decorators import validate_headers, authentication_required, \
+    enterprise_must_exist, enterprise_must_not_exist, user_member_must_exist, \
+    enterprise_state_must_active, user_must_be_enterprise, user_members_must_not_exist
+from resources.helpers.user_helper import validate_enterprise_user_exist
 
 
 class EnterpriseApi(Resource):
-    def get(self, admin=None):
+    method_decorators = {
+        'get': [enterprise_state_must_active, enterprise_must_exist, authentication_required],
+        'post': [user_members_must_not_exist, enterprise_must_not_exist, user_must_be_enterprise, authentication_required,
+                 validate_headers],
+        'put': [user_members_must_not_exist, user_must_be_enterprise, enterprise_must_exist,
+                authentication_required, validate_headers],
+        'delete': [enterprise_must_exist, authentication_required, validate_headers]
+    }
+
+    def get(self):
         """
         Obtiene una empresa que corresponda con un nombre
-        :param enterprise_name: nombre de la empresa a buscar
+        :param admin: nombre de la empresa a buscar
         """
-        if not admin:
-            abort(404)
 
-        # Validar que la lista no esté vacía
-        if Enterprise.objects.count() == 0:
-            return [], 200
-        try:
-            # Obtengo la empresa que corresponde con el nombre pasado por parámetro
-            empresa_ret = Enterprise.objects.get(admin_user=admin)
-        except DoesNotExist:
-            abort(400, message='User enterprise {} not exists'.format(admin))
-
-        # Se valida que la empresa este activa
-        if not empresa_ret.state == State.objects.get(name='active_enterprise'):
-            abort(400, message='Enteprise\'s state is inactive')
+        empresa_ret = Enterprise.objects.get(admin_user=get_user().account)
 
         # Creo una lista con un diccionario fijando los parámetros que se quieren mostrar
         empresa = [
@@ -45,76 +53,56 @@ class EnterpriseApi(Resource):
         """
         body = request.get_json()
         try:
-            # Se valida que el admin_user ya esté registrado
-            validate_enterprise_user_exist(body['admin_user'])
-            # Se valida que el estado exista
-            validate_state_exist(body['state'])
-            # Se valida si la empresa ya se encuentra registrada
-            validate_enterprise_exist(body['admin_user'])
+            body['admin_user'] = get_user()
+
+            if 'member_users' in body and body['member_users']:
+                member_users = []
+                for member_user in body['member_users']:
+                    member_user['role'] = Role.objects.get(name='member')
+                    member_user['password'] = hash_password(member_user.get('password'))
+
+                    try:
+                        enterprise_user = EnterpriseUser(**member_user).save()
+                    except NotUniqueError:
+                        raise UserAlreadyExistsException(enterprise_user.account)
+
+                    member_users.append(enterprise_user)
+
+                body['member_users'] = member_users
 
             enterprise = Enterprise(**body)
-            Enterprise.objects.insert(enterprise)
+            enterprise.save()
 
         except FieldDoesNotExist:
             raise MissingRequiredFieldsException
 
         return {'message': 'Enterprise {} created successfully'.format(enterprise.business_name)}, 201
 
-    def delete(self, admin=None):
+    def delete(self):
         """
         Elimina de forma lógica una empresa
         """
-        if not admin:
-            abort(404)
+        ent = Enterprise.objects.get(admin_user=get_user().account)
+        ent.update(state=State.objects.get(name='inactive'))
 
-        try:
-            state_enterprise = State.objects.get(name='inactive_enterprise')
-            Enterprise.objects.get(admin_user=admin).update(state=state_enterprise)
-        except DoesNotExist:
-            abort(400, message='User enterprise {} not exists'.format(admin))
+        return {'message': 'The enterprise {} has been deleted logically'.format(ent.business_name)}, 200
 
-        enterprise = Enterprise.objects.get(admin_user=admin)
-
-        return {'message': 'The enterprise {} has been deleted logically'.format(enterprise.business_name)}, 200
-
-    def put(self, admin=None):
+    def put(self):
         """
         Actualiza los datos de una empresa
         """
-        if not admin:
-            abort(404)
-
         body = request.get_json()
-
+        enterprise = Enterprise.objects.get(admin_user=get_user())
         try:
-            if 'admin_user' in body:
-                validate_enterprise_user_exist(body['admin_user'])
-
-            validate_enterprise_user_exist(admin)
-
             if 'state' in body:
-                validate_state_exist(body['state'])
                 body['state'] = State.objects.get(name=body['state'])
 
-            enterprise = Enterprise.objects.get(admin_user=admin)
+            if 'member_users' in body and body['member_users']:
+                raise SchemaValidationErrorException
+
             enterprise.update(**body)
 
         except DoesNotExist:
-            abort(400, message='User enterprise {} not exists'.format(admin))
+            abort(400, message='User enterprise {} not exists'.format(body['admin_user']))
 
         return {'message': 'Enterprise {} updated successfully'.format(enterprise.business_name)}, 201
-
-
-def validate_state_exist(name_state):
-    if not State.objects(name=name_state).count():
-        abort(400, message='State {} not exists'.format(name_state))
-
-
-def validate_enterprise_user_exist(name_user):
-    if not EnterpriseUser.objects(account=name_user):
-        abort(400, message='User {} not exists'.format(name_user))
-
-
-def validate_enterprise_exist(admin):
-    if Enterprise.objects(admin_user=admin):
-        abort(400, message='Enterprise with admin {} exists'.format(admin))
