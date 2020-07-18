@@ -26,8 +26,17 @@ class Address(db.EmbeddedDocument):
     apartment = db.StringField()
     floor = db.IntField()
     postal_code = db.IntField()
-    province = db.IntField()
     city = db.ReferenceField(City)
+
+    def format_response(self):
+        response = super(Address, self).to_mongo()
+        if response.get('city'):
+            city = City.objects.get(code=response['city'])
+            province = list(filter(lambda obj: obj.code == city.province_id,
+                                   Country.objects.get(code=1).provinces))[0]
+            response['province'] = {'code': province.code, 'name': province.name}
+            response['city'] = {'code': city.code, 'name': city.name}
+        return response
 
 
 class EducationLevel(db.Document):
@@ -37,6 +46,7 @@ class EducationLevel(db.Document):
 class Education(db.EmbeddedDocument):
     start_date = db.DateTimeField()
     end_date = db.DateTimeField()
+    institution = db.StringField()
     name = db.StringField()
     level = db.StringField()
     description = db.StringField()
@@ -48,6 +58,7 @@ class Experience(db.EmbeddedDocument):
     end_date = db.DateTimeField()
     position = db.StringField(required=True)
     description = db.StringField()
+    reference = db.DictField()
 
 
 class Skill(db.EmbeddedDocument):
@@ -57,7 +68,8 @@ class Skill(db.EmbeddedDocument):
 
 class UserLanguage(db.EmbeddedDocument):
     name = db.StringField(required=True)
-    level = db.StringField(required=True)
+    writing_level = db.StringField(required=True)
+    reading_level = db.StringField(required=True)
 
 
 class LanguageLevel(db.Document):
@@ -65,7 +77,8 @@ class LanguageLevel(db.Document):
 
 
 class Language(db.Document):
-    name = db.StringField(primary_key=True)
+    code = db.StringField(primary_key=True)
+    name = db.StringField()
 
 
 class Scope(db.Document):
