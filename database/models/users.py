@@ -1,3 +1,5 @@
+from mongoengine import NULLIFY
+
 from database.db import db
 from resources.utils.exceptions import ImmutableFieldsException
 from .common import Address, Education, Experience, Skill, UserLanguage, Image
@@ -24,12 +26,13 @@ class CommonUser(User):
     birth_date = db.DateTimeField(required=True)
     address = db.EmbeddedDocumentField(Address)
     curriculum = db.FileField()
-    profile_photo = db.ReferenceField(Image)
+    profile_photo = db.ReferenceField(Image, reverse_delete_rule=NULLIFY)
     description = db.StringField()
     education = db.EmbeddedDocumentListField(Education)
     experience = db.EmbeddedDocumentListField(Experience)
     skill = db.EmbeddedDocumentListField(Skill)
     language = db.EmbeddedDocumentListField(UserLanguage)
+    phone = db.IntField()
 
 
 class EnterpriseUser(User):
