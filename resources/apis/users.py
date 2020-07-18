@@ -52,7 +52,8 @@ class ImageApi(Resource):
 
     method_decorators = {
         'get': [user_must_exist, user_must_be_common, authentication_required, validate_headers],
-        'post': [user_must_exist, user_must_be_common, authentication_required, validate_headers]
+        'post': [user_must_exist, user_must_be_common, authentication_required, validate_headers],
+        'delete': [user_must_exist, user_must_be_common, authentication_required, validate_headers]
     }
 
     def get(self):
@@ -70,6 +71,12 @@ class ImageApi(Resource):
         new_image.save()
         user.update(profile_photo=new_image)
         return {'message': 'Profile photo uploaded successfully'}, 201
+
+    def delete(self):
+        user = get_user()
+        user.profile_photo.delete()
+        user.save()
+        return '', 204
 
 
 class CurriculumApi(Resource):
