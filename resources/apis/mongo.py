@@ -1,7 +1,10 @@
+import csv
+import os
+
 from flask_restful import Resource
 
 from database.initial_values import data
-from database.models.common import Country, Province, City, EducationLevel, LanguageLevel, State, Scope
+from database.models.common import Country, Province, City, EducationLevel, LanguageLevel, State, Scope, Language
 from database.models.roles import Permission, Role
 from database.models.users import EnterpriseUser
 from resources.helpers import places_helper
@@ -22,6 +25,7 @@ class MongoApi(Resource):
         init_scopes(data.get('scope'))
         init_states(data.get('state'))
         init_enterprise_users(data.get('enterprise_users'))
+        init_languages()
 
         return {'message': 'Database initialized correctly'}, 200
 
@@ -102,3 +106,16 @@ def init_enterprise_users(enterprise_users):
     EnterpriseUser.objects.insert([
         EnterpriseUser(**enterprise_user) for enterprise_user in enterprise_users
     ])
+
+
+def init_languages():
+    languages_csv = './database/data/languages.csv'
+    if not os.path.exists(languages_csv):
+        return
+    languages = []
+    with open(languages_csv) as file:
+        reader = csv.DictReader(file)
+        for row in reader:
+            language = {'code': row['code'], 'name': row['name']}
+            languages.append(language)
+    Language.objects.insert([Language(**data_language) for data_language in languages])
