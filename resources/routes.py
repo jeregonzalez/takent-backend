@@ -1,5 +1,7 @@
+from resources.apis.education import EducationLevelApi
 from resources.apis.enterprise import EnterpriseApi
 from resources.apis.authentication import AuthenticationApi
+from resources.apis.languages import LanguageApi, LanguageLevelApi
 from resources.apis.mongo import MongoApi
 from resources.apis.places import CountriesApi, ProvincesApi, CitiesApi
 from resources.apis.users import ImageApi, CurriculumApi, UserApi
@@ -20,3 +22,8 @@ def initialize_routes(api):
     api.add_resource(EnterpriseApi, '/api/v1/enterprise', '/api/v1/enterprise/<admin>')
     # Authentication
     api.add_resource(AuthenticationApi, '/api/v1/authentication')
+    # Language
+    api.add_resource(LanguageApi, '/api/v1/language')
+    api.add_resource(LanguageLevelApi, '/api/v1/language_level')
+    # Education
+    api.add_resource(EducationLevelApi, '/api/v1/education_level')

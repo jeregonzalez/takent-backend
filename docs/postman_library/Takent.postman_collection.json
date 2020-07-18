@@ -172,7 +172,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"account\": \"jereegonzalez@gmail.com\",\n    \"password\": \"pass123\",\n    \"name\": \"Jeremias\",\n    \"surname\": \"Gonzalez\",\n    \"address\": {\n        \"district\": \"Córdoba\",\n        \"street\": \"Mza 19\",\n        \"number\": 7,\n        \"postal_code\": 5000,\n        \"city\": 2084010001\n    },\n    \"birth_date\": \"28/04/1996\",\n    \"description\": \"Hola soy jere\",\n    \"education\": [\n        {\n            \"start_date\": \"01/01/2014\",\n            \"end_date\": \"01/01/2019\",\n            \"name\": \"Ingeniero en sistemas\",\n            \"level\": \"Degree\",\n            \"description\": \"Alguna descripción\"\n        }\n    ],\n    \"experience\": [\n        {\n            \"company\": \"SimtTLiX\",\n            \"start_date\": \"01/12/2019\",\n            \"end_date\": \"01/12/2020\",\n            \"position\": \"Software Engineer\",\n            \"description\": \"hola\"\n        }\n    ],\n    \"skill\": [\n        {\n            \"name\": \"Dormir\",\n            \"description\": \"\"\n        }\n\n    ],\n    \"language\": [\n        {\n            \"name\": \"Ingles\",\n            \"level\": \"Basic\"\n        }\n    ]\n}",
+							"raw": "{\n    \"account\": \"jereegonzalez@gmail.com\",\n    \"password\": \"pass123\",\n    \"name\": \"Jeremias\",\n    \"surname\": \"Gonzalez\",\n    \"address\": {\n        \"district\": \"Córdoba\",\n        \"street\": \"Mza 19\",\n        \"number\": 7,\n        \"postal_code\": 5000,\n        \"city\": 2084010001\n    },\n    \"birth_date\": \"28/04/1996\",\n    \"description\": \"Hola soy jere\",\n    \"education\": [\n        {\n            \"start_date\": \"01/01/2014\",\n            \"end_date\": \"01/01/2019\",\n            \"institution\": \"UTN Córdoba\",\n            \"name\": \"Ingeniero en sistemas\",\n            \"level\": \"Degree\",\n            \"description\": \"Alguna descripción\"\n        }\n    ],\n    \"experience\": [\n        {\n            \"company\": \"SimtTLiX\",\n            \"start_date\": \"01/12/2019\",\n            \"end_date\": \"01/12/2020\",\n            \"position\": \"Software Engineer\",\n            \"description\": \"hola\",\n            \"reference\": {\n                \"name\": \"Nadie\",\n                \"phone\": 123123123\n            }\n        }\n    ],\n    \"skill\": [\n        {\n            \"name\": \"Dormir\",\n            \"description\": \"\"\n        }\n\n    ],\n    \"language\": [\n        {\n            \"name\": \"Ingles\",\n            \"writing_level\": \"Basic\",\n            \"reading_level\": \"Basic\"\n        }\n    ]\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -610,6 +610,90 @@
 							"path": [
 								"init",
 								"mongodb"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "Language",
+			"item": [
+				{
+					"name": "Language",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "file",
+							"file": {}
+						},
+						"url": {
+							"raw": "{{host}}/language",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"language"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Language level",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "file",
+							"file": {}
+						},
+						"url": {
+							"raw": "{{host}}/language_level",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"language_level"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "Education",
+			"item": [
+				{
+					"name": "Education level",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "file",
+							"file": {}
+						},
+						"url": {
+							"raw": "{{host}}/education_level",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"education_level"
 							]
 						}
 					},
