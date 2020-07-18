@@ -4,7 +4,7 @@ import json
 from bson import ObjectId
 from flask_mongoengine import Document
 
-from database.models.users import User
+from database.models.users import User, CommonUser
 
 HIDE_FIELDS = ['password', 'profile_photo', 'curriculum']
 
@@ -15,8 +15,10 @@ class CustomEncoder(json.JSONEncoder):
             response = obj.to_mongo()
             for field in HIDE_FIELDS:
                 response.pop(field, None)
+            if isinstance(obj, CommonUser) and obj.address and obj.address.city:
+                response['address'] = obj.address.format_response()
             return response
-        if issubclass(obj.__class__, Document):
+        elif issubclass(obj.__class__, Document):
             return obj.to_mongo()
         elif isinstance(obj, datetime.datetime) or isinstance(obj, datetime.date):
             return str(obj)
