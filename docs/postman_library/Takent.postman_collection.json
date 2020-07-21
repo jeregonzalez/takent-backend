@@ -420,6 +420,81 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "Recover password",
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {}
+					},
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"account\": \"jereegonzalez@gmail.com\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/user/common/recover_password",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"user",
+								"common",
+								"recover_password"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Change password",
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {}
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{user_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"new_password\": \"pass123\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/user/common/change_password",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"user",
+								"common",
+								"change_password"
+							]
+						}
+					},
+					"response": []
 				}
 			],
 			"protocolProfileBehavior": {}
@@ -608,6 +683,81 @@
 							"path": [
 								"enterprise",
 								"usertakent@gmail.com"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Recover password",
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {}
+					},
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"account\": \"jereegonzalez@gmail.com\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/user/enterprise/recover_password",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"user",
+								"enterprise",
+								"recover_password"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Change password",
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {}
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{user_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"new_password\": \"nuevapass\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/user/enterprise/change_password",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"user",
+								"enterprise",
+								"change_password"
 							]
 						}
 					},

@@ -4,7 +4,7 @@ from resources.apis.authentication import AuthenticationApi
 from resources.apis.languages import LanguageApi, LanguageLevelApi
 from resources.apis.mongo import MongoApi
 from resources.apis.places import CountriesApi, ProvincesApi, CitiesApi
-from resources.apis.users import ImageApi, CurriculumApi, UserApi
+from resources.apis.users import ImageApi, CurriculumApi, UserApi, PasswordRecoverApi, ChangePasswordApi
 
 
 def initialize_routes(api):
@@ -27,3 +27,8 @@ def initialize_routes(api):
     api.add_resource(LanguageLevelApi, '/api/v1/language_level')
     # Education
     api.add_resource(EducationLevelApi, '/api/v1/education_level')
+    # Password
+    api.add_resource(PasswordRecoverApi, '/api/v1/user/common/recover_password',
+                     '/api/v1/user/enterprise/recover_password')
+    api.add_resource(ChangePasswordApi, '/api/v1/user/common/change_password',
+                     '/api/v1/user/enterprise/change_password')
