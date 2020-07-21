@@ -21,6 +21,9 @@ class User(db.Document):
             raise ImmutableFieldsException
         return super(User, self).update(*args, **kwargs)
 
+    def update_password(self, new_password):
+        super(User, self).update(password=new_password)
+
 
 class CommonUser(User):
     birth_date = db.DateTimeField(required=True)
