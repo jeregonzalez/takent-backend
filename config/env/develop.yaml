@@ -8,3 +8,7 @@ MONGODB_PORT: 27017
 
 # JWT Secret Key
 JWT_SECRET_KEY: "t1NP63m4wnBg6nyHYKfmc2TpCOGI4nss"
+
+# Takent email
+TAKENT_EMAIL: "takentuser@gmail.com"
+TAKENT_EMAIL_PASSWORD: "proyectofinal2020"

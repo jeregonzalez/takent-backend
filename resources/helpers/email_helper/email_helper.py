@@ -7,12 +7,10 @@ from email.mime.text import MIMEText
 from smtplib import SMTPException
 
 from resources.helpers.log_helper import LOGGER
+from resources.utils.project_vars import ProjectVars
 
 SMTP_HOST = 'smtp.gmail.com'
 SMTP_PORT = 587
-
-SOURCE_EMAIL = 'takentuser@gmail.com'
-SOURCE_PASSWORD = 'proyectofinal2020'
 
 COMMON_IMAGES = {
     'logo_takent': 'logo_takent.png',
@@ -66,7 +64,7 @@ class Email(ABC):
         Método que inicializa el email
         """
         self.root_message['Subject'] = SUBJECTS.get(self.email_type)
-        self.root_message['From'] = SOURCE_EMAIL
+        self.root_message['From'] = ProjectVars.get_project_var('TAKENT_EMAIL')
         self.root_message['To'] = self.destination_email
         self.root_message.preamble = 'This is a multi-part message in MIME format.'
         self.root_message.attach(self.alternative_message)
@@ -100,13 +98,15 @@ class Email(ABC):
         """
         Método que envía el email a destinatario
         """
+        takent_email = ProjectVars.get_project_var('TAKENT_EMAIL')
+        takent_password = ProjectVars.get_project_var('TAKENT_EMAIL_PASSWORD')
         self._init_email()
         self._set_body()
         self._set_images()
         try:
             self.smtp.starttls()
-            self.smtp.login(SOURCE_EMAIL, SOURCE_PASSWORD)
-            self.smtp.sendmail(SOURCE_PASSWORD, self.destination_email, self.root_message.as_string())
+            self.smtp.login(takent_email, takent_password)
+            self.smtp.sendmail(takent_password, self.destination_email, self.root_message.as_string())
         except SMTPException as e:
             LOGGER.error(e)
         finally:

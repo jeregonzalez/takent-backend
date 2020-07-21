@@ -10,24 +10,25 @@ data = {
         {'name': 'member', 'description': 'Permissions to only query data', 'permissions': ['member']}
     ],
     'education_level': [
-        {'name': 'College'},
-        {'name': 'Degree'},
-        {'name': 'Postgraduate'},
+        {'name': 'Primario'},
+        {'name': 'Secundario'},
+        {'name': 'Grado'},
+        {'name': 'Posgrado'},
         {'name': 'Master'},
-        {'name': 'Tertiary'}
+        {'name': 'Terciario'}
     ],
     'language_level': [
-        {'name': 'Basic'},
-        {'name': 'Limited basic'},
-        {'name': 'Basic professional'},
-        {'name': 'Complete professional'},
-        {'name': 'Native or bilingual'}
+        {'name': 'Básico'},
+        {'name': 'Intermedio'},
+        {'name': 'Básico profesional'},
+        {'name': 'Completo profesional'},
+        {'name': 'Nativo o bilingüe'}
     ],
     'state': [
         {'name': 'active', 'description': 'Active entity', 'scope': 'enterprise'},
     ],
     'scope': [
-        {'name': 'enterprise', 'description': 'Account of enterprise whith active state'}
+        {'name': 'enterprise', 'description': 'Account of enterprise with active state'}
     ],
     'enterprise_users': [
         {'account': 'usertakent@gmail.com', 'password': '123', 'name': 'takent', 'surname': 'app', 'role': 'admin'},
