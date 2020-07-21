@@ -144,3 +144,13 @@ class ChangePasswordApi(Resource):
         new_password = hash_password(new_password)
         get_user().update_password(new_password=new_password)
         return {'message': 'Password changed correctly'}, 200
+
+
+class UserExistsValidation(Resource):
+
+    def get(self):
+        user_account = request.args.get('account')
+        if not user_account:
+            abort(400, message='Param account is needed')
+        exists = bool(get_user_type(user_account=user_account))
+        return {'exists': exists}, 200
