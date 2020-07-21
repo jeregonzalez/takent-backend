@@ -880,6 +880,36 @@
 				}
 			],
 			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "Validate user exists",
+			"protocolProfileBehavior": {
+				"disabledSystemHeaders": {}
+			},
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{host}}/user/exists?account=jereegonzalez@gmail.com",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"user",
+						"exists"
+					],
+					"query": [
+						{
+							"key": "account",
+							"value": "jereegonzalez@gmail.com"
+						}
+					]
+				}
+			},
+			"response": []
 		}
 	],
 	"protocolProfileBehavior": {}

@@ -9,6 +9,7 @@ from flask_restful import Api
 from database.db import init_db
 from resources.helpers import yaml_helper
 from resources.routes import initialize_routes
+from resources.utils.project_vars import ProjectVars
 from resources.utils.representations import json_output
 
 CONFIG_BASE_DIR = 'config/'
@@ -30,6 +31,7 @@ bcrypt = Bcrypt(app)
 
 dictConfig(yaml_helper.to_dict(LOG_CONFIG_FILE))
 app.config.from_mapping(yaml_helper.to_dict(API_CONFIG_FILE))
+ProjectVars.set_project_vars(app.config.items())
 
 jwt = JWTManager(app)
 
