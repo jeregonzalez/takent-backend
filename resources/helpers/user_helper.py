@@ -24,9 +24,10 @@ def validate_user_not_exists(user_account=None):
         abort(400, message='User {} already exists'.format(user_account))
 
 
-def get_user():
-    user_type = get_jwt_identity().get('user_type')
-    user_account = get_jwt_identity().get('user_account')
+def get_user(user_type=None, user_account=None):
+    if not user_type or not user_account:
+        user_type = get_jwt_identity().get('user_type')
+        user_account = get_jwt_identity().get('user_account')
     return USER_TYPES[user_type].objects.get(account=user_account)
 
 
