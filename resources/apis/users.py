@@ -1,14 +1,18 @@
+from threading import Thread
+
 from flask import request, Response
 from flask_restful import Resource, abort
 from mongoengine import FieldDoesNotExist, NotUniqueError, ValidationError
 
 from database.models.common import Image
+from resources.helpers import password_helper
 from resources.helpers.auth_helper import hash_password
-from resources.helpers.user_helper import get_user, USER_TYPES
+from resources.helpers.email_helper.email_helper import EmailChangePassword
+from resources.helpers.user_helper import get_user, USER_TYPES, get_user_type
 from resources.utils.decorators import validate_headers, authentication_required, user_must_not_exist, \
     user_must_exist, user_must_be_common
 from resources.utils.exceptions import MissingRequiredFieldsException, UserAlreadyExistsException, \
-    SchemaValidationErrorException
+    SchemaValidationErrorException, UserNotExistsException
 
 
 class UserApi(Resource):
@@ -102,3 +106,41 @@ class CurriculumApi(Resource):
         user.curriculum.put(new_curriculum, content_type=new_curriculum.content_type)
         user.save()
         return {'message': 'Curriculum uploaded successfully'}, 201
+
+
+class PasswordRecoverApi(Resource):
+
+    method_decorators = {
+        'post': [validate_headers]
+    }
+
+    def post(self):
+        body = request.get_json()
+        user_account = body.get('account')
+        if not user_account:
+            raise MissingRequiredFieldsException
+        user_type = get_user_type(user_account=user_account)
+        if not user_type:
+            raise UserNotExistsException(user_account)
+        new_password = password_helper.get_random_alphanumeric_string(10)
+        user = get_user(user_type=user_type, user_account=user_account)
+        user.update_password(new_password=hash_password(new_password))
+        Thread(target=lambda: EmailChangePassword(destination_email=user_account,
+                                                  new_password=new_password).send_email()).start()
+        return {'message': 'New password generated'}, 200
+
+
+class ChangePasswordApi(Resource):
+
+    method_decorators = {
+        'post': [user_must_exist, authentication_required, validate_headers]
+    }
+
+    def post(self):
+        body = request.get_json()
+        new_password = body.get('new_password')
+        if not new_password:
+            raise MissingRequiredFieldsException
+        new_password = hash_password(new_password)
+        get_user().update_password(new_password=new_password)
+        return {'message': 'Password changed correctly'}, 200
