@@ -8,6 +8,7 @@ from flask_restful import Api
 
 from database.db import init_db
 from resources.helpers import yaml_helper
+from resources.helpers.log_helper import log_request_info
 from resources.routes import initialize_routes
 from resources.utils.project_vars import ProjectVars
 from resources.utils.representations import json_output
@@ -19,6 +20,9 @@ DEFAULT_LOG_CONFIG_FILE = 'logging.yaml'
 
 LOG_CONFIG_FILE = CONFIG_BASE_DIR + os.environ.get('LOG_CONFIG_FILE', DEFAULT_LOG_CONFIG_FILE)
 API_CONFIG_FILE = CONFIG_ENV_BASE_DIR + os.environ.get('API_CONFIG_FILE', DEFAULT_ENV_CONFIG_FILE)
+
+if not os.path.exists('logs'):
+    os.makedirs('logs')
 
 app = Flask(__name__)
 api = Api(app)
@@ -38,6 +42,8 @@ jwt = JWTManager(app)
 init_db(app)
 
 initialize_routes(api)
+
+app.before_request(log_request_info)
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0')
