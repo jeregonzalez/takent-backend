@@ -36,6 +36,8 @@ class CommonUser(User):
     skill = db.EmbeddedDocumentListField(Skill)
     language = db.EmbeddedDocumentListField(UserLanguage)
     phone = db.IntField()
+    floor = db.IntField()
+    apartment = db.StringField()
 
 
 class EnterpriseUser(User):
