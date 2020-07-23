@@ -11,8 +11,9 @@ build
 dist
 
 # Logs
-/logfile.log
+/logs
 /nohup.out
+/logfile.log
 
 # Data files
 /temp_data
