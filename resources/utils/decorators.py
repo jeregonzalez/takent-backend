@@ -6,8 +6,9 @@ from flask_restful import abort
 from jwt import ExpiredSignatureError
 
 from resources.helpers.user_helper import validate_user_exists, validate_user_not_exists, USER_TYPES
-from resources.utils.exceptions import AuthorizationHeaderMissingException, AuthorizationTokenExpiredException, \
-    UnauthorizedException, UnsupportedContentTypeException, UnsupportedResponseTypeException
+from resources.utils.exceptions import AuthorizationHeaderMissingException, \
+    AuthorizationTokenExpiredException, UnauthorizedException, UnsupportedContentTypeException, \
+    UnsupportedResponseTypeException
 
 
 def validate_headers(func):
