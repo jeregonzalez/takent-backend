@@ -94,3 +94,7 @@ class State(db.Document):
 
 class Image(db.Document):
     base64 = db.StringField()
+
+
+class CurriculumVitae(db.Document):
+    base64 = db.StringField()
