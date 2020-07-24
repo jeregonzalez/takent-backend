@@ -4,7 +4,7 @@ from flask import request, Response
 from flask_restful import Resource, abort
 from mongoengine import FieldDoesNotExist, NotUniqueError, ValidationError
 
-from database.models.common import Image
+from database.models.common import Image, CurriculumVitae
 from resources.helpers import password_helper
 from resources.helpers.auth_helper import hash_password
 from resources.helpers.email_helper.email_helper import EmailChangePassword
@@ -86,26 +86,32 @@ class ImageApi(Resource):
 class CurriculumApi(Resource):
 
     method_decorators = {
-        'get': [user_must_exist, user_must_be_common, authentication_required],
-        'post': [user_must_exist, user_must_be_common, authentication_required]
+        'get': [user_must_exist, user_must_be_common, authentication_required, validate_headers],
+        'post': [user_must_exist, user_must_be_common, authentication_required, validate_headers],
+        'delete': [user_must_exist, user_must_be_common, authentication_required, validate_headers]
     }
 
     def get(self):
         user = get_user()
         if not user.curriculum:
             return {'message': 'User {} does not have curriculum'.format(user.account)}, 200
-        return Response(user.curriculum.read(), mimetype=user.curriculum.content_type, status=200)
+        return {'curriculum': user.curriculum.base64}, 200
 
     def post(self):
-        if not request.files or not request.files.get('curriculum'):
+        curriculum = request.get_json().get('curriculum')
+        if not curriculum:
             abort(400, message='No curriculum sent')
         user = get_user()
-        new_curriculum = request.files.get('curriculum')
-        if user.curriculum:
-            user.curriculum.delete()
-        user.curriculum.put(new_curriculum, content_type=new_curriculum.content_type)
-        user.save()
+        new_curriculum = CurriculumVitae(base64=curriculum)
+        new_curriculum.save()
+        user.update(curriculum=new_curriculum)
         return {'message': 'Curriculum uploaded successfully'}, 201
+
+    def delete(self):
+        user = get_user()
+        user.curriculum.delete()
+        user.save()
+        return '', 204
 
 
 class PasswordRecoverApi(Resource):
