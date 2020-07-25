@@ -81,15 +81,9 @@ class Language(db.Document):
     name = db.StringField()
 
 
-class Scope(db.Document):
-    name = db.StringField(primary_key=True)
-    description = db.StringField()
-
-
 class State(db.Document):
     name = db.StringField(primary_key=True)
     description = db.StringField()
-    scope = db.ReferenceField(Scope)
 
 
 class Image(db.Document):
@@ -98,3 +92,8 @@ class Image(db.Document):
 
 class CurriculumVitae(db.Document):
     base64 = db.StringField()
+
+
+class ActivationTicket(db.Document):
+    account = db.EmailField(required=True)
+    user_type = db.StringField(required=True)

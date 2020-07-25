@@ -5,7 +5,7 @@ from resources.apis.languages import LanguageApi, LanguageLevelApi
 from resources.apis.mongo import MongoApi
 from resources.apis.places import CountriesApi, ProvincesApi, CitiesApi
 from resources.apis.users import ImageApi, CurriculumApi, UserApi, PasswordRecoverApi, ChangePasswordApi, \
-    UserExistsValidation
+    UserExistsValidationApi, ActivateAccountApi
 
 
 def initialize_routes(api):
@@ -19,7 +19,8 @@ def initialize_routes(api):
     api.add_resource(UserApi, '/api/v1/user/<user_type>')
     api.add_resource(ImageApi, '/api/v1/user/common/profile_photo')
     api.add_resource(CurriculumApi, '/api/v1/user/common/curriculum')
-    api.add_resource(UserExistsValidation, '/api/v1/user/exists')
+    api.add_resource(UserExistsValidationApi, '/api/v1/user/exists')
+    api.add_resource(ActivateAccountApi, '/api/v1/user/activate')
     # Enterprise
     api.add_resource(EnterpriseApi, '/api/v1/enterprise', '/api/v1/enterprise/<admin>')
     # Authentication

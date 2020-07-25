@@ -4,7 +4,7 @@ import os
 from flask_restful import Resource
 
 from database.initial_values import data
-from database.models.common import Country, Province, City, EducationLevel, LanguageLevel, State, Scope, Language
+from database.models.common import Country, Province, City, EducationLevel, LanguageLevel, State, Language
 from database.models.roles import Permission, Role
 from database.models.users import EnterpriseUser
 from resources.helpers import places_helper
@@ -22,9 +22,7 @@ class MongoApi(Resource):
         init_countries_provinces_cities()
         init_education_levels(data.get('education_level'))
         init_language_levels(data.get('language_level'))
-        init_scopes(data.get('scope'))
         init_states(data.get('state'))
-        init_enterprise_users(data.get('enterprise_users'))
         init_languages()
 
         return {'message': 'Database initialized correctly'}, 200
@@ -83,17 +81,8 @@ def init_language_levels(language_levels):
     ])
 
 
-def init_scopes(scopes):
-    Scope.objects.delete()
-    Scope.objects.insert([
-        Scope(**scope) for scope in scopes
-    ])
-
-
 def init_states(states):
     State.objects.delete()
-    for state in states:
-        state['scope'] = Scope.objects.get(name=state['scope'])
     State.objects.insert([
         State(**state) for state in states
     ])

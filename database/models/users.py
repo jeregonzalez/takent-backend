@@ -2,7 +2,7 @@ from mongoengine import NULLIFY
 
 from database.db import db
 from resources.utils.exceptions import ImmutableFieldsException
-from .common import Address, Education, Experience, Skill, UserLanguage, Image, CurriculumVitae
+from .common import Address, Education, Experience, Skill, UserLanguage, Image, CurriculumVitae, State
 from .roles import Role
 
 
@@ -11,6 +11,7 @@ class User(db.Document):
     password = db.StringField(required=True, min_length=6)
     name = db.StringField(required=True)
     surname = db.StringField(required=True)
+    state = db.ReferenceField(State, default=lambda: State.objects.get(name='inactive'))
 
     meta = {
         'abstract': True,
@@ -23,6 +24,10 @@ class User(db.Document):
 
     def update_password(self, new_password):
         super(User, self).update(password=new_password)
+
+    def activate(self):
+        active_state = State.objects.get(name='active')
+        return super(User, self).update(state=active_state)
 
 
 class CommonUser(User):
