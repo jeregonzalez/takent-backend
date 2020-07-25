@@ -25,14 +25,7 @@ data = {
         {'name': 'Nativo o bilingüe'}
     ],
     'state': [
-        {'name': 'active', 'description': 'Active entity', 'scope': 'enterprise'},
-    ],
-    'scope': [
-        {'name': 'enterprise', 'description': 'Account of enterprise with active state'}
-    ],
-    'enterprise_users': [
-        {'account': 'usertakent@gmail.com', 'password': '123', 'name': 'takent', 'surname': 'app', 'role': 'admin'},
-        {'account': 'rodri@gmail.com', 'password': '456', 'name': 'rodri', 'surname': 'EL CAPO', 'role': 'member'},
-        {'account': 'jere@gmail.com', 'password': '678', 'name': 'jere', 'surname': 'EL DEVELOPER', 'role': 'member'}
+        {'name': 'active', 'description': 'Active entity'},
+        {'name': 'inactive', 'description': 'Inactive entity'}
     ]
 }

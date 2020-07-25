@@ -1,0 +1,18 @@
+# Flask
+SECRET_KEY: "\x18k\xce\xf8\xc0\xb6\xd2e\x0e\xf9\xfb\x88N@\x0c\xa3\xb5\xd4\xc7\x02\x80c(\x87"
+
+# Mongo DB
+MONGODB_DB: "takent"
+MONGODB_HOST: "localhost"
+MONGODB_PORT: 27017
+
+# JWT Secret Key
+JWT_SECRET_KEY: "t1NP63m4wnBg6nyHYKfmc2TpCOGI4nss"
+
+# Takent email
+TAKENT_EMAIL: "takentuser@gmail.com"
+TAKENT_EMAIL_PASSWORD: "proyectofinal2020"
+
+# Frontend URL
+# TODO Temporalmente, esta URL va a ser la IP de la raspberry
+FRONTEND_URL: "http://152.169.30.124:5000"
