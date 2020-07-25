@@ -103,6 +103,7 @@ class Email(ABC):
         self._init_email()
         self._set_body()
         self._set_images()
+        LOGGER.debug('Sending {} to {}'.format(self.email_type, self.destination_email))
         try:
             self.smtp.starttls()
             self.smtp.login(takent_email, takent_password)
@@ -114,9 +115,19 @@ class Email(ABC):
 
 
 class EmailActivation(Email):
-    def __init__(self, destination_email):
+    def __init__(self, destination_email, ticket_hash):
         super().__init__(destination_email)
         self.email_type = 'email_activation'
+        self.ticket_hash = ticket_hash
+
+    def _set_body(self):
+        current_dir = os.path.dirname(os.path.realpath(__file__))
+        with open('{}/html/{}'.format(current_dir, EMAILS_MAP.get(self.email_type))) as html_file:
+            body_message = html_file.read()
+        url_activation = '{}/api/v1/user/activate?ticket={}'.format(ProjectVars.get_project_var('FRONTEND_URL'),
+                                                                    self.ticket_hash)
+        body_message = body_message.replace('$(url_activation)', url_activation)
+        self.alternative_message.attach(MIMEText(body_message, 'html'))
 
 
 class EmailChangePassword(Email):

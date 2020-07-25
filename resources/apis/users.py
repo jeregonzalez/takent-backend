@@ -1,18 +1,19 @@
 from threading import Thread
 
-from flask import request, Response
+from flask import request
 from flask_restful import Resource, abort
-from mongoengine import FieldDoesNotExist, NotUniqueError, ValidationError
+from mongoengine import FieldDoesNotExist, ValidationError
 
-from database.models.common import Image, CurriculumVitae
+from database.models.common import Image, CurriculumVitae, ActivationTicket
 from resources.helpers import password_helper
 from resources.helpers.auth_helper import hash_password
-from resources.helpers.email_helper.email_helper import EmailChangePassword
+from resources.helpers.email_helper.email_helper import EmailChangePassword, EmailActivation
+from resources.helpers.log_helper import LOGGER
 from resources.helpers.user_helper import get_user, USER_TYPES, get_user_type
 from resources.utils.decorators import validate_headers, authentication_required, user_must_not_exist, \
     user_must_exist, user_must_be_common
-from resources.utils.exceptions import MissingRequiredFieldsException, UserAlreadyExistsException, \
-    SchemaValidationErrorException, UserNotExistsException
+from resources.utils.exceptions import MissingRequiredFieldsException, SchemaValidationErrorException, \
+    UserNotExistsException
 
 
 class UserApi(Resource):
@@ -29,7 +30,6 @@ class UserApi(Resource):
 
     def post(self, user_type=None):
         body = request.get_json()
-        new_user = None
         if body.get('password'):
             body['password'] = hash_password(body['password'])
         try:
@@ -38,9 +38,12 @@ class UserApi(Resource):
             raise SchemaValidationErrorException
         except ValidationError:
             raise MissingRequiredFieldsException
-        except NotUniqueError:
-            raise UserAlreadyExistsException(new_user.account)
-        return {'message': 'User {} created successfully'.format(new_user.id)}, 201
+        activation_ticket = ActivationTicket(account=new_user.account, user_type=user_type)
+        activation_ticket.save()
+        LOGGER.info(activation_ticket.id)
+        Thread(target=lambda: EmailActivation(destination_email=new_user.account,
+                                              ticket_hash=activation_ticket.id).send_email()).start()
+        return {'message': 'User {} created successfully'.format(new_user.account)}, 201
 
     def put(self, user_type=None):
         body = request.get_json()
@@ -152,7 +155,7 @@ class ChangePasswordApi(Resource):
         return {'message': 'Password changed correctly'}, 200
 
 
-class UserExistsValidation(Resource):
+class UserExistsValidationApi(Resource):
 
     def get(self):
         user_account = request.args.get('account')
@@ -160,3 +163,24 @@ class UserExistsValidation(Resource):
             abort(400, message='Param account is needed')
         exists = bool(get_user_type(user_account=user_account))
         return {'exists': exists}, 200
+
+
+class ActivateAccountApi(Resource):
+    method_decorators = {
+        'post': [validate_headers]
+    }
+
+    # TODO Temporalmente, la request va a ser un get cuya URL se va a adjuntar en el mail de activación
+    def get(self):
+        # activation_ticket = request.get_json().get('ticket')
+        activation_ticket = request.args.get('ticket')
+        if not activation_ticket:
+            abort(400, message='Enter a ticket')
+        if not ActivationTicket.objects(id=activation_ticket).count():
+            abort(400, message='Ticket {} does not exist'.format(activation_ticket))
+        ticket = ActivationTicket.objects.get(id=activation_ticket)
+        LOGGER.info(ticket)
+        user = get_user(user_type=ticket.user_type, user_account=ticket.account)
+        user.activate()
+        ticket.delete()
+        return {'message': 'Account {} activated'.format(user.account)}, 200
