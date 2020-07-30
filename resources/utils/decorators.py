@@ -9,6 +9,7 @@ from resources.helpers.user_helper import validate_user_exists, validate_user_no
 from resources.utils.exceptions import AuthorizationHeaderMissingException, \
     AuthorizationTokenExpiredException, UnauthorizedException, UnsupportedContentTypeException, \
     UnsupportedResponseTypeException
+from resources.helpers.offer_helper import validate_offer_must_exist, validate_offer_must_not_exist
 
 
 def validate_headers(func):
@@ -21,6 +22,7 @@ def validate_headers(func):
         if accept and not (accept in ['application/json', '*/*']):
             raise UnsupportedResponseTypeException(accept)
         return func(*args, **kwargs)
+
     return wrapper
 
 
@@ -36,6 +38,7 @@ def authentication_required(func):
         except Exception:
             raise UnauthorizedException
         return func(*args, **kwargs)
+
     return wrapper
 
 
@@ -44,6 +47,7 @@ def user_must_exist(func):
     def wrapper(*args, **kwargs):
         validate_user_exists()
         return func(*args, **kwargs)
+
     return wrapper
 
 
@@ -56,6 +60,7 @@ def user_must_not_exist(func):
         user_account = request.get_json().get('account')
         validate_user_not_exists(user_account=user_account)
         return func(*args, **kwargs)
+
     return wrapper
 
 
@@ -65,4 +70,23 @@ def user_must_be_common(func):
         if get_jwt_identity().get('user_type') != 'common':
             abort(400, message='User must be common')
         return func(*args, **kwargs)
+
+    return wrapper
+
+
+def offer_must_exist(func):
+    @wraps(func)
+    def wrapper(*args, **kwargs):
+        validate_offer_must_exist(id=kwargs.get('id'), user=get_jwt_identity().get('user_account'))
+        return func(*args, **kwargs)
+
+    return wrapper
+
+
+def offer_must_not_exist(func):
+    @wraps(func)
+    def wrapper(*args, **kwargs):
+        validate_offer_must_not_exist(request.get_json().get('title'))
+        return func(*args, **kwargs)
+
     return wrapper
