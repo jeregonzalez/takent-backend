@@ -26,6 +26,13 @@ data = {
     ],
     'state': [
         {'name': 'active', 'description': 'Active entity'},
-        {'name': 'inactive', 'description': 'Inactive entity'}
+        {'name': 'inactive', 'description': 'Inactive entity'},
+        {'name': 'En seleccion', 'description': 'Usuario común en proceso de selección'}
+    ],
+    'job_type': [
+        {'name': 'Jornada completa'},
+        {'name': 'Jornada parcial'},
+        {'name': 'Por temporada'},
+        {'name': 'Por obra'}
     ]
 }
