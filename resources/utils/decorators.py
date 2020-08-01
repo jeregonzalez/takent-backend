@@ -9,7 +9,8 @@ from resources.helpers.user_helper import validate_user_exists, validate_user_no
 from resources.utils.exceptions import AuthorizationHeaderMissingException, \
     AuthorizationTokenExpiredException, UnauthorizedException, UnsupportedContentTypeException, \
     UnsupportedResponseTypeException
-from resources.helpers.offer_helper import validate_offer_must_exist, validate_offer_must_not_exist
+from resources.helpers.offer_helper import validate_offer_must_not_exist, \
+    validate_offer_active_must_exist, validate_offer_must_exist
 
 
 def validate_headers(func):
@@ -69,6 +70,15 @@ def user_must_be_common(func):
     def wrapper(*args, **kwargs):
         if get_jwt_identity().get('user_type') != 'common':
             abort(400, message='User must be common')
+        return func(*args, **kwargs)
+
+    return wrapper
+
+
+def offer_active_must_exist(func):
+    @wraps(func)
+    def wrapper(*args, **kwargs):
+        validate_offer_active_must_exist(id=kwargs.get('id'), user=get_jwt_identity().get('user_account'))
         return func(*args, **kwargs)
 
     return wrapper
