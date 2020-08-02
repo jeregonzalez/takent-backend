@@ -234,6 +234,698 @@
 			"name": "Common user",
 			"item": [
 				{
+					"name": "Education",
+					"item": [
+						{
+							"name": "All Education",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{user_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{host}}/user/common/education",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"user",
+										"common",
+										"education"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Education",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{user_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{host}}/user/common/education/5f263bba55b824d3dfab8da6",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"user",
+										"common",
+										"education",
+										"5f263bba55b824d3dfab8da6"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Education",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{user_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"start_date\": \"2014-01-01 00:00:00\",\n    \"end_date\": \"2019-01-01 00:00:00\",\n    \"institution\": \"UTN Córdoba\",\n    \"name\": \"Ingeniero en sistemas\",\n    \"level\": \"Degree\",\n    \"description\": \"Alguna descripción\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{host}}/user/common/education",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"user",
+										"common",
+										"education"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Education",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{user_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"description\": \"Otra descripcion\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{host}}/user/common/education/5f264831c824f258f5cd553c",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"user",
+										"common",
+										"education",
+										"5f264831c824f258f5cd553c"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Education",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{user_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{host}}/user/common/education/5f263bba55b824d3dfab8da6",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"user",
+										"common",
+										"education",
+										"5f263bba55b824d3dfab8da6"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"protocolProfileBehavior": {},
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "Experience",
+					"item": [
+						{
+							"name": "All experience",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{user_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{host}}/user/common/experience",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"user",
+										"common",
+										"experience"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Experience",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{user_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{host}}/user/common/experience/5f263bba55b824d3dfab8da7",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"user",
+										"common",
+										"experience",
+										"5f263bba55b824d3dfab8da7"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Experience",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{user_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"company\": \"SimtTLiX\",\n    \"start_date\": \"01/12/2019\",\n    \"end_date\": \"01/12/2020\",\n    \"position\": \"Software Engineer\",\n    \"description\": \"hola\",\n    \"reference\": {\n        \"name\": \"Nadie\",\n        \"phone\": 123123123\n    }\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{host}}/user/common/experience",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"user",
+										"common",
+										"experience"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Experience",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{user_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"company\": \"SimtTLiX2\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{host}}/user/common/experience/5f263bba55b824d3dfab8da7",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"user",
+										"common",
+										"experience",
+										"5f263bba55b824d3dfab8da7"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Experience",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{user_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{host}}/user/common/experience/5f263bba55b824d3dfab8da7",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"user",
+										"common",
+										"experience",
+										"5f263bba55b824d3dfab8da7"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"protocolProfileBehavior": {},
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "Skill",
+					"item": [
+						{
+							"name": "All Skill",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{user_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{host}}/user/common/skill",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"user",
+										"common",
+										"skill"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Skill",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{user_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{host}}/user/common/skill/5f263bba55b824d3dfab8da8",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"user",
+										"common",
+										"skill",
+										"5f263bba55b824d3dfab8da8"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Skill",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{user_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"name\": \"Dormir\",\n    \"description\": \"\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{host}}/user/common/skill",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"user",
+										"common",
+										"skill"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Skill",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{user_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"name\": \"Dormir2\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{host}}/user/common/skill/5f263bba55b824d3dfab8da8",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"user",
+										"common",
+										"skill",
+										"5f263bba55b824d3dfab8da8"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Skill",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{user_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{host}}/user/common/skill/5f263bba55b824d3dfab8da8",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"user",
+										"common",
+										"skill",
+										"5f263bba55b824d3dfab8da8"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"protocolProfileBehavior": {},
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "Language",
+					"item": [
+						{
+							"name": "All Language",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{user_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{host}}/user/common/language",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"user",
+										"common",
+										"language"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Language",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{user_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{host}}/user/common/language/5f263bba55b824d3dfab8da9",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"user",
+										"common",
+										"language",
+										"5f263bba55b824d3dfab8da9"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Language",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{user_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"name\": \"Ingles\",\n    \"writing_level\": \"Basic\",\n    \"reading_level\": \"Basic\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{host}}/user/common/language",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"user",
+										"common",
+										"language"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Language",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{user_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"writing_level\": \"Basic2\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{host}}/user/common/language/5f263bba55b824d3dfab8da9",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"user",
+										"common",
+										"language",
+										"5f263bba55b824d3dfab8da9"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Language",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{user_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{host}}/user/common/language/5f263bba55b824d3dfab8da9",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"user",
+										"common",
+										"language",
+										"5f263bba55b824d3dfab8da9"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"protocolProfileBehavior": {},
+					"_postman_isSubFolder": true
+				},
+				{
 					"name": "Common User",
 					"protocolProfileBehavior": {
 						"disabledSystemHeaders": {}

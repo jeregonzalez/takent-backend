@@ -5,7 +5,7 @@ from resources.apis.language import LanguageApi, LanguageLevelApi
 from resources.apis.mongo import MongoApi
 from resources.apis.place import CountriesApi, ProvincesApi, CitiesApi
 from resources.apis.user import ImageApi, CurriculumApi, UserApi, PasswordRecoverApi, ChangePasswordApi, \
-    UserExistsValidationApi, ActivateAccountApi
+    UserExistsValidationApi, ActivateAccountApi, UserAttributesListApi
 from resources.apis.offer import OfferApi
 
 
@@ -22,6 +22,8 @@ def initialize_routes(api):
     api.add_resource(CurriculumApi, '/api/v1/user/common/curriculum')
     api.add_resource(UserExistsValidationApi, '/api/v1/user/exists')
     api.add_resource(ActivateAccountApi, '/api/v1/user/activate')
+    api.add_resource(UserAttributesListApi, '/api/v1/user/common/<attribute_name>/<_id>',
+                     '/api/v1/user/common/<attribute_name>')
     # Enterprise
     api.add_resource(EnterpriseApi, '/api/v1/enterprise')
     # Authentication

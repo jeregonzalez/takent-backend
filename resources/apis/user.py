@@ -2,7 +2,7 @@ from threading import Thread
 
 from flask import request
 from flask_restful import Resource, abort
-from mongoengine import FieldDoesNotExist, ValidationError
+from mongoengine import FieldDoesNotExist, ValidationError, DoesNotExist
 
 from database.models.common import Image, State, ActivationTicket, CurriculumVitae
 from database.models.user import EnterpriseUser
@@ -180,3 +180,71 @@ class ActivateAccountApi(Resource):
         user.activate()
         ticket.delete()
         return {'message': 'Account {} activated'.format(user.account)}, 200
+
+
+class UserAttributesListApi(Resource):
+    method_decorators = {
+        'get': [validate_user_is_common, validate_user_exists, authentication_required, validate_headers],
+        'post': [validate_user_is_common, validate_user_exists, authentication_required, validate_headers],
+        'put': [validate_user_is_common, validate_user_exists, authentication_required, validate_headers],
+        'delete': [validate_user_is_common, validate_user_exists, authentication_required, validate_headers]
+    }
+
+    def get(self, attribute_name, _id=None):
+        user = user_helper.get_user_from_jwt()
+        if not hasattr(user, attribute_name):
+            abort(400, message='Attribute {} not exists'.format(attribute_name))
+        attribute_list = getattr(user, attribute_name)
+        if _id:
+            try:
+                attribute_list = attribute_list.get(id=_id)
+            except DoesNotExist:
+                attribute_list = []
+        return attribute_list, 200
+
+    def post(self, attribute_name, _id=None):
+        user = user_helper.get_user_from_jwt()
+        body = request.get_json()
+        if not hasattr(user, attribute_name):
+            abort(400, message='Attribute {} not exists'.format(attribute_name))
+        attribute_list = getattr(user, attribute_name)
+        attribute_list.create(**body)
+        attribute_list.save()
+        return {'message': '{} added successfully'.format(attribute_name)}, 201
+
+    def put(self, attribute_name, _id=None):
+        user = user_helper.get_user_from_jwt()
+        body = request.get_json()
+        if not hasattr(user, attribute_name):
+            abort(400, message='Attribute {} not exists'.format(attribute_name))
+        if not _id:
+            abort(400, message='Object id needed')
+        attribute_list = getattr(user, attribute_name)
+        attribute_element = None
+        try:
+            attribute_element = attribute_list.get(id=_id)
+        except DoesNotExist:
+            abort(400, message='{} with id {} not exists'.format(attribute_name, _id))
+        for key, value in body.items():
+            setattr(attribute_element, key, value)
+        try:
+            attribute_element.validate()
+        except ValidationError:
+            raise SchemaValidationErrorException
+        attribute_list.save()
+        return '', 204
+
+    def delete(self, attribute_name, _id=None):
+        user = user_helper.get_user_from_jwt()
+        if not hasattr(user, attribute_name):
+            abort(400, message='Attribute {} not exists'.format(attribute_name))
+        attribute_list = getattr(user, attribute_name)
+        if not _id:
+            abort(400, message='Object id needed')
+        try:
+            attribute_list.get(id=_id)
+        except DoesNotExist:
+            abort(400, message='{} with id {} not exists'.format(attribute_name, _id))
+        delete_condition = {'pull__{}__id'.format(attribute_name): _id}
+        user.update(**delete_condition)
+        return '', 204
