@@ -4,7 +4,7 @@ import json
 from bson import ObjectId
 from flask_mongoengine import Document
 
-from database.models.users import User, CommonUser
+from database.models.user import User, CommonUser
 
 HIDE_FIELDS = ['password', 'profile_photo', 'curriculum']
 

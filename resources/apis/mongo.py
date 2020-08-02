@@ -4,11 +4,19 @@ import os
 from flask_restful import Resource
 
 from database.initial_values import data
+<<<<<<< HEAD
+from database.models.common import Country, City, Province, EducationLevel, LanguageLevel, State, Language
+from database.models.enterprise import Enterprise
+from database.models.role import Permission, Role
+from database.models.user import EnterpriseUser, CommonUser
+from resources.helpers import place_helper
+=======
 from database.models.common import Country, Province, City, EducationLevel, LanguageLevel, State, Language, JobType
 from database.models.offer import Offer
 from database.models.roles import Permission, Role
 from database.models.users import EnterpriseUser
 from resources.helpers import places_helper
+>>>>>>> origin/develop
 
 
 class MongoApi(Resource):
@@ -52,16 +60,16 @@ def init_countries_provinces_cities():
     City.objects.delete()
 
     # Countries
-    Country.objects.insert([Country(**country) for country in places_helper.get_countries()])
+    Country.objects.insert([Country(**country) for country in place_helper.get_countries()])
 
     # Provinces
     argentina = Country.objects.first()
-    for province in places_helper.get_provinces():
+    for province in place_helper.get_provinces():
         argentina.provinces.append(Province(**province))
     argentina.save()
 
     # Cities
-    for city in places_helper.get_cities():
+    for city in place_helper.get_cities():
         new_city = City(**city)
         new_city.save()
         province = list(filter(lambda obj: obj.code == city.get('province_id'), argentina.provinces))[0]
@@ -93,9 +101,28 @@ def init_states(states):
 def init_enterprise_users(enterprise_users):
     EnterpriseUser.objects.delete()
     for enterprise_user in enterprise_users:
+        enterprise_user['state'] = State.objects.get(name='active')
         enterprise_user['role'] = Role.objects.get(name=enterprise_user['role'])
-    EnterpriseUser.objects.insert([
-        EnterpriseUser(**enterprise_user) for enterprise_user in enterprise_users
+        for eu in enterprise_users:
+            EnterpriseUser(**eu).save()
+
+
+def init_common_users(common_users):
+    CommonUser.objects.delete()
+    CommonUser.objects.insert([
+        CommonUser(**common_user) for common_user in common_users
+    ])
+
+
+def init_enterprises(enterprises):
+    Enterprise.objects.delete()
+    for enterprise in enterprises:
+        enterprise['state'] = State.objects.get(name='active')
+        enterprise['admin_user'] = EnterpriseUser.objects.get(account=enterprise['admin_user'])
+        enterprise['member_users'] = [EnterpriseUser.objects.get(account=member)
+                                      for member in enterprise.get('member_users')]
+    Enterprise.objects.insert([
+        Enterprise(**enterprise) for enterprise in enterprises
     ])
 
 
