@@ -6,9 +6,9 @@ from flask_restful import Resource
 from database.initial_values import data
 from database.models.common import Country, City, Province, EducationLevel, LanguageLevel, State, Language
 from database.models.enterprise import Enterprise
-from database.models.roles import Permission, Role
-from database.models.users import EnterpriseUser, CommonUser
-from resources.helpers import places_helper
+from database.models.role import Permission, Role
+from database.models.user import EnterpriseUser, CommonUser
+from resources.helpers import place_helper
 
 
 class MongoApi(Resource):
@@ -51,16 +51,16 @@ def init_countries_provinces_cities():
     City.objects.delete()
 
     # Countries
-    Country.objects.insert([Country(**country) for country in places_helper.get_countries()])
+    Country.objects.insert([Country(**country) for country in place_helper.get_countries()])
 
     # Provinces
     argentina = Country.objects.first()
-    for province in places_helper.get_provinces():
+    for province in place_helper.get_provinces():
         argentina.provinces.append(Province(**province))
     argentina.save()
 
     # Cities
-    for city in places_helper.get_cities():
+    for city in place_helper.get_cities():
         new_city = City(**city)
         new_city.save()
         province = list(filter(lambda obj: obj.code == city.get('province_id'), argentina.provinces))[0]

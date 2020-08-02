@@ -1,8 +1,7 @@
 from flask_jwt_extended import get_jwt_identity
-from flask_restful import abort
 
-from database.models.users import CommonUser, EnterpriseUser
-from database.models.roles import Role
+from database.models.user import CommonUser, EnterpriseUser
+from resources.consts.consts import JwtKey
 
 USER_TYPES = {
     'common': CommonUser,
@@ -10,56 +9,40 @@ USER_TYPES = {
 }
 
 
-def validate_user_exists():
-    user_type = get_jwt_identity().get('user_type')
-    user_account = get_jwt_identity().get('user_account')
-    state_name = 'active'
-    exist = (bool(USER_TYPES[user_type].objects(account=user_account).count()) and
-             USER_TYPES[user_type].objects.get(account=user_account).state.name == state_name)
-    if not exist:
-        abort(400, message='User {} does not exist'.format(user_account))
+def user_exists(user_account, user_type=None):
+    if not user_type:
+        user_type = ['common', 'enterprise']
+    if isinstance(user_type, str):
+        user_type = [user_type]
+    exist = any(USER_TYPES[user_type].objects(account=user_account).count() for user_type in user_type)
+    return exist
 
 
-def validate_user_not_exists(user_account=None):
-    exist = (bool(USER_TYPES['common'].objects(account=user_account).count()) and
-             USER_TYPES['common'].objects.get(account=user_account).state.name == 'active') or \
-            (bool(USER_TYPES['enterprise'].objects(account=user_account).count()) and
-             USER_TYPES['enterprise'].objects.get(account=user_account).state.name == 'active')
+def users_exist(user_accounts, user_type=None):
+    if not user_type:
+        user_type = ['common', 'enterprise']
+    if isinstance(user_type, str):
+        user_type = [user_type]
+    existing_accounts = []
+    for user_account in user_accounts:
+        if any(USER_TYPES[user_type].objects(account=user_account).count() for user_type in user_type):
+            existing_accounts.append(user_account)
+    if existing_accounts:
+        return True, existing_accounts
+    else:
+        return False, []
 
-    if exist:
-        abort(400, message='User {} already exists'.format(user_account))
 
-
-def get_user(user_type=None, user_account=None):
-    if not user_type or not user_account:
-        user_type = get_jwt_identity().get('user_type')
-        user_account = get_jwt_identity().get('user_account')
+def get_user(user_account, user_type=None):
+    if not user_type:
+        user_type = 'common' if USER_TYPES['common'].objects(account=user_account).count() else 'enterprise'
     return USER_TYPES[user_type].objects.get(account=user_account)
 
 
-def get_user_type(user_account):
-    if CommonUser.objects(account=user_account).count() and \
-            CommonUser.objects.get(account=user_account).state.name == 'active':
-        return 'common'
-    if EnterpriseUser.objects(account=user_account).count() and \
-            EnterpriseUser.objects.get(account=user_account).state.name == 'active':
-        return 'enterprise'
-    return None
-
-
-def validate_enterprise_user_exist(user_account):
-    """
-    Método que valida que el usuario administrador exista, que sea usuario empresa y administrador
-    :param user_account: el email (account) del usuario
-    """
-    # Valido que exista el usuario y que esté activo
-    exist = (bool(EnterpriseUser.objects(account=user_account).count()) and
-             EnterpriseUser.objects.get(account=user_account).state.name == 'active')
-
-    if not exist:
-        abort(400, message='User {} not exists'.format(user_account))
-
-    is_admin = EnterpriseUser.objects(account=user_account, role=Role.objects.get(name='admin')).count()
-
-    if not is_admin:
-        abort(400, message='User {} is not admin'.format(user_account))
+def get_user_from_jwt(keys=None):
+    user_data = get_jwt_identity()
+    if keys:
+        if isinstance(keys, str):
+            return user_data.get(keys)
+        return {key: user_data.get(key) for key in keys}
+    return USER_TYPES[user_data.get(JwtKey.USER_TYPE)].objects.get(account=user_data.get(JwtKey.USER_ACCOUNT))
