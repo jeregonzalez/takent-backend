@@ -1,10 +1,10 @@
 from resources.apis.education import EducationLevelApi
 from resources.apis.enterprise import EnterpriseApi
 from resources.apis.authentication import AuthenticationApi
-from resources.apis.languages import LanguageApi, LanguageLevelApi
+from resources.apis.language import LanguageApi, LanguageLevelApi
 from resources.apis.mongo import MongoApi
-from resources.apis.places import CountriesApi, ProvincesApi, CitiesApi
-from resources.apis.users import ImageApi, CurriculumApi, UserApi, PasswordRecoverApi, ChangePasswordApi, \
+from resources.apis.place import CountriesApi, ProvincesApi, CitiesApi
+from resources.apis.user import ImageApi, CurriculumApi, UserApi, PasswordRecoverApi, ChangePasswordApi, \
     UserExistsValidationApi, ActivateAccountApi
 
 

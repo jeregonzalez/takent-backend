@@ -1,5 +1,3 @@
-# Datos con los que inicializar la base de datos, cada entrada del diccionario es una coleccion
-
 data = {
     'permission': [
         {'name': 'admin', 'description': 'Permissions to do anything'},
@@ -24,7 +22,6 @@ data = {
         {'name': 'Completo profesional'},
         {'name': 'Nativo o bilingüe'}
     ],
-
     'state': [
         {'name': 'active', 'description': 'Active entity'},
         {'name': 'inactive', 'description': 'Inactive entity'}

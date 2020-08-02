@@ -2,12 +2,12 @@ from mongoengine import NULLIFY
 
 from database.db import db
 from database.models.common import State, Address, CurriculumVitae, Image, Education, Experience, Skill, UserLanguage
-from database.models.roles import Role
+from database.models.role import Role
 from resources.utils.exceptions import ImmutableFieldsException
 
 
 class User(db.Document):
-    account = db.StringField(primary_key=True)
+    account = db.EmailField(primary_key=True)
     password = db.StringField(required=True, min_length=6)
     name = db.StringField(required=True)
     surname = db.StringField(required=True)
@@ -29,6 +29,10 @@ class User(db.Document):
         active_state = State.objects.get(name='active')
         return super(User, self).update(state=active_state)
 
+    def deactivate(self):
+        inactive_state = State.objects.get(name='inactive')
+        return super(User, self).update(state=inactive_state)
+
 
 class CommonUser(User):
     birth_date = db.DateTimeField(required=True)
@@ -46,4 +50,4 @@ class CommonUser(User):
 
 
 class EnterpriseUser(User):
-    role = db.ReferenceField(Role, required=True)
+    role = db.ReferenceField(Role, required=True, default=lambda: Role.objects.get(name='admin'))
