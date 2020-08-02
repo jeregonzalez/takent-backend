@@ -4,19 +4,11 @@ import os
 from flask_restful import Resource
 
 from database.initial_values import data
-<<<<<<< HEAD
-from database.models.common import Country, City, Province, EducationLevel, LanguageLevel, State, Language
+from database.models.common import Country, City, Province, EducationLevel, LanguageLevel, State, Language, JobType
 from database.models.enterprise import Enterprise
 from database.models.role import Permission, Role
 from database.models.user import EnterpriseUser, CommonUser
 from resources.helpers import place_helper
-=======
-from database.models.common import Country, Province, City, EducationLevel, LanguageLevel, State, Language, JobType
-from database.models.offer import Offer
-from database.models.roles import Permission, Role
-from database.models.users import EnterpriseUser
-from resources.helpers import places_helper
->>>>>>> origin/develop
 
 
 class MongoApi(Resource):
