@@ -1,7 +1,8 @@
-from database.db import db
-from .common import State, Experience, JobType, Language, UserLanguage
-from .users import EnterpriseUser, CommonUser
 from datetime import datetime
+
+from database.db import db
+from .common import State, JobType, UserLanguage
+from .user import CommonUser, EnterpriseUser
 
 
 class PostulantOffer(db.Document):
