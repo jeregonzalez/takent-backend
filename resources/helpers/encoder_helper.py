@@ -3,6 +3,7 @@ import json
 
 from bson import ObjectId
 from flask_mongoengine import Document
+from mongoengine import EmbeddedDocument
 
 from database.models.user import User, CommonUser
 
@@ -19,6 +20,8 @@ class CustomEncoder(json.JSONEncoder):
                 response['address'] = obj.address.format_response()
             return response
         elif issubclass(obj.__class__, Document):
+            return obj.to_mongo()
+        elif issubclass(obj.__class__, EmbeddedDocument):
             return obj.to_mongo()
         elif isinstance(obj, datetime.datetime) or isinstance(obj, datetime.date):
             return str(obj)
