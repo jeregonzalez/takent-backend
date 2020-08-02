@@ -97,3 +97,12 @@ class CurriculumVitae(db.Document):
 class ActivationTicket(db.Document):
     account = db.EmailField(required=True)
     user_type = db.StringField(required=True)
+
+
+class JobType(db.Document):
+    name = db.StringField(primary_key=True)
+
+
+class Sector(db.Document):
+    name = db.StringField(primary_key=True)
+    description = db.StringField()

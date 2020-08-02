@@ -6,7 +6,7 @@ from flask_restful import abort
 from jwt import ExpiredSignatureError
 
 from resources.consts.consts import RequestHeaderKey, RequestHeaderValue, JwtKey
-from resources.helpers import user_helper, enterprise_helper
+from resources.helpers import user_helper, enterprise_helper, offer_helper
 from resources.utils import exceptions
 
 
@@ -21,6 +21,7 @@ def validate_headers(func):
         if accept and accept not in [RequestHeaderValue.APPLICATION_JSON, RequestHeaderValue.APPLICATION_ANY]:
             raise exceptions.UnsupportedResponseTypeException(accept)
         return func(*args, **kwargs)
+
     return wrapper
 
 
@@ -36,6 +37,7 @@ def authentication_required(func):
         except Exception:
             raise exceptions.UnauthorizedException
         return func(*args, **kwargs)
+
     return wrapper
 
 
@@ -52,6 +54,7 @@ def validate_user_exists(func):
         if not user_helper.user_exists(user_account=user_account, user_type=user_type):
             abort(400, message='User {} not exists'.format(user_account))
         return func(*args, **kwargs)
+
     return wrapper
 
 
@@ -62,6 +65,7 @@ def validate_user_not_exists(func):
         if user_helper.user_exists(user_account=user_account):
             abort(400, message='User {} already exists'.format(user_account))
         return func(*args, **kwargs)
+
     return wrapper
 
 
@@ -109,5 +113,29 @@ def validate_role_is_admin(func):
         if user_helper.get_user(user_account=get_jwt_identity().get('user_account'),
                                 user_type='enterprise').role.name != 'admin':
             abort(403, message='You do not have permissions to do this action')
+        return func(*args, **kwargs)
+    return wrapper
+
+
+def offer_active_must_exist(func):
+    @wraps(func)
+    def wrapper(*args, **kwargs):
+        offer_helper.validate_offer_active_must_exist(id=kwargs.get('id'), user=get_jwt_identity().get('user_account'))
+        return func(*args, **kwargs)
+    return wrapper
+
+
+def offer_must_exist(func):
+    @wraps(func)
+    def wrapper(*args, **kwargs):
+        offer_helper.validate_offer_must_exist(id=kwargs.get('id'), user=get_jwt_identity().get('user_account'))
+        return func(*args, **kwargs)
+    return wrapper
+
+
+def offer_must_not_exist(func):
+    @wraps(func)
+    def wrapper(*args, **kwargs):
+        offer_helper.validate_offer_must_not_exist(request.get_json().get('title'))
         return func(*args, **kwargs)
     return wrapper
