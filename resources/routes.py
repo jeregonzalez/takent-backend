@@ -6,6 +6,7 @@ from resources.apis.mongo import MongoApi
 from resources.apis.place import CountriesApi, ProvincesApi, CitiesApi
 from resources.apis.user import ImageApi, CurriculumApi, UserApi, PasswordRecoverApi, ChangePasswordApi, \
     UserExistsValidationApi, ActivateAccountApi
+from resources.apis.offer import OfferApi
 
 
 def initialize_routes(api):
@@ -35,3 +36,4 @@ def initialize_routes(api):
                      '/api/v1/user/enterprise/recover_password')
     api.add_resource(ChangePasswordApi, '/api/v1/user/common/change_password',
                      '/api/v1/user/enterprise/change_password')
+    api.add_resource(OfferApi, '/api/v1/offer', '/api/v1/offer/<id>')

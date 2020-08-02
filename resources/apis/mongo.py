@@ -4,11 +4,19 @@ import os
 from flask_restful import Resource
 
 from database.initial_values import data
+<<<<<<< HEAD
 from database.models.common import Country, City, Province, EducationLevel, LanguageLevel, State, Language
 from database.models.enterprise import Enterprise
 from database.models.role import Permission, Role
 from database.models.user import EnterpriseUser, CommonUser
 from resources.helpers import place_helper
+=======
+from database.models.common import Country, Province, City, EducationLevel, LanguageLevel, State, Language, JobType
+from database.models.offer import Offer
+from database.models.roles import Permission, Role
+from database.models.users import EnterpriseUser
+from resources.helpers import places_helper
+>>>>>>> origin/develop
 
 
 class MongoApi(Resource):
@@ -25,6 +33,7 @@ class MongoApi(Resource):
         init_language_levels(data.get('language_level'))
         init_states(data.get('state'))
         init_languages()
+        init_job_type(data.get('job_type'))
 
         return {'message': 'Database initialized correctly'}, 200
 
@@ -122,9 +131,16 @@ def init_languages():
     if not os.path.exists(languages_csv):
         return
     languages = []
-    with open(languages_csv) as file:
+    with open(languages_csv, encoding='utf-8') as file:
         reader = csv.DictReader(file)
         for row in reader:
             language = {'code': row['code'], 'name': row['name']}
             languages.append(language)
     Language.objects.insert([Language(**data_language) for data_language in languages])
+
+
+def init_job_type(job_types):
+    JobType.objects.delete()
+
+    for job_type in job_types:
+        JobType.objects.insert(JobType(**job_type))
