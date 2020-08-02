@@ -15,7 +15,7 @@ class Offer(db.Document):
     publication_date = db.DateTimeField(default=lambda: datetime.today())
     publication_user = db.ReferenceField(EnterpriseUser)
     photo = db.ListField(db.ImageField())
-    experience_offer = db.EmbeddedDocumentListField(Experience)
+    experience_offer = db.StringField(default='Ninguna Experiencia')
     postulant = db.ListField(db.ReferenceField('PostulantOffer'))
     job_type = db.ReferenceField(JobType, default=lambda: JobType.objects.get(name='Jornada completa'))
     sector = db.StringField()

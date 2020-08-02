@@ -18,7 +18,7 @@ class OfferApi(Resource):
         'delete': [offer_must_exist, user_must_exist, authentication_required, validate_headers]
     }
 
-    def get(self, id=None):
+    def get(self, id=None, state=None):
 
         offers = []
 
@@ -28,6 +28,7 @@ class OfferApi(Resource):
             for offer in Offer.objects(state=State.objects.get(name='active'), publication_user=get_user()):
                 offers.append(offer)
 
+        offers.append({'state': state})
         return offers, 200
 
     def post(self):
