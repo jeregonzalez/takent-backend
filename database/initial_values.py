@@ -1,5 +1,3 @@
-# Datos con los que inicializar la base de datos, cada entrada del diccionario es una coleccion
-
 data = {
     'permission': [
         {'name': 'admin', 'description': 'Permissions to do anything'},
