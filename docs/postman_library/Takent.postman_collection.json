@@ -132,6 +132,105 @@
 			"protocolProfileBehavior": {}
 		},
 		{
+			"name": "User",
+			"item": [
+				{
+					"name": "Validate user exists",
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {}
+					},
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/user/exists?account=jereegonzalez@gmail.com",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"user",
+								"exists"
+							],
+							"query": [
+								{
+									"key": "account",
+									"value": "jereegonzalez@gmail.com"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Activate account (TEMPORAL)",
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {}
+					},
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/user/activate?ticket=5f1b90b4d7b25d4e57f0c7c7",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"user",
+								"activate"
+							],
+							"query": [
+								{
+									"key": "ticket",
+									"value": "5f1b90b4d7b25d4e57f0c7c7"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Activate account (NO USAR)",
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {}
+					},
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"ticket\": \"5f1b90b4d7b25d4e57f0c7c7\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/user/activate",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"user",
+								"activate"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
 			"name": "Common user",
 			"item": [
 				{
@@ -565,7 +664,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"account\": \"jereegonzalez@gmail.com\",\n    \"password\": \"pass123\",\n    \"name\": \"Jeremias\",\n    \"surname\": \"Gonzalez\",\n    \"role\": \"admin\"\n}",
+							"raw": "{\n    \"account\": \"jereegonzalez@gmail.com\",\n    \"password\": \"pass123\",\n    \"name\": \"Jeremias\",\n    \"surname\": \"Gonzalez\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -651,72 +750,6 @@
 					"response": []
 				},
 				{
-					"name": "Enterprise",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": ""
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Enterprise",
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{ \r\n    \"fantasy_name\" : \"Takent\", \r\n    \"business_name\" : \"Takent SA\", \r\n    \"address\" : \r\n    { \r\n        \"district\" : \"Las flores\", \r\n        \"street\" : \"Naciones Unidas\", \r\n        \"number\" : 1050, \"apartment\" : \"Córdoba\", \r\n        \"floor\" : 0, \"postal_code\" : 5000, \r\n        \"city\" : \"Córdoba\" \r\n    }, \r\n    \"phone\" : 1234567, \r\n    \"email\" : \"takent@gmail.com\", \r\n    \"location\" : \"blabla\", \r\n    \"photos\" : [ ], \r\n    \"description\" : \"Takent la mejor\", \r\n    \"admin_user\" : \"usertakent@gmail.com\", \r\n    \"member_users\" : [ ], \r\n    \"state\" : \"active_enterprise\" \r\n}\r\n",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{host}}/enterprise",
-							"host": [
-								"{{host}}"
-							],
-							"path": [
-								"enterprise"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Enterprise",
-					"request": {
-						"method": "PUT",
-						"header": [],
-						"url": {
-							"raw": ""
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Enterprise",
-					"request": {
-						"method": "DELETE",
-						"header": [],
-						"url": {
-							"raw": "{{host}}/enterprise/usertakent@gmail.com",
-							"host": [
-								"{{host}}"
-							],
-							"path": [
-								"enterprise",
-								"usertakent@gmail.com"
-							]
-						}
-					},
-					"response": []
-				},
-				{
 					"name": "Recover password",
 					"protocolProfileBehavior": {
 						"disabledSystemHeaders": {}
@@ -786,6 +819,138 @@
 								"user",
 								"enterprise",
 								"change_password"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "Enterprise",
+			"item": [
+				{
+					"name": "Enterprise",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{user_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/enterprise",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"enterprise"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Enterprise",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{user_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{ \r\n    \"fantasy_name\" : \"Takent\", \r\n    \"business_name\" : \"Takent SA\", \r\n    \"address\" : \r\n    { \r\n        \"district\" : \"Las flores\", \r\n        \"street\" : \"Naciones Unidas\", \r\n        \"number\" : 1050, \r\n        \"apartment\" : \"Córdoba\", \r\n        \"floor\" : 0, \r\n        \"postal_code\" : 5000, \r\n        \"city\" : 14098270000\r\n    }, \r\n    \"phone\" : 1234567, \r\n    \"email\" : \"takent@gmail.com\", \r\n    \"location\" : \"blabla\", \r\n    \"description\" : \"Takent la mejor\", \r\n    \"member_users\" : [\r\n        {\r\n            \"account\": \"jereegonzalez2@gmail.com\",\r\n            \"password\": \"pass123\",\r\n            \"name\": \"Jeremias\",\r\n            \"surname\": \"Gonzalez\"\r\n        }\r\n    ]\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/enterprise",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"enterprise"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Enterprise",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{user_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"fantasy_name\": \"Takent2\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/enterprise",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"enterprise"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Enterprise",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{user_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/enterprise",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"enterprise"
 							]
 						}
 					},
@@ -901,105 +1066,6 @@
 							"path": [
 								"init",
 								"mongodb"
-							]
-						}
-					},
-					"response": []
-				}
-			],
-			"protocolProfileBehavior": {}
-		},
-		{
-			"name": "User",
-			"item": [
-				{
-					"name": "Validate user exists",
-					"protocolProfileBehavior": {
-						"disabledSystemHeaders": {}
-					},
-					"request": {
-						"auth": {
-							"type": "noauth"
-						},
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{host}}/user/exists?account=jereegonzalez@gmail.com",
-							"host": [
-								"{{host}}"
-							],
-							"path": [
-								"user",
-								"exists"
-							],
-							"query": [
-								{
-									"key": "account",
-									"value": "jereegonzalez@gmail.com"
-								}
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Activate account (TEMPORAL)",
-					"protocolProfileBehavior": {
-						"disabledSystemHeaders": {}
-					},
-					"request": {
-						"auth": {
-							"type": "noauth"
-						},
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{host}}/user/activate?ticket=5f1b90b4d7b25d4e57f0c7c7",
-							"host": [
-								"{{host}}"
-							],
-							"path": [
-								"user",
-								"activate"
-							],
-							"query": [
-								{
-									"key": "ticket",
-									"value": "5f1b90b4d7b25d4e57f0c7c7"
-								}
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Activate account (NO USAR)",
-					"protocolProfileBehavior": {
-						"disabledSystemHeaders": {}
-					},
-					"request": {
-						"auth": {
-							"type": "noauth"
-						},
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n    \"ticket\": \"5f1b90b4d7b25d4e57f0c7c7\"\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{host}}/user/activate",
-							"host": [
-								"{{host}}"
-							],
-							"path": [
-								"user",
-								"activate"
 							]
 						}
 					},
