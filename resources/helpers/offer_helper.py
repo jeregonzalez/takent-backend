@@ -1,10 +1,8 @@
-
-
 from database.models.offer import Offer
 from database.models.common import State
 from flask_restful import abort
 
-from database.models.users import EnterpriseUser
+from database.models.user import EnterpriseUser
 
 
 def validate_offer_active_must_exist(id=None, user=None):
