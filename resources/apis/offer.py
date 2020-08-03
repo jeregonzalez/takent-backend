@@ -6,31 +6,34 @@ from database.models.common import State, JobType
 from database.models.offer import Offer
 from resources.helpers import user_helper
 from resources.utils.decorators import authentication_required, validate_user_exists, validate_headers, \
-    offer_active_must_exist, offer_must_exist
+    offer_id_state_must_exist, offer_must_exist, state_must_exist
 from resources.utils.exceptions import SchemaValidationErrorException, MissingRequiredFieldsException
 
 
 class OfferApi(Resource):
     method_decorators = {
-        'get': [offer_active_must_exist, validate_user_exists, authentication_required, validate_headers],
+        'get': [offer_id_state_must_exist, state_must_exist, validate_user_exists, authentication_required, validate_headers],
         'post': [validate_user_exists, authentication_required, validate_headers],
         'put': [offer_must_exist, validate_user_exists, authentication_required, validate_headers],
         'delete': [offer_must_exist, validate_user_exists, authentication_required, validate_headers]
     }
 
-    def get(self, id=None, state=None):
+    def get(self):
 
         offers = []
 
-        if id:
-            offers.append(Offer.objects.get(id=id, state=State.objects.get(name='active'),
+        if request.args.get('id'):
+            offers.append(Offer.objects.get(id=request.args.get('id'), state=State.objects.get(name='active'),
                                             publication_user=user_helper.get_user_from_jwt()))
+        elif request.args.get('state'):
+            for offer in Offer.objects(state=State.objects.get(name=request.args.get('state'))):
+                offers.append(offer)
+
         else:
             for offer in Offer.objects(state=State.objects.get(name='active'),
                                        publication_user=user_helper.get_user_from_jwt()):
                 offers.append(offer)
 
-        offers.append({'state': state})
         return offers, 200
 
     def post(self):
