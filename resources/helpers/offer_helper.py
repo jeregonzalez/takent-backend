@@ -5,13 +5,17 @@ from flask_restful import abort
 from database.models.user import EnterpriseUser
 
 
-def validate_offer_active_must_exist(id=None, user=None):
-    if not id:
+def validate_offer_id_state_must_exist(id=None, state=None, user=None):
+    if not id and not state:
         return
-    elif len(id) != 24:
-        abort(400, message='Offer not exist')
-    if not Offer.objects(id=id, publication_user=EnterpriseUser.objects.get(account=user), state=State.objects.get(name='active')).count():
-        abort(400, message='Offer not exist')
+
+    if id:
+        if len(id) != 24:
+            abort(400, message='Offer not exist')
+        else:
+            if not Offer.objects(id=id, publication_user=EnterpriseUser.objects.get(account=user),
+                                 state=State.objects.get(name='active')).count():
+                abort(400, message='Offer not exist')
 
 
 def validate_offer_must_exist(id=None, user=None):
