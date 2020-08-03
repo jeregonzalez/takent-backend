@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "8078504b-2e4d-4f2a-abf8-d45af5af2268",
+		"_postman_id": "622dabea-7150-44bb-a605-78dc28b71d6e",
 		"name": "Takent",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -96,7 +96,7 @@
 						{
 							"listen": "test",
 							"script": {
-								"id": "074c38f5-8361-4afa-a687-5b5e1e0350dd",
+								"id": "209e9fa5-ac56-41f5-878c-106fb2239029",
 								"exec": [
 									"pm.environment.set(\"user_token\", pm.response.json().token);"
 								],
@@ -222,6 +222,141 @@
 							"path": [
 								"user",
 								"activate"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "Offer",
+			"item": [
+				{
+					"name": "Get offers",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{user_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/offer/5f235703bd8728ad70377f5e",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"offer",
+								"5f235703bd8728ad70377f5e"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Post offer",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{user_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"title\": \"Programador\",\r\n    \"description\": \"Programador backend C#\",\r\n    \"experience_offer\": \r\n    [\r\n        {\r\n            \"company\": \"Microsoft\",\r\n            \"start_date\": \"1996/02/01\",\r\n            \"end_date\": \"2001/10/30\",\r\n            \"position\": \"CEO\",\r\n            \"description\": \"He sido CEO de Microsoft, pero me cansé y lo dejé\"\r\n        }\r\n    ],\r\n    \"language\": \r\n    [\r\n        {\r\n            \"name\": \"INGLÉS\",\r\n            \"writing_level\": \"Intermedio\",\r\n            \"reading_level\": \"Intermedio\"\r\n        }\r\n    ],\r\n    \"job_type\": \"Jornada completa\",\r\n    \"sector\": \"Informática\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/offer",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"offer"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Put offer",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{user_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"state\": \"active\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/offer/5f235703bd8728ad70377f5e",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"offer",
+								"5f235703bd8728ad70377f5e"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete offers",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{user_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/offer/5f235703bd8728ad70377f5e",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"offer",
+								"5f235703bd8728ad70377f5e"
 							]
 						}
 					},
@@ -1765,6 +1900,28 @@
 				}
 			],
 			"protocolProfileBehavior": {}
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"id": "612472b6-cdf9-468d-b0c7-46cdf85da0ab",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"id": "54cf9913-a41d-4881-965f-4b16bc5b24dc",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
 		}
 	],
 	"protocolProfileBehavior": {}
