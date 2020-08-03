@@ -7,6 +7,7 @@ from jwt import ExpiredSignatureError
 
 from resources.consts.consts import RequestHeaderKey, RequestHeaderValue, JwtKey
 from resources.helpers import user_helper, enterprise_helper, offer_helper
+from resources.helpers.state_helper import validate_state_must_exist
 from resources.utils import exceptions
 
 
@@ -75,6 +76,7 @@ def validate_user_is_enterprise(func):
         if get_jwt_identity().get('user_type') != 'enterprise':
             abort(400, message='User type must be enterprise')
         return func(*args, **kwargs)
+
     return wrapper
 
 
@@ -84,6 +86,7 @@ def validate_user_is_common(func):
         if get_jwt_identity().get('user_type') != 'common':
             abort(400, message='User type must be common')
         return func(*args, **kwargs)
+
     return wrapper
 
 
@@ -94,6 +97,7 @@ def validate_enterprise_exists(func):
         if not enterprise_helper.enterprise_exists(user_account=user_account):
             abort(400, message='User {} does not have an enterprise associated'.format(user_account))
         return func(*args, **kwargs)
+
     return wrapper
 
 
@@ -104,6 +108,7 @@ def validate_enterprise_not_exists(func):
         if enterprise_helper.enterprise_exists(user_account=user_account):
             abort(400, message='User {} already has an enterprise associated'.format(user_account))
         return func(*args, **kwargs)
+
     return wrapper
 
 
@@ -114,14 +119,18 @@ def validate_role_is_admin(func):
                                 user_type='enterprise').role.name != 'admin':
             abort(403, message='You do not have permissions to do this action')
         return func(*args, **kwargs)
+
     return wrapper
 
 
-def offer_active_must_exist(func):
+def offer_id_state_must_exist(func):
     @wraps(func)
     def wrapper(*args, **kwargs):
-        offer_helper.validate_offer_active_must_exist(id=kwargs.get('id'), user=get_jwt_identity().get('user_account'))
+        if request.args.get('id'):
+            offer_helper.validate_offer_id_state_must_exist(id=request.args.get('id'),
+                                                            user=get_jwt_identity().get('user_account'))
         return func(*args, **kwargs)
+
     return wrapper
 
 
@@ -130,6 +139,7 @@ def offer_must_exist(func):
     def wrapper(*args, **kwargs):
         offer_helper.validate_offer_must_exist(id=kwargs.get('id'), user=get_jwt_identity().get('user_account'))
         return func(*args, **kwargs)
+
     return wrapper
 
 
@@ -138,4 +148,17 @@ def offer_must_not_exist(func):
     def wrapper(*args, **kwargs):
         offer_helper.validate_offer_must_not_exist(request.get_json().get('title'))
         return func(*args, **kwargs)
+
+    return wrapper
+
+
+def state_must_exist(func):
+    @wraps(func)
+    def wrapper(*args, **kwargs):
+        if 'state' in kwargs:
+            validate_state_must_exist(state=kwargs.get('state'))
+        if request.args.get('state'):
+            validate_state_must_exist(state=request.args.get('state'))
+        return func(*args, **kwargs)
+
     return wrapper
