@@ -46,7 +46,7 @@ class EducationLevel(db.Document):
 
 
 class Education(db.EmbeddedDocument):
-    id = db.ObjectIdField(unique=True, default=ObjectId)
+    id = db.ObjectIdField(default=ObjectId)
     start_date = db.DateTimeField()
     end_date = db.DateTimeField()
     institution = db.StringField()
@@ -56,7 +56,7 @@ class Education(db.EmbeddedDocument):
 
 
 class Experience(db.EmbeddedDocument):
-    id = db.ObjectIdField(unique=True, default=ObjectId)
+    id = db.ObjectIdField(default=ObjectId)
     company = db.StringField(required=True)
     start_date = db.DateTimeField(required=True)
     end_date = db.DateTimeField()
@@ -66,13 +66,13 @@ class Experience(db.EmbeddedDocument):
 
 
 class Skill(db.EmbeddedDocument):
-    id = db.ObjectIdField(unique=True, default=ObjectId)
+    id = db.ObjectIdField(default=ObjectId)
     name = db.StringField(required=True)
     description = db.StringField()
 
 
 class UserLanguage(db.EmbeddedDocument):
-    id = db.ObjectIdField(unique=True, default=ObjectId)
+    id = db.ObjectIdField(default=ObjectId)
     name = db.StringField(required=True)
     writing_level = db.StringField(required=True)
     reading_level = db.StringField(required=True)
