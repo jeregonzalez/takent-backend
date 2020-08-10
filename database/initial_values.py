@@ -25,7 +25,9 @@ data = {
     'state': [
         {'name': 'active', 'description': 'Active entity'},
         {'name': 'inactive', 'description': 'Inactive entity'},
-        {'name': 'En seleccion', 'description': 'Usuario común en proceso de selección'}
+        {'name': 'in_selection', 'description': 'Offer in selection process'},
+        {'name': 'finished', 'description': 'Offer finished'},
+        {'name': 'deleted', 'description': 'Offer or user deleted logically'}
     ],
     'job_type': [
         {'name': 'Jornada completa'},
