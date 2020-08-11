@@ -100,15 +100,18 @@ class CurriculumApi(Resource):
         user = user_helper.get_user_from_jwt()
         if not user.curriculum:
             return {'message': 'User {} does not have curriculum'.format(user.account)}, 200
-        return {'curriculum': user.curriculum.base64}, 200
+        return user.curriculum, 200
 
     def post(self):
-        curriculum = request.get_json().get('curriculum')
-        if not curriculum:
-            abort(400, message='No curriculum sent')
+        body = request.get_json()
         user = user_helper.get_user_from_jwt()
-        new_curriculum = CurriculumVitae(base64=curriculum)
-        new_curriculum.save()
+        try:
+            new_curriculum = CurriculumVitae(**body)
+            new_curriculum.save()
+        except FieldDoesNotExist:
+            raise SchemaValidationErrorException
+        except ValidationError:
+            raise MissingRequiredFieldsException
         user.update(curriculum=new_curriculum)
         return {'message': 'Curriculum uploaded successfully'}, 201
 
