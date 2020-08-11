@@ -25,6 +25,7 @@ class Address(db.EmbeddedDocument):
     district = db.StringField()
     street = db.StringField()
     number = db.IntField()
+    tower = db.StringField()
     apartment = db.StringField()
     floor = db.IntField()
     postal_code = db.IntField()
@@ -97,7 +98,8 @@ class Image(db.Document):
 
 
 class CurriculumVitae(db.Document):
-    base64 = db.StringField()
+    name = db.StringField()
+    base64 = db.StringField(required=True)
 
 
 class ActivationTicket(db.Document):
