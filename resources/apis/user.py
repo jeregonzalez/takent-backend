@@ -17,7 +17,7 @@ class UserApi(Resource):
     method_decorators = {
         'get': [validate_user_exists, authentication_required, validate_headers],
         'post': [validate_user_not_exists, validate_user_password, validate_headers],
-        'put': [validate_user_exists, authentication_required, validate_headers],
+        'put': [validate_user_exists, validate_user_password, authentication_required, validate_headers],
         'delete': [validate_user_exists, authentication_required, validate_headers]
     }
 
