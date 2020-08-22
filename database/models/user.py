@@ -8,7 +8,7 @@ from resources.utils.exceptions import ImmutableFieldsException
 
 class User(db.Document):
     account = db.EmailField(primary_key=True)
-    password = db.StringField(required=True, min_length=8, max_length=15)
+    password = db.StringField(required=True)
     name = db.StringField(required=True)
     surname = db.StringField(required=True)
     state = db.ReferenceField(State, default=lambda: State.objects.get(name='inactive'))

@@ -144,7 +144,7 @@ class PasswordRecoverApi(Resource):
 class ChangePasswordApi(Resource):
 
     method_decorators = {
-        'post': [validate_user_exists, authentication_required, validate_headers]
+        'post': [validate_user_exists, validate_user_password, authentication_required, validate_headers]
     }
 
     def post(self):
