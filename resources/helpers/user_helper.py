@@ -1,4 +1,6 @@
 from flask_jwt_extended import get_jwt_identity
+from flask_restful import abort
+import re
 
 from database.models.user import CommonUser, EnterpriseUser
 from resources.consts.consts import JwtKey
@@ -46,3 +48,11 @@ def get_user_from_jwt(keys=None):
             return user_data.get(keys)
         return {key: user_data.get(key) for key in keys}
     return USER_TYPES[user_data.get(JwtKey.USER_TYPE)].objects.get(account=user_data.get(JwtKey.USER_ACCOUNT))
+
+
+def validate_password(password=None):
+    if password:
+        result = re.search("^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,15}$", password)
+
+        if not result:
+            abort(400, message='Password is invalid')
