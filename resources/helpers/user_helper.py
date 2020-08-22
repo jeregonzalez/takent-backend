@@ -51,10 +51,8 @@ def get_user_from_jwt(keys=None):
 
 
 def validate_password(password=None):
-    if not password:
-        abort(400, message='Field password not found')
+    if password:
+        result = re.search("^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,15}$", password)
 
-    result = re.search("^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,15}$", password)
-
-    if not result:
-        abort(400, message='Password is invalid')
+        if not result:
+            abort(400, message='Password is invalid')

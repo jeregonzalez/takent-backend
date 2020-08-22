@@ -75,7 +75,8 @@ def validate_user_password(func):
     @wraps(func)
     def wrapper(*args, **kwargs):
         body = request.get_json()
-        validate_password(body['password'])
+        if 'password' in body:
+            validate_password(body['password'])
         return func(*args, **kwargs)
 
     return wrapper
