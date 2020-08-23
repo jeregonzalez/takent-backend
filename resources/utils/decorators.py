@@ -79,6 +79,11 @@ def validate_user_password(func):
             validate_password(body['password'])
         if 'new_password' in body:
             validate_password(body['new_password'])
+        if 'member_users' in body:
+            for member in body['member_users']:
+                if 'password' in member:
+                    validate_password(member.get('password'))
+
         return func(*args, **kwargs)
 
     return wrapper
