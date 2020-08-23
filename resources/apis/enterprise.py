@@ -6,7 +6,8 @@ from database.models.role import Role
 from database.models.user import EnterpriseUser
 from resources.helpers import user_helper, enterprise_helper, auth_helper
 from resources.utils.decorators import validate_headers, authentication_required, validate_user_exists, \
-    validate_user_is_enterprise, validate_enterprise_exists, validate_enterprise_not_exists, validate_role_is_admin
+    validate_user_is_enterprise, validate_enterprise_exists, validate_enterprise_not_exists, validate_role_is_admin, \
+    validate_user_password
 from resources.utils.exceptions import SchemaValidationErrorException
 
 
@@ -14,7 +15,7 @@ class EnterpriseApi(Resource):
     method_decorators = {
         'get': [validate_enterprise_exists, validate_user_is_enterprise, validate_user_exists, authentication_required,
                 validate_headers],
-        'post': [validate_role_is_admin, validate_enterprise_not_exists, validate_user_is_enterprise,
+        'post': [validate_role_is_admin, validate_user_password, validate_enterprise_not_exists, validate_user_is_enterprise,
                  validate_user_exists, authentication_required, validate_headers],
         'put': [validate_role_is_admin, validate_enterprise_exists, validate_user_is_enterprise, validate_user_exists,
                 authentication_required, validate_headers],
