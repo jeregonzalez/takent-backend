@@ -10,17 +10,15 @@ data = {
     'education_level': [
         {'name': 'Primario'},
         {'name': 'Secundario'},
+        {'name': 'Terciario'},
         {'name': 'Grado'},
-        {'name': 'Posgrado'},
-        {'name': 'Master'},
-        {'name': 'Terciario'}
+        {'name': 'Posgrado'}
     ],
     'language_level': [
         {'name': 'Básico'},
         {'name': 'Intermedio'},
-        {'name': 'Básico profesional'},
-        {'name': 'Completo profesional'},
-        {'name': 'Nativo o bilingüe'}
+        {'name': 'Avanzado'},
+        {'name': 'Nativo'}
     ],
     'state': [
         {'name': 'active', 'description': 'Active entity'},
