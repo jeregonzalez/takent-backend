@@ -11,7 +11,7 @@ class User(db.Document):
     password = db.StringField(required=True)
     name = db.StringField(required=True)
     surname = db.StringField(required=True)
-    state = db.ReferenceField(State, default=lambda: State.objects.get(name='active'))
+    state = db.ReferenceField(State, default=lambda: State.objects.get(name='inactive'))
 
     meta = {
         'abstract': True,
