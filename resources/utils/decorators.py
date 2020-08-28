@@ -7,6 +7,7 @@ from jwt import ExpiredSignatureError
 
 from resources.consts.consts import RequestHeaderKey, RequestHeaderValue, JwtKey
 from resources.helpers import user_helper, enterprise_helper, offer_helper
+from resources.helpers.offer_helper import validate_attributes_exist
 from resources.helpers.state_helper import validate_state_must_exist
 from resources.helpers.user_helper import validate_password
 from resources.utils import exceptions
@@ -178,6 +179,16 @@ def state_must_exist(func):
             validate_state_must_exist(state=kwargs.get('state'))
         if request.args.get('state'):
             validate_state_must_exist(state=request.args.get('state'))
+        return func(*args, **kwargs)
+
+    return wrapper
+
+
+def validate_attributes(func):
+    @wraps(func)
+    def wrapper(*args, **kwargs):
+        user_account = get_jwt_identity().get('user_account')
+        validate_attributes_exist(account=user_account, attr=request.args.to_dict())
         return func(*args, **kwargs)
 
     return wrapper
