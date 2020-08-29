@@ -1,10 +1,12 @@
-from mongoengine import InvalidQueryError
+from dateutil import parser
+from flask_restful import abort
+from mongoengine import ReferenceField, EmbeddedDocument, \
+    EmbeddedDocumentListField, StringField, DateTimeField
 
-from database.models.offer import Offer
 from database.models.common import State
-from flask_restful import abort, request
-
+from database.models.offer import Offer
 from database.models.user import EnterpriseUser
+from resources.helpers.log_helper import LOGGER
 
 
 def validate_offer_id_state_must_exist(id=None, state=None, user=None):
@@ -37,32 +39,50 @@ def validate_offer_must_not_exist(title):
         abort(400, message='Offer {} exist'.format(title))
 
 
-def validate_attributes_exist(account, attr):
-    aux = []
-    states = {}
-    if not attr.get('publication_user'):
-        attr['publication_user'] = account
+def get_fields():
+    return Offer._fields.keys()
 
-    if attr.get('state'):
-        aux = attr['state'].split(',')
-        states = {'1': 'active', '2': 'inactive', '3': 'in_selection', '4': 'finished', '5': 'deleted'}
-        for state in aux:
-            if State.objects(name=states.get(state)).count():
-                states[state] = State.objects.get(name=states.get(state))
-            else:
-                abort(400, message='State not exist')
 
-    if attr.get('language'):
-        language = attr['language']
-        attr['language__match'] = attr.pop('language')
-        attr['language__match'] = {"name__icontains": language}
+def get_field_type(field):
+    return Offer._fields.get(field)
 
-    try:
-        if attr.get('state'):
-            for state in aux:
-                attr['state'] = states[state]
-                Offer.objects(**attr).count()
 
-        Offer.objects(**attr).count()
-    except InvalidQueryError:
-        abort(400, message='Field not exist')
+def filter_offers(filters):
+    """
+    Filter offers given multiple filters
+    :param filters: list of filters
+    :type filters: list
+    :return: list of offers filtered
+    """
+    mongo_query_params = []
+    for key, value in filters:
+        field_type = get_field_type(key)
+        query_param = []
+        values = value.split(',')
+        LOGGER.info(field_type)
+        if type(field_type) == ReferenceField:
+            reference_obj = field_type.document_type_obj
+            filter_references = reference_obj.objects(pk__in=values)
+            query_param.append(('{}__in'.format(key), filter_references))
+        elif type(field_type) == EmbeddedDocument:
+            query_param.append(('{}__{}__in'.format(key, 'pk'), values))
+        elif type(field_type) == EmbeddedDocumentListField:
+            query_param.append(('{}__{}__in'.format(key, 'pk'), values))
+        elif type(field_type) == StringField:
+            query_param.append(('{}__icontains'.format(key), value))
+        elif type(field_type) == DateTimeField:
+            try:
+                start_date = parser.parse(values[0])
+            except Exception as e:
+                start_date = None
+            try:
+                end_date = parser.parse(values[1])
+            except Exception:
+                end_date = None
+            if start_date:
+                query_param.append(('{}__gte'.format(key), start_date))
+            if end_date:
+                query_param.append(('{}__lte'.format(key), end_date))
+        mongo_query_params.extend(query_param)
+    mongo_query_params = dict(mongo_query_params)
+    return Offer.objects(**mongo_query_params)
