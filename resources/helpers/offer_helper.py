@@ -65,9 +65,9 @@ def filter_offers(filters):
             filter_references = reference_obj.objects(pk__in=values)
             query_param.append(('{}__in'.format(key), filter_references))
         elif type(field_type) == EmbeddedDocument:
-            query_param.append(('{}__{}__in'.format(key, 'pk'), values))
+            query_param.append(('{}__{}__in'.format(key, 'name'), values))
         elif type(field_type) == EmbeddedDocumentListField:
-            query_param.append(('{}__{}__in'.format(key, 'pk'), values))
+            query_param.append(('{}__{}__in'.format(key, 'name'), values))
         elif type(field_type) == StringField:
             query_param.append(('{}__icontains'.format(key), value))
         elif type(field_type) == DateTimeField:
@@ -85,4 +85,4 @@ def filter_offers(filters):
                 query_param.append(('{}__lte'.format(key), end_date))
         mongo_query_params.extend(query_param)
     mongo_query_params = dict(mongo_query_params)
-    return Offer.objects(**mongo_query_params)
+    return Offer.objects(**mongo_query_params).order_by('-publication_date')

@@ -7,8 +7,6 @@ from jwt import ExpiredSignatureError
 
 from resources.consts.consts import RequestHeaderKey, RequestHeaderValue, JwtKey
 from resources.helpers import user_helper, enterprise_helper, offer_helper
-from resources.helpers.log_helper import LOGGER
-from resources.helpers.offer_helper import validate_attributes_exist
 from resources.helpers.state_helper import validate_state_must_exist
 from resources.helpers.user_helper import validate_password
 from resources.utils import exceptions
