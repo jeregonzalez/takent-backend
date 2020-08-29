@@ -73,7 +73,7 @@ def filter_offers(filters):
         elif type(field_type) == DateTimeField:
             try:
                 start_date = parser.parse(values[0])
-            except Exception as e:
+            except Exception:
                 start_date = None
             try:
                 end_date = parser.parse(values[1])
