@@ -1,6 +1,6 @@
 from flask import request
 from flask_restful import Resource
-from mongoengine import FieldDoesNotExist, ValidationError
+from mongoengine import FieldDoesNotExist, ValidationError, InvalidQueryError
 
 from database.models.common import State, JobType
 from database.models.offer import Offer
@@ -50,7 +50,7 @@ class OfferApi(Resource):
                 body['job_type'] = JobType.objects.get(name=body['job_type'])
 
             Offer.objects.get(id=id).update(**body)
-        except FieldDoesNotExist:
+        except InvalidQueryError:
             raise SchemaValidationErrorException
         except ValidationError:
             raise MissingRequiredFieldsException

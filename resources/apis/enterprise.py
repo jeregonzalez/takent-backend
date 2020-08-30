@@ -1,5 +1,6 @@
 from flask import request
 from flask_restful import Resource, abort
+from mongoengine import FieldDoesNotExist, ValidationError, InvalidQueryError
 
 from database.models.enterprise import Enterprise
 from database.models.role import Role
@@ -8,7 +9,7 @@ from resources.helpers import user_helper, enterprise_helper, auth_helper
 from resources.utils.decorators import validate_headers, authentication_required, validate_user_exists, \
     validate_user_is_enterprise, validate_enterprise_exists, validate_enterprise_not_exists, validate_role_is_admin, \
     validate_user_password
-from resources.utils.exceptions import SchemaValidationErrorException
+from resources.utils.exceptions import SchemaValidationErrorException, MissingRequiredFieldsException
 
 
 class EnterpriseApi(Resource):
@@ -42,7 +43,13 @@ class EnterpriseApi(Resource):
                 member_user['role'] = Role.objects.get(name='member')
                 saved_users.append(EnterpriseUser(**member_user).save())
             body['member_users'] = saved_users
-        new_enterprise = Enterprise(**body).save()
+
+        try:
+            new_enterprise = Enterprise(**body).save()
+        except FieldDoesNotExist:
+            raise SchemaValidationErrorException
+        except ValidationError:
+            raise MissingRequiredFieldsException
         return {'message': 'Enterprise {} created'.format(new_enterprise.business_name)}, 201
 
     def put(self):
@@ -50,7 +57,12 @@ class EnterpriseApi(Resource):
         enterprise = enterprise_helper.get_enterprise(user_account=user_helper.get_user_from_jwt().account)
         if body.get('member_users'):
             raise SchemaValidationErrorException
-        enterprise.update(**body)
+        try:
+            enterprise.update(**body)
+        except InvalidQueryError:
+            raise SchemaValidationErrorException
+        except ValidationError:
+            raise MissingRequiredFieldsException
         return '', 204
 
     def delete(self):
