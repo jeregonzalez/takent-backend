@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "8078504b-2e4d-4f2a-abf8-d45af5af2268",
+		"_postman_id": "31c73193-d1c6-41b6-bcf4-97914a65054b",
 		"name": "Takent",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -96,7 +96,7 @@
 						{
 							"listen": "test",
 							"script": {
-								"id": "074c38f5-8361-4afa-a687-5b5e1e0350dd",
+								"id": "4e2bee79-4b05-49f1-900d-d61b4e953d8c",
 								"exec": [
 									"pm.environment.set(\"user_token\", pm.response.json().token);"
 								],
@@ -109,7 +109,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"account\": \"jereegonzalez@gmail.com\",\n    \"password\": \"Mariano2502\"\n}",
+							"raw": "{\n    \"account\": \"jereegonzalez@gmail.com\",\n    \"password\": \"pass123\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -222,6 +222,151 @@
 							"path": [
 								"user",
 								"activate"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "Offer",
+			"item": [
+				{
+					"name": "Get offer",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{user_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/offer?publication_date=2020/01/01,2020/12/01",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"offer"
+							],
+							"query": [
+								{
+									"key": "publication_date",
+									"value": "2020/01/01,2020/12/01"
+								},
+								{
+									"key": "job_type",
+									"value": "Jornada completa",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Post offer",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{user_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"title\": \"Limpieza\",\r\n    \"description\": \"Limpieza de casas\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/offer",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"offer"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete offer",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{user_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/offer/5f47dd3b5f2529800fba4993",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"offer",
+								"5f47dd3b5f2529800fba4993"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Put offer",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{user_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"title\": \"holaaa\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/offer/5f47dd3b5f2529800fba4993",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"offer",
+								"5f47dd3b5f2529800fba4993"
 							]
 						}
 					},
@@ -963,7 +1108,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"account\": \"jereegonzalez@gmail.com\",\n    \"password\": \"Password123\",\n    \"name\": \"Jeremias\",\n    \"surname\": \"Gonzalez\",\n    \"address\": {\n        \"district\": \"Córdoba\",\n        \"street\": \"Mza 19\",\n        \"number\": 7,\n        \"postal_code\": 5000,\n        \"city\": 2084010001,\n        \"tower\": \"Torre Eiffel\",\n        \"floor\": 6,\n        \"apartment\": \"A\"\n    },\n    \"birth_date\": \"28/04/1996\",\n    \"description\": \"Hola soy jere\",\n    \"phone\": 3513246309,\n    \"education\": [\n        {\n            \"start_date\": \"01/01/2014\",\n            \"end_date\": \"01/01/2019\",\n            \"institution\": \"UTN Córdoba\",\n            \"name\": \"Ingeniero en sistemas\",\n            \"level\": \"Degree\",\n            \"description\": \"Alguna descripción\"\n        }\n    ],\n    \"experience\": [\n        {\n            \"company\": \"SimtTLiX\",\n            \"start_date\": \"01/12/2019\",\n            \"end_date\": \"01/12/2020\",\n            \"position\": \"Software Engineer\",\n            \"description\": \"hola\",\n            \"reference\": {\n                \"name\": \"Nadie\",\n                \"phone\": 123123123\n            }\n        }\n    ],\n    \"skill\": [\n        {\n            \"name\": \"Dormir\",\n            \"description\": \"\"\n        }\n\n    ],\n    \"language\": [\n        {\n            \"name\": \"Ingles\",\n            \"writing_level\": \"Basic\",\n            \"reading_level\": \"Basic\"\n        }\n    ]\n}",
+							"raw": "{\n    \"account\": \"jereegonzalez@gmail.com\",\n    \"password\": \"pass123\",\n    \"name\": \"Jeremias\",\n    \"surname\": \"Gonzalez\",\n    \"address\": {\n        \"district\": \"Córdoba\",\n        \"street\": \"Mza 19\",\n        \"number\": 7,\n        \"postal_code\": 5000,\n        \"city\": 2084010001,\n        \"tower\": \"Torre Eiffel\",\n        \"floor\": 6,\n        \"apartment\": \"A\"\n    },\n    \"birth_date\": \"28/04/1996\",\n    \"description\": \"Hola soy jere\",\n    \"phone\": 3513246309,\n    \"education\": [\n        {\n            \"start_date\": \"01/01/2014\",\n            \"end_date\": \"01/01/2019\",\n            \"institution\": \"UTN Córdoba\",\n            \"name\": \"Ingeniero en sistemas\",\n            \"level\": \"Degree\",\n            \"description\": \"Alguna descripción\"\n        }\n    ],\n    \"experience\": [\n        {\n            \"company\": \"SimtTLiX\",\n            \"start_date\": \"01/12/2019\",\n            \"end_date\": \"01/12/2020\",\n            \"position\": \"Software Engineer\",\n            \"description\": \"hola\",\n            \"reference\": {\n                \"name\": \"Nadie\",\n                \"phone\": 123123123\n            }\n        }\n    ],\n    \"skill\": [\n        {\n            \"name\": \"Dormir\",\n            \"description\": \"\"\n        }\n\n    ],\n    \"language\": [\n        {\n            \"name\": \"Ingles\",\n            \"writing_level\": \"Basic\",\n            \"reading_level\": \"Basic\"\n        }\n    ]\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1758,93 +1903,6 @@
 							"path": [
 								"init",
 								"mongodb"
-							]
-						}
-					},
-					"response": []
-				}
-			],
-			"protocolProfileBehavior": {}
-		},
-		{
-			"name": "Offer",
-			"item": [
-				{
-					"name": "Offer",
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{user_token}}",
-									"type": "string"
-								}
-							]
-						},
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{host}}/offer?state=active,inactive&title=ti&publication_user=jereegonzalez@gmail.com&publication_date=01/01/2021,01/01/2022",
-							"host": [
-								"{{host}}"
-							],
-							"path": [
-								"offer"
-							],
-							"query": [
-								{
-									"key": "state",
-									"value": "active,inactive"
-								},
-								{
-									"key": "title",
-									"value": "ti"
-								},
-								{
-									"key": "publication_user",
-									"value": "jereegonzalez@gmail.com"
-								},
-								{
-									"key": "publication_date",
-									"value": "01/01/2021,01/01/2022"
-								}
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Offer",
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{user_token}}",
-									"type": "string"
-								}
-							]
-						},
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n    \"title\": \"Algun titulo\",\n    \"description\": \"Alguna descripcion\"\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{host}}/offer",
-							"host": [
-								"{{host}}"
-							],
-							"path": [
-								"offer"
 							]
 						}
 					},
