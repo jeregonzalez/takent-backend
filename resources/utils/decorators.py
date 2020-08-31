@@ -181,3 +181,12 @@ def state_must_exist(func):
         return func(*args, **kwargs)
 
     return wrapper
+
+
+def validate_offer_args(func):
+    @wraps(func)
+    def wrapper(*args, **kwargs):
+        if any(key not in offer_helper.get_fields() for key, value in request.args.items()):
+            abort(400, message='Any attribute in the filter is invalid')
+        return func(*args, **kwargs)
+    return wrapper
