@@ -3,6 +3,7 @@ from logging.config import dictConfig
 
 from flask import Flask
 from flask_bcrypt import Bcrypt
+from flask_cors import CORS
 from flask_jwt_extended import JWTManager
 from flask_restful import Api
 
@@ -26,6 +27,7 @@ if not os.path.exists('logs'):
 
 app = Flask(__name__)
 api = Api(app)
+CORS(app)
 
 api.representations.update({
     'application/json': json_output
