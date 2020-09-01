@@ -15,7 +15,7 @@ from resources.utils.representations import json_output
 
 CONFIG_BASE_DIR = 'config/'
 CONFIG_ENV_BASE_DIR = CONFIG_BASE_DIR + 'env/'
-DEFAULT_ENV_CONFIG_FILE = 'develop.yaml'
+DEFAULT_ENV_CONFIG_FILE = 'production.yaml'
 DEFAULT_LOG_CONFIG_FILE = 'logging.yaml'
 
 LOG_CONFIG_FILE = CONFIG_BASE_DIR + os.environ.get('LOG_CONFIG_FILE', DEFAULT_LOG_CONFIG_FILE)
