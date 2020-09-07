@@ -9,6 +9,7 @@ from resources.utils.decorators import authentication_required, validate_user_ex
     validate_headers, offer_must_exist, validate_offer_args
 from resources.utils.exceptions import SchemaValidationErrorException, \
     MissingRequiredFieldsException
+from resources.utils.messages import Message
 
 
 class OfferApi(Resource):
@@ -21,7 +22,7 @@ class OfferApi(Resource):
 
     def get(self):
         filters = request.args.items()
-        return [offer for offer in offer_helper.filter_offers(filters)]
+        return Message.ok(response=[offer for offer in offer_helper.filter_offers(filters)])
 
     def post(self):
         body = request.get_json()
