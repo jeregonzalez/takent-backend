@@ -7,6 +7,7 @@ from jwt import ExpiredSignatureError
 
 from resources.consts.consts import RequestHeaderKey, RequestHeaderValue, JwtKey
 from resources.helpers import user_helper, enterprise_helper, offer_helper
+from resources.helpers.allowed_user_helper import validate_allowed_user_not_exists, validate_allowed_user_exists
 from resources.helpers.state_helper import validate_state_must_exist
 from resources.helpers.user_helper import validate_password
 from resources.utils import exceptions
@@ -189,4 +190,37 @@ def validate_offer_args(func):
         if any(key not in offer_helper.get_fields() for key, value in request.args.items()):
             abort(400, message='Any attribute in the filter is invalid')
         return func(*args, **kwargs)
+
+    return wrapper
+
+
+def allowed_user_not_exists(func):
+    @wraps(func)
+    def wrapper(*args, **kwargs):
+        if 'account' in request.get_json():
+            validate_allowed_user_not_exists(admin_user=user_helper.get_user_from_jwt(),
+                                             account=request.get_json().get('account'))
+        return func(*args, **kwargs)
+
+    return wrapper
+
+
+def allowed_user_exists(func):
+    @wraps(func)
+    def wrapper(*args, **kwargs):
+        if 'account' in request.get_json():
+            validate_allowed_user_exists(admin_user=user_helper.get_user_from_jwt(),
+                                         account=kwargs.get('account'))
+        return func(*args, **kwargs)
+
+    return wrapper
+
+
+def role_must_be_admin(func):
+    @wraps(func)
+    def wrapper(*args, **kwargs):
+        if not user_helper.get_user_from_jwt().role.name == 'admin':
+            abort(400, message='User\'s role is not admin')
+        return func(*args, **kwargs)
+
     return wrapper

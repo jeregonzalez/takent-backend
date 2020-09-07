@@ -1,3 +1,4 @@
+from resources.apis.allowed_user import AllowedUserApi
 from resources.apis.education import EducationLevelApi
 from resources.apis.enterprise import EnterpriseApi
 from resources.apis.authentication import AuthenticationApi
@@ -41,3 +42,4 @@ def initialize_routes(api):
                      '/api/v1/user/enterprise/change_password')
     api.add_resource(OfferApi, '/api/v1/offer', '/api/v1/offer/<id>')
     api.add_resource(ReactivateOfferApi, '/api/v1/reactivation/<id>')
+    api.add_resource(AllowedUserApi, '/api/v1/allowed', '/api/v1/allowed/<account>')
