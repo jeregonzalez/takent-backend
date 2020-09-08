@@ -77,6 +77,8 @@ class UserLanguage(db.EmbeddedDocument):
     name = db.StringField(required=True)
     writing_level = db.StringField(required=True)
     reading_level = db.StringField(required=True)
+    certificate = db.BooleanField(default=False)
+    description = db.StringField(max_length=300)
 
 
 class LanguageLevel(db.Document):
