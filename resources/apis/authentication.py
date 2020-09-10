@@ -1,16 +1,33 @@
 import datetime
 
 from flask import request
-from flask_jwt_extended import create_access_token
+from flask_jwt_extended import create_access_token, verify_jwt_in_request, get_jwt_identity
 from flask_restful import Resource, abort
+from jwt import ExpiredSignatureError
 
 from database.models.user import CommonUser
+from resources.consts.consts import JwtKey
 from resources.helpers import auth_helper, user_helper
+from resources.utils.exceptions import AuthorizationTokenExpiredException, UnauthorizedException
 
 
 class AuthenticationApi(Resource):
     def post(self):
         body = request.get_json()
+        if not body:
+            try:
+                verify_jwt_in_request()
+            except ExpiredSignatureError:
+                raise AuthorizationTokenExpiredException
+            except Exception:
+                raise UnauthorizedException
+            user_account, user_type = get_jwt_identity().get(JwtKey.USER_ACCOUNT), \
+                                      get_jwt_identity().get(JwtKey.USER_TYPE)
+            expires = datetime.timedelta(hours=4)
+            access_token = create_access_token(identity={'user_type': user_type,
+                                                         'user_account': user_account},
+                                               expires_delta=expires)
+            return {'token': access_token}, 200
         user_account = body.get('account')
         user_password = body.get('password')
         if not user_account or not user_password:
@@ -25,6 +42,7 @@ class AuthenticationApi(Resource):
             abort(401, message='Account or password invalid')
         expires = datetime.timedelta(hours=4)
         user_type = 'common' if isinstance(user, CommonUser) else 'enterprise'
-        access_token = create_access_token(identity={'user_type': user_type, 'user_account': user.account},
+        access_token = create_access_token(identity={'user_type': user_type,
+                                                     'user_account': user.account},
                                            expires_delta=expires)
         return {'token': access_token}, 200
