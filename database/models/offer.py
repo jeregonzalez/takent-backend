@@ -19,7 +19,6 @@ class Offer(db.Document):
     experience_offer = db.StringField(default='Ninguna Experiencia')
     postulant = db.ListField(db.ReferenceField('PostulantOffer'))
     job_type = db.ReferenceField(JobType, default=lambda: JobType.objects.get(name='Jornada completa'))
-    profession = db.StringField()
     sector = db.StringField()
     language = db.EmbeddedDocumentListField(UserLanguage, default=[
         UserLanguage(name='ESPAÑOL', writing_level='Nativo', reading_level='Nativo')])

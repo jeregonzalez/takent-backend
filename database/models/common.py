@@ -62,6 +62,7 @@ class Experience(db.EmbeddedDocument):
     start_date = db.DateTimeField(required=True)
     end_date = db.DateTimeField()
     position = db.StringField(required=True)
+    profession = db.StringField()
     description = db.StringField()
     reference = db.DictField()
 
