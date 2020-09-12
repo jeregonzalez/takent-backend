@@ -120,7 +120,7 @@ def init_enterprises(enterprises):
 
 
 def init_professions():
-    professions_csv = './temp_data/professions.csv'
+    professions_csv = './database/data/professions.csv'
     if not os.path.exists(professions_csv):
         return
 
