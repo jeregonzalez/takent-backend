@@ -5,5 +5,4 @@ from database.models.common import Profession
 
 class ProfessionApi(Resource):
     def get(self):
-        professions = []
         return [profession for profession in Profession.objects]
