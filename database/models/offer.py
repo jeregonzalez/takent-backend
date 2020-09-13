@@ -1,7 +1,7 @@
 from datetime import datetime
 
 from database.db import db
-from .common import State, JobType, UserLanguage
+from .common import State, JobType, UserLanguage, Profession
 from .user import CommonUser, EnterpriseUser
 
 

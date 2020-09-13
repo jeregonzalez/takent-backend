@@ -62,6 +62,7 @@ class Experience(db.EmbeddedDocument):
     start_date = db.DateTimeField(required=True)
     end_date = db.DateTimeField()
     position = db.StringField(required=True)
+    profession = db.StringField()
     description = db.StringField()
     reference = db.DictField()
 
@@ -116,3 +117,8 @@ class JobType(db.Document):
 class Sector(db.Document):
     name = db.StringField(primary_key=True)
     description = db.StringField()
+
+
+class Profession(db.Document):
+    id = db.IntField(primary_key=True)
+    name = db.StringField()
