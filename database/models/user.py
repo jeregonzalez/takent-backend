@@ -11,6 +11,7 @@ class User(db.Document):
     password = db.StringField(required=True)
     name = db.StringField(required=True)
     surname = db.StringField(required=True)
+    birth_date = db.DateTimeField()
     state = db.ReferenceField(State, default=lambda: State.objects.get(name='inactive'))
 
     meta = {
@@ -35,7 +36,6 @@ class User(db.Document):
 
 
 class CommonUser(User):
-    birth_date = db.DateTimeField(required=True)
     address = db.EmbeddedDocumentField(Address)
     curriculum = db.ReferenceField(CurriculumVitae, reverse_delete_rule=NULLIFY)
     profile_photo = db.ReferenceField(Image, reverse_delete_rule=NULLIFY)

@@ -9,7 +9,7 @@ from resources.consts.consts import RequestHeaderKey, RequestHeaderValue, JwtKey
 from resources.helpers import user_helper, enterprise_helper, offer_helper
 from resources.helpers.allowed_user_helper import validate_allowed_user_not_exists, validate_allowed_user_exists
 from resources.helpers.state_helper import validate_state_must_exist
-from resources.helpers.user_helper import validate_password
+from resources.helpers.user_helper import validate_password, validate_birth_date
 from resources.utils import exceptions
 
 
@@ -67,6 +67,17 @@ def validate_user_not_exists(func):
         user_account = request.get_json().get('account')
         if user_helper.user_exists(user_account=user_account):
             abort(400, message='User {} already exists'.format(user_account))
+        return func(*args, **kwargs)
+
+    return wrapper
+
+
+def validate_user_birth_date(func):
+    @wraps(func)
+    def wrapper(*args, **kwargs):
+        body = request.get_json()
+        if 'birth_date' in body:
+            validate_birth_date(body['birth_date'])
         return func(*args, **kwargs)
 
     return wrapper
