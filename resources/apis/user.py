@@ -9,15 +9,15 @@ from database.models.user import EnterpriseUser
 from resources.helpers import password_helper, user_helper, enterprise_helper, auth_helper
 from resources.helpers.email_helper.email_helper import EmailAdmin, EmailActivation, EmailChangePassword
 from resources.utils.decorators import validate_headers, authentication_required, validate_user_is_common, \
-    validate_user_exists, validate_user_not_exists, validate_user_password
+    validate_user_exists, validate_user_not_exists, validate_user_password, validate_user_birth_date
 from resources.utils.exceptions import MissingRequiredFieldsException, SchemaValidationErrorException
 
 
 class UserApi(Resource):
     method_decorators = {
         'get': [validate_user_exists, authentication_required, validate_headers],
-        'post': [validate_user_not_exists, validate_user_password, validate_headers],
-        'put': [validate_user_exists, validate_user_password, authentication_required, validate_headers],
+        'post': [validate_user_not_exists, validate_user_password, validate_user_birth_date, validate_headers],
+        'put': [validate_user_exists, validate_user_password, validate_user_birth_date, authentication_required, validate_headers],
         'delete': [validate_user_exists, authentication_required, validate_headers]
     }
 
@@ -28,8 +28,18 @@ class UserApi(Resource):
         body = request.get_json()
         if body.get('password'):
             body['password'] = auth_helper.hash_password(body['password'])
+
         try:
-            new_user = user_helper.USER_TYPES[user_type](**body).save()
+            new_user = user_helper.USER_TYPES[user_type](**body)
+            if not 'birth_date' in body:
+                if type(new_user) == EnterpriseUser:
+                    if 'member' != new_user.role.name:
+                        raise SchemaValidationErrorException
+                else:
+                    raise SchemaValidationErrorException
+
+            new_user.save()
+
         except FieldDoesNotExist:
             raise SchemaValidationErrorException
         except ValidationError:
@@ -56,6 +66,7 @@ class UserApi(Resource):
             def send_emails():
                 for member_user in enterprise.member_users:
                     EmailAdmin(destination_email=member_user.account).send_email()
+
             Thread(target=send_emails).start()
         return '', 204
 
@@ -123,7 +134,6 @@ class CurriculumApi(Resource):
 
 
 class PasswordRecoverApi(Resource):
-
     method_decorators = {
         'post': [validate_user_exists, validate_headers]
     }
@@ -142,7 +152,6 @@ class PasswordRecoverApi(Resource):
 
 
 class ChangePasswordApi(Resource):
-
     method_decorators = {
         'post': [validate_user_exists, validate_user_password, authentication_required, validate_headers]
     }
