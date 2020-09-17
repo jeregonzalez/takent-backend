@@ -15,6 +15,8 @@ class Enterprise(db.Document):
     description = db.StringField()
     admin_user = db.ReferenceField(EnterpriseUser, required=True)
     member_users = db.ListField(db.ReferenceField(EnterpriseUser))
+    enterprise_type = db.StringField()
+    sector = db.StringField()
     state = db.ReferenceField(State, default=lambda: State.objects.get(name='active'))
 
     def deactivate(self):
