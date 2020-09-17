@@ -5,7 +5,7 @@ from flask_restful import Resource
 
 from database.initial_values import data
 from database.models.common import Country, City, Province, EducationLevel, LanguageLevel, State, Language, JobType, \
-    Profession
+    EnterpriseType, Sector, Profession
 from database.models.enterprise import Enterprise
 from database.models.role import Permission, Role
 from database.models.user import EnterpriseUser, CommonUser
@@ -27,6 +27,8 @@ class MongoApi(Resource):
         init_states(data.get('state'))
         init_languages()
         init_job_type(data.get('job_type'))
+        init_enterprise_type(data.get('enterprise_type'))
+        init_sector()
         init_professions()
         return {'message': 'Database initialized correctly'}, 200
 
@@ -152,3 +154,23 @@ def init_job_type(job_types):
 
     for job_type in job_types:
         JobType.objects.insert(JobType(**job_type))
+
+
+def init_enterprise_type(enterprise_types):
+    EnterpriseType.objects.delete()
+
+    EnterpriseType.objects.insert([EnterpriseType(**enterprise_type) for enterprise_type in enterprise_types])
+
+
+def init_sector():
+    Sector.objects.delete()
+    sectors_csv = './database/data/sectors.csv'
+    if not os.path.exists(sectors_csv):
+        return
+    sectors = []
+    with open(sectors_csv, encoding='utf-8') as file:
+        reader = csv.DictReader(file)
+        for row in reader:
+            sector = {'name': row['name']}
+            sectors.append(sector)
+    Sector.objects.insert([Sector(**data_sector) for data_sector in sectors])

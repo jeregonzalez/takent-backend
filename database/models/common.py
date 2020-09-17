@@ -115,9 +115,11 @@ class JobType(db.Document):
 
 
 class Sector(db.Document):
-    name = db.StringField(primary_key=True)
-    description = db.StringField()
+    name = db.StringField(unique=True)
 
+
+class EnterpriseType(db.Document):
+    name = db.StringField(unique=True)
 
 class Profession(db.Document):
     id = db.IntField(primary_key=True)

@@ -32,5 +32,9 @@ data = {
         {'name': 'Jornada parcial'},
         {'name': 'Por temporada'},
         {'name': 'Por obra'}
+    ],
+    'enterprise_type': [
+        {'name': 'Reclutamiento y selección'},
+        {'name': 'Empleador directo'}
     ]
 }
