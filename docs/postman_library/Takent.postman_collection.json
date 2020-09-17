@@ -1851,6 +1851,23 @@
 			"protocolProfileBehavior": {}
 		},
 		{
+			"name": "Profession",
+			"item": [
+				{
+					"name": "Get profession",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": ""
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
 			"name": "Education",
 			"item": [
 				{
@@ -1903,6 +1920,136 @@
 							"path": [
 								"init",
 								"mongodb"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "Allowed",
+			"item": [
+				{
+					"name": "Get allowed user",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{user_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/allowed?account=abcde",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"allowed"
+							],
+							"query": [
+								{
+									"key": "account",
+									"value": "abcde"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Post allowed user",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{user_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"account\": \"hello@gmail.com\",\r\n    \"password\": \"Pass1234567\",\r\n    \"name\": \"Jeremias\",\r\n    \"surname\": \"Gonzalez\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/allowed",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"allowed"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Put allowed user",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{user_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"HOLAA\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/allowed/helo@gmail.com",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"allowed",
+								"helo@gmail.com"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete allowed user",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/allowed/helo@gmail.com",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"allowed",
+								"helo@gmail.com"
 							]
 						}
 					},
