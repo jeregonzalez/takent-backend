@@ -121,6 +121,7 @@ class Sector(db.Document):
 class EnterpriseType(db.Document):
     name = db.StringField(unique=True)
 
+
 class Profession(db.Document):
     id = db.IntField(primary_key=True)
     name = db.StringField()
