@@ -7,17 +7,20 @@ from mongoengine import FieldDoesNotExist, ValidationError, DoesNotExist
 from database.models.common import Image, State, ActivationTicket, CurriculumVitae
 from database.models.user import EnterpriseUser
 from resources.helpers import password_helper, user_helper, enterprise_helper, auth_helper
-from resources.helpers.email_helper.email_helper import EmailAdmin, EmailActivation, EmailChangePassword
-from resources.utils.decorators import validate_headers, authentication_required, validate_user_is_common, \
-    validate_user_exists, validate_user_not_exists, validate_user_password, validate_user_birth_date
-from resources.utils.exceptions import MissingRequiredFieldsException, SchemaValidationErrorException
+from resources.helpers.email_helper.email_helper import EmailAdmin, EmailActivation, \
+    EmailChangePassword
+from resources.utils.decorators import validate_headers, authentication_required, \
+    validate_user_is_common, \
+    validate_user_exists, validate_user_not_exists, validate_user_password
+from resources.utils.exceptions import MissingRequiredFieldsException, \
+    SchemaValidationErrorException
 
 
 class UserApi(Resource):
     method_decorators = {
         'get': [validate_user_exists, authentication_required, validate_headers],
-        'post': [validate_user_not_exists, validate_user_password, validate_user_birth_date, validate_headers],
-        'put': [validate_user_exists, validate_user_password, validate_user_birth_date, authentication_required, validate_headers],
+        'post': [validate_user_not_exists, validate_user_password, validate_headers],
+        'put': [validate_user_exists, validate_user_password, authentication_required, validate_headers],
         'delete': [validate_user_exists, authentication_required, validate_headers]
     }
 
