@@ -64,7 +64,10 @@ def validate_user_exists(func):
 def validate_user_not_exists(func):
     @wraps(func)
     def wrapper(*args, **kwargs):
-        user_account = request.get_json().get('account')
+        if request.get_json().get('user'):
+            user_account = request.get_json().get('user').get('account')
+        else:
+            user_account = request.get_json().get('account')
         if user_helper.user_exists(user_account=user_account):
             abort(400, message='User {} already exists'.format(user_account))
         return func(*args, **kwargs)
@@ -76,6 +79,8 @@ def validate_user_birth_date(func):
     @wraps(func)
     def wrapper(*args, **kwargs):
         body = request.get_json()
+        if 'birth_date' in body.get('user'):
+            validate_birth_date(body['user']['birth_date'])
         if 'birth_date' in body:
             validate_birth_date(body['birth_date'])
         return func(*args, **kwargs)
@@ -87,6 +92,13 @@ def validate_user_password(func):
     @wraps(func)
     def wrapper(*args, **kwargs):
         body = request.get_json()
+        if body.get('user'):
+            if 'password' in body.get('user'):
+                validate_password(body['user']['password'])
+            if 'member_users' in body.get('enterprise'):
+                for member in body['enterprise']['member_users']:
+                    if 'password' in member:
+                        validate_password(member.get('password'))
         if 'password' in body:
             validate_password(body['password'])
         if 'new_password' in body:
