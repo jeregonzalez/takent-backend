@@ -12,6 +12,7 @@ from resources.apis.user import ImageApi, CurriculumApi, UserApi, PasswordRecove
     UserExistsValidationApi, ActivateAccountApi, UserAttributesListApi
 from resources.apis.offer import OfferApi
 from resources.apis.reactivation_offer import ReactivateOfferApi
+from resources.apis.admin_user_and_enterprise import AdminUserEnterpriseApi
 
 
 def initialize_routes(api):
@@ -50,3 +51,5 @@ def initialize_routes(api):
     api.add_resource(EnterpriseTypeApi, '/api/v1/enterprise_type', '/api/v1/enterprise_type/<id>')
     # Profession
     api.add_resource(ProfessionApi, '/api/v1/profession')
+    # Enterprise and admin user
+    api.add_resource(AdminUserEnterpriseApi, '/api/v1/admin_user_enterprise')
