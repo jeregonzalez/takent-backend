@@ -2057,6 +2057,238 @@
 				}
 			],
 			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "Sector",
+			"item": [
+				{
+					"name": "Get sector",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/sector?name=servicios",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"sector"
+							],
+							"query": [
+								{
+									"key": "name",
+									"value": "servicios"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Post sector",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"holaaa\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/sector",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"sector"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Put sector",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"HOLAA\",\r\n    \"id\": \"21312\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/sector/5f62d65d511e55fcdd9676c5",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"sector",
+								"5f62d65d511e55fcdd9676c5"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete sector",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/sector/5f62d65d511e55fcdd9676c4",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"sector",
+								"5f62d65d511e55fcdd9676c4"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "Enterprise type",
+			"item": [
+				{
+					"name": "Get enterprise type",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/enterprise_type?name=",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"enterprise_type"
+							],
+							"query": [
+								{
+									"key": "name",
+									"value": ""
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Post enterprise type",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"hola\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/enterprise_type",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"enterprise_type"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Put enterprise type",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"HELOOO\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/enterprise_type/5f62d65b511e55fcdd9676c3",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"enterprise_type",
+								"5f62d65b511e55fcdd9676c3"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete enterprise type",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/enterprise_type/5f62d65b511e55fcdd9676c3",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"enterprise_type",
+								"5f62d65b511e55fcdd9676c3"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "Admin user and enterprise",
+			"item": [
+				{
+					"name": "Post admin user and enterprise",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"user\": {\r\n    \"account\": \"jereegonzalez@gmail.com\",\r\n    \"password\": \"Pass1234\",\r\n    \"name\": \"Jeremias\",\r\n    \"surname\": \"Gonzalez\",\r\n    \"birth_date\": \"01/02/1995\",\r\n    \"role\": \"admin\"\r\n    },\r\n    \"enterprise\": {\r\n    \"fantasy_name\" : \"Takent\", \r\n    \"business_name\" : \"Takent SA\", \r\n    \"address\" : \r\n    { \r\n        \"district\" : \"Las flores\", \r\n        \"street\" : \"Naciones Unidas\", \r\n        \"number\" : 1050, \r\n        \"apartment\" : \"Córdoba\", \r\n        \"floor\" : 0, \r\n        \"postal_code\" : 5000, \r\n        \"city\" : 14098270000\r\n    }, \r\n    \"phone\" : 1234567, \r\n    \"email\" : \"takent@gmail.com\", \r\n    \"location\" : \"blabla\", \r\n    \"description\" : \"Takent la mejor\", \r\n    \"member_users\" : [\r\n        {\r\n            \"account\": \"dethf2@gmail.com\",\r\n            \"password\": \"Pass1234\",\r\n            \"name\": \"Jeremias\",\r\n            \"surname\": \"Gonzalez\"\r\n        }\r\n    ]\r\n    }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/admin_user_enterprise",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"admin_user_enterprise"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
 		}
 	],
 	"protocolProfileBehavior": {}
