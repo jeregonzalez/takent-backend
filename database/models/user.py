@@ -12,6 +12,7 @@ class User(db.Document):
     name = db.StringField(required=True)
     surname = db.StringField(required=True)
     birth_date = db.DateTimeField()
+    phone = db.IntField()
     state = db.ReferenceField(State, default=lambda: State.objects.get(name='inactive'))
 
     meta = {
@@ -44,7 +45,6 @@ class CommonUser(User):
     experience = db.EmbeddedDocumentListField(Experience)
     skill = db.EmbeddedDocumentListField(Skill)
     language = db.EmbeddedDocumentListField(UserLanguage)
-    phone = db.IntField()
     floor = db.IntField()
     apartment = db.StringField()
 

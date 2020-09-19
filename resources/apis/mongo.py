@@ -5,7 +5,7 @@ from flask_restful import Resource
 
 from database.initial_values import data
 from database.models.common import Country, City, Province, EducationLevel, LanguageLevel, State, Language, JobType, \
-    EnterpriseType, Sector, Profession
+    EnterpriseType, Sector, Profession, ExperienceOffer
 from database.models.enterprise import Enterprise
 from database.models.role import Permission, Role
 from database.models.user import EnterpriseUser, CommonUser
@@ -30,6 +30,8 @@ class MongoApi(Resource):
         init_enterprise_type(data.get('enterprise_type'))
         init_sector()
         init_professions()
+        init_experience_offer(data.get('experience_offer'))
+
         return {'message': 'Database initialized correctly'}, 200
 
 
@@ -174,3 +176,8 @@ def init_sector():
             sector = {'name': row['name']}
             sectors.append(sector)
     Sector.objects.insert([Sector(**data_sector) for data_sector in sectors])
+
+
+def init_experience_offer(experiences):
+    ExperienceOffer.objects.delete()
+    ExperienceOffer.objects.insert([ExperienceOffer(**exp) for exp in experiences])

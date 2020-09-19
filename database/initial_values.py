@@ -28,13 +28,22 @@ data = {
         {'name': 'deleted', 'description': 'Offer or user deleted logically'}
     ],
     'job_type': [
-        {'name': 'Jornada completa'},
-        {'name': 'Jornada parcial'},
-        {'name': 'Por temporada'},
-        {'name': 'Por obra'}
+        {'name': 'Jornada Completa'},
+        {'name': 'Jornada Parcial'},
+        {'name': 'Por Temporada'},
+        {'name': 'Por Obra'},
+        {'name': 'Pasantía'},
+        {'name': 'Por Hora'}
     ],
     'enterprise_type': [
         {'name': 'Reclutamiento y selección'},
         {'name': 'Empleador directo'}
+    ],
+    'experience_offer': [
+        {'name': 'Experiencia Escasa'},
+        {'name': 'Algo de Experiencia'},
+        {'name': 'Experiencia Intermedia'},
+        {'name': 'Mucha Experiencia'}
+
     ]
 }
