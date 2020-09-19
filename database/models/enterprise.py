@@ -9,7 +9,7 @@ class Enterprise(db.Document):
     address = db.EmbeddedDocumentField(Address)
     phone = db.IntField()
     email = db.EmailField()
-    location = db.StringField()
+    location = db.DictField()
     profile_photo = db.ImageField()
     photos = db.ListField(db.ImageField())
     description = db.StringField()
