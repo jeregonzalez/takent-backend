@@ -125,3 +125,7 @@ class EnterpriseType(db.Document):
 class Profession(db.Document):
     id = db.IntField(primary_key=True)
     name = db.StringField()
+
+
+class ExperienceOffer(db.Document):
+    name = db.StringField()
