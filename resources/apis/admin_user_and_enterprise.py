@@ -24,6 +24,9 @@ class AdminUserEnterpriseApi(Resource):
 
     def post(self, user_type=None):
         body = request.get_json()
+        # if enterprise_helper.enterprise_exists(user_account=body['user']['account']):
+        #     abort(400, message='User {} already has an enterprise associated'.format(body['enterprise']['admin_user']))
+
         if body.get('user').get('password'):
             body['user']['password'] = auth_helper.hash_password(body['user']['password'])
 
@@ -37,8 +40,6 @@ class AdminUserEnterpriseApi(Resource):
                 body['user']['role'] = 'admin'
             new_user = user_helper.USER_TYPES['enterprise'](**body.get('user'))
 
-            new_user.save()
-
         except FieldDoesNotExist:
             raise SchemaValidationErrorException
         except ValidationError:
@@ -48,26 +49,34 @@ class AdminUserEnterpriseApi(Resource):
                                               ticket_hash=activation_ticket.id).send_email()).start()
 
         ################Enterprise##################
-        body['enterprise']['admin_user'] = EnterpriseUser.objects.get(account=new_user.account)
-        if enterprise_helper.enterprise_exists(user_account=body['enterprise']['admin_user'].account):
-            new_user.delete()
-            abort(400, message='User {} already has an enterprise associated'.format(body['enterprise']['admin_user'].account))
+        aux = []
         if body.get('enterprise').get('member_users'):
-            member_users = body.get('enterprise').get('member_users')
+            aux = body['enterprise']['member_users']
             exist, existing_users = user_helper.users_exist(user_accounts=[member_user.get('account')
-                                                                           for member_user in member_users])
+                                                                           for member_user in aux])
             if exist:
                 new_user.delete()
                 abort(400, message='Users {} already exist'.format(','.join(existing_users)))
-            saved_users = []
-            for member_user in member_users:
-                member_user['password'] = auth_helper.hash_password(member_user.get('password'))
-                member_user['role'] = Role.objects.get(name='member')
-                saved_users.append(EnterpriseUser(**member_user).save())
-            body['enterprise']['member_users'] = saved_users
-
+            del body['enterprise']['member_users']
         try:
+            new_user.save()
+            body['enterprise']['admin_user'] = new_user
             new_enterprise = Enterprise(**body.get('enterprise')).save()
+            if aux:
+                member_users = aux
+                exist, existing_users = user_helper.users_exist(user_accounts=[member_user.get('account')
+                                                                               for member_user in member_users])
+                if exist:
+                    new_user.delete()
+                    abort(400, message='Users {} already exist'.format(','.join(existing_users)))
+                saved_users = []
+                for member_user in member_users:
+                    member_user['password'] = auth_helper.hash_password(member_user.get('password'))
+                    member_user['role'] = Role.objects.get(name='member')
+                    saved_users.append(EnterpriseUser(**member_user).save())
+                body['enterprise']['member_users'] = saved_users
+                print(saved_users)
+                new_enterprise.update(member_users=saved_users)
         except FieldDoesNotExist:
             new_user.delete()
             raise SchemaValidationErrorException
