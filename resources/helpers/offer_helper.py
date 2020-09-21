@@ -1,7 +1,7 @@
 from dateutil import parser
 from flask_restful import abort
 from mongoengine import ReferenceField, EmbeddedDocument, \
-    EmbeddedDocumentListField, StringField, DateTimeField
+    EmbeddedDocumentListField, StringField, DateTimeField, ObjectIdField
 
 from database.models.common import State
 from database.models.offer import Offer
@@ -59,8 +59,12 @@ def filter_offers(filters):
         field_type = get_field_type(key)
         query_param = []
         values = value.split(',')
-        LOGGER.info(field_type)
-        if type(field_type) == ReferenceField:
+
+        if type(field_type) == ObjectIdField:
+            if len(values[0]) != 24:
+                return []
+            query_param.append(('pk__in', values))
+        elif type(field_type) == ReferenceField:
             reference_obj = field_type.document_type_obj
             filter_references = reference_obj.objects(pk__in=values)
             query_param.append(('{}__in'.format(key), filter_references))
