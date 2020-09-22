@@ -19,6 +19,7 @@ class Enterprise(db.Document):
     sector = db.StringField()
     offers_remaining = db.IntField(default=10)
     state = db.ReferenceField(State, default=lambda: State.objects.get(name='active'))
+    web_page = db.StringField()
 
     def deactivate(self):
         self.update(state=State.objects.get(name='inactive'))
