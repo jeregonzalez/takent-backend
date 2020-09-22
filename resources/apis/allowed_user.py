@@ -1,24 +1,26 @@
 from flask import request
 from flask_restful import Resource, abort
-from mongoengine import FieldDoesNotExist, ValidationError, DoesNotExist
+from mongoengine import FieldDoesNotExist, ValidationError
 
 from database.models.common import State
 from database.models.enterprise import Enterprise
 from database.models.role import Role
 from database.models.user import EnterpriseUser
 from resources.helpers import user_helper, auth_helper
-from resources.utils.decorators import authentication_required, validate_headers, validate_enterprise_exists, \
-    validate_user_password, allowed_user_not_exists, allowed_user_exists, role_must_be_admin, validate_user_birth_date
-from resources.utils.exceptions import SchemaValidationErrorException, MissingRequiredFieldsException
+from resources.utils.decorators import authentication_required, validate_headers, \
+    validate_enterprise_exists, \
+    validate_user_password, allowed_user_not_exists, allowed_user_exists, role_must_be_admin
+from resources.utils.exceptions import SchemaValidationErrorException, \
+    MissingRequiredFieldsException
 from resources.utils.messages import Message
 
 
 class AllowedUserApi(Resource):
     method_decorators = {
         'get': [role_must_be_admin, authentication_required, validate_headers],
-        'post': [role_must_be_admin, validate_user_password, validate_user_birth_date, allowed_user_not_exists,
+        'post': [role_must_be_admin, validate_user_password, allowed_user_not_exists,
                  validate_enterprise_exists, authentication_required, validate_headers],
-        'put': [allowed_user_exists, validate_user_birth_date, authentication_required, validate_headers],
+        'put': [allowed_user_exists, authentication_required, validate_headers],
         'delete': [authentication_required, validate_headers]
     }
 
