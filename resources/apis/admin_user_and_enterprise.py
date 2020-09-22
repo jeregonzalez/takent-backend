@@ -2,36 +2,33 @@ from threading import Thread
 
 from flask import request
 from flask_restful import Resource, abort
-from mongoengine import FieldDoesNotExist, ValidationError, DoesNotExist
+from mongoengine import FieldDoesNotExist, ValidationError
 
-from database.models.common import Image, State, ActivationTicket, CurriculumVitae
+from database.models.common import ActivationTicket
 from database.models.enterprise import Enterprise
 from database.models.role import Role
 from database.models.user import EnterpriseUser
-from resources.helpers import password_helper, user_helper, enterprise_helper, auth_helper
-from resources.helpers.email_helper.email_helper import EmailAdmin, EmailActivation, EmailChangePassword
-from resources.helpers.enterprise_helper import enterprise_exists
-from resources.utils.decorators import validate_headers, authentication_required, validate_user_is_common, \
-    validate_user_exists, validate_user_not_exists, validate_user_password, validate_user_birth_date, \
-    validate_enterprise_not_exists
-from resources.utils.exceptions import MissingRequiredFieldsException, SchemaValidationErrorException
+from resources.helpers import user_helper, auth_helper
+from resources.helpers.email_helper.email_helper import EmailActivation
+from resources.helpers.log_helper import LOGGER
+from resources.utils.decorators import validate_headers, validate_user_not_exists, \
+    validate_user_password
+from resources.utils.exceptions import MissingRequiredFieldsException, \
+    SchemaValidationErrorException
 
 
 class AdminUserEnterpriseApi(Resource):
     method_decorators = {
-        'post': [validate_user_password, validate_user_birth_date, validate_user_not_exists, validate_headers]
+        'post': [validate_user_password, validate_user_not_exists, validate_headers]
     }
 
     def post(self, user_type=None):
         body = request.get_json()
-        # if enterprise_helper.enterprise_exists(user_account=body['user']['account']):
-        #     abort(400, message='User {} already has an enterprise associated'.format(body['enterprise']['admin_user']))
 
         if body.get('user').get('password'):
             body['user']['password'] = auth_helper.hash_password(body['user']['password'])
-
         try:
-            if not 'birth_date' in body.get('user'):
+            if 'birth_date' not in body.get('user'):
                 raise SchemaValidationErrorException
             if body.get('user').get('role'):
                 if body.get('user').get('role') != 'admin':
@@ -39,7 +36,6 @@ class AdminUserEnterpriseApi(Resource):
             else:
                 body['user']['role'] = 'admin'
             new_user = user_helper.USER_TYPES['enterprise'](**body.get('user'))
-
         except FieldDoesNotExist:
             raise SchemaValidationErrorException
         except ValidationError:
@@ -80,7 +76,8 @@ class AdminUserEnterpriseApi(Resource):
         except FieldDoesNotExist:
             new_user.delete()
             raise SchemaValidationErrorException
-        except ValidationError:
+        except ValidationError as e:
+            LOGGER.info(e)
             new_user.delete()
             raise MissingRequiredFieldsException
         except Exception:
