@@ -10,6 +10,7 @@ from resources.utils.decorators import authentication_required, validate_user_ex
 from resources.utils.exceptions import SchemaValidationErrorException, \
     MissingRequiredFieldsException
 from resources.utils.messages import Message
+import datetime
 
 
 class OfferApi(Resource):
@@ -21,8 +22,14 @@ class OfferApi(Resource):
     }
 
     def get(self):
-        filters = request.args.items()
-        return Message.ok(response=[offer for offer in offer_helper.filter_offers(filters)])
+        filters = list(request.args.items())
+        offers = []
+        for offer in offer_helper.filter_offers(filters):
+            json_offer = offer.to_mongo()
+            json_offer['postulants_quantity'] = len(offer.postulants)
+            json_offer['remaining_days'] = offer.duration - (datetime.datetime.today() - offer.publication_date).days
+            offers.append(json_offer)
+        return Message.ok(response=offers)
 
     def post(self):
         body = request.get_json()
