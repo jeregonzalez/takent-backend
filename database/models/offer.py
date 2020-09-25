@@ -24,3 +24,4 @@ class Offer(db.Document):
     language = db.DictField()
     address = db.EmbeddedDocumentField(Address)
     state = db.ReferenceField(State, default=lambda: State.objects.get(name='active'))
+    duration = db.IntField(default=30)
