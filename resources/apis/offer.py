@@ -1,3 +1,5 @@
+import datetime
+
 from flask import request
 from flask_restful import Resource
 from mongoengine import FieldDoesNotExist, ValidationError, InvalidQueryError
@@ -10,7 +12,6 @@ from resources.utils.decorators import authentication_required, validate_user_ex
 from resources.utils.exceptions import SchemaValidationErrorException, \
     MissingRequiredFieldsException
 from resources.utils.messages import Message
-import datetime
 
 
 class OfferApi(Resource):

@@ -30,6 +30,7 @@ class Address(db.EmbeddedDocument):
     floor = db.IntField()
     postal_code = db.IntField()
     city = db.ReferenceField(City)
+    location = db.DictField()
 
     def format_response(self):
         response = super(Address, self).to_mongo()
