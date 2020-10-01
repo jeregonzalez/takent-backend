@@ -7,6 +7,7 @@ from database.initial_values import data
 from database.models.common import Country, City, Province, EducationLevel, LanguageLevel, State, Language, JobType, \
     EnterpriseType, Sector, Profession, ExperienceOffer
 from database.models.enterprise import Enterprise
+from database.models.mercadopago import OfferPack
 from database.models.role import Permission, Role
 from database.models.user import EnterpriseUser, CommonUser
 from resources.helpers import place_helper
@@ -31,7 +32,7 @@ class MongoApi(Resource):
         init_sector()
         init_professions()
         init_experience_offer(data.get('experience_offer'))
-
+        init_offer_pack(data.get('offer_pack'))
         return {'message': 'Database initialized correctly'}, 200
 
 
@@ -181,3 +182,8 @@ def init_sector():
 def init_experience_offer(experiences):
     ExperienceOffer.objects.delete()
     ExperienceOffer.objects.insert([ExperienceOffer(**exp) for exp in experiences])
+
+
+def init_offer_pack(offer_packs):
+    OfferPack.objects.delete()
+    OfferPack.objects.insert([OfferPack(**offer_pack) for offer_pack in offer_packs])

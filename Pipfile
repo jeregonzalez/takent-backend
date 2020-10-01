@@ -16,6 +16,7 @@ pyyaml = "5.3.1"
 pandas = "1.0.5"
 pillow = "7.2.0"
 flask-cors = "3.0.9"
+mercadopago = "*"
 
 [requires]
 python_version = "3.8"
