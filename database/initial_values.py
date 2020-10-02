@@ -5,7 +5,8 @@ data = {
     ],
     'role': [
         {'name': 'admin', 'description': 'Permissions to do anything', 'permissions': ['admin']},
-        {'name': 'member', 'description': 'Permissions to only query data', 'permissions': ['member']}
+        {'name': 'member', 'description': 'Permissions to only query data',
+         'permissions': ['member']}
     ],
     'education_level': [
         {'name': 'Primario'},
@@ -45,5 +46,57 @@ data = {
         {'name': 'Experiencia Intermedia'},
         {'name': 'Mucha Experiencia'}
 
+    ],
+    'offer_pack': [
+        {
+            'id': 'SINGLE',
+            'common_name': 'Ofertas sueltas',
+            'item_template': {
+                'title': "Oferta",
+                'quantity': 1,
+                'currency_id': 'AR',
+                'unit_price': 100
+            }
+        },
+        {
+            'id': 'THREE_PACK',
+            'common_name': 'Pack 3 ofertas',
+            'item_template': {
+                'title': "Pack 3 ofertas",
+                'quantity': 1,
+                'currency_id': 'AR',
+                'unit_price': 250
+            },
+        },
+        {
+            'id': 'FIVE_PACK',
+            'common_name': 'Pack 5 ofertas',
+            'item_template': {
+                'title': "Pack 5 ofertas",
+                'quantity': 1,
+                'currency_id': 'AR',
+                'unit_price': 400
+            },
+        },
+        {
+            'id': 'TEN_PACK',
+            'common_name': 'Pack 10 ofertas',
+            'item_template': {
+                'title': "Pack 10 ofertas",
+                'quantity': 1,
+                'currency_id': 'AR',
+                'unit_price': 800
+            },
+        },
+        {
+            'id': 'TWENTY_PACK',
+            'common_name': 'Pack 20 ofertas',
+            'item_template': {
+                'title': "Pack 20 ofertas",
+                'quantity': 1,
+                'currency_id': 'AR',
+                'unit_price': 1500
+            },
+        }
     ]
 }

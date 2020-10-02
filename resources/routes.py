@@ -4,6 +4,7 @@ from resources.apis.enterprise import EnterpriseApi
 from resources.apis.authentication import AuthenticationApi
 from resources.apis.enterprise_type import EnterpriseTypeApi
 from resources.apis.language import LanguageApi, LanguageLevelApi
+from resources.apis.mercadopago import MercadoPagoApi, OfferPackApi
 from resources.apis.mongo import MongoApi
 from resources.apis.place import CountriesApi, ProvincesApi, CitiesApi
 from resources.apis.sector import SectorApi
@@ -53,3 +54,6 @@ def initialize_routes(api):
     api.add_resource(ProfessionApi, '/api/v1/profession')
     # Enterprise and admin user
     api.add_resource(AdminUserEnterpriseApi, '/api/v1/admin_user_enterprise')
+    # Mercado Pago
+    api.add_resource(OfferPackApi, '/api/v1/offer_pack')
+    api.add_resource(MercadoPagoApi, '/api/v1/mercadopago/generate_payment')

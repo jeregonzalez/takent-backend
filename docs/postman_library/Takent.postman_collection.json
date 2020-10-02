@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "31c73193-d1c6-41b6-bcf4-97914a65054b",
+		"_postman_id": "88672502-da3e-4dc8-af79-951d9c1e4bfe",
 		"name": "Takent",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -96,7 +96,7 @@
 						{
 							"listen": "test",
 							"script": {
-								"id": "4e2bee79-4b05-49f1-900d-d61b4e953d8c",
+								"id": "a16debe5-cb9b-4b69-a087-ca1cbade373a",
 								"exec": [
 									"pm.environment.set(\"user_token\", pm.response.json().token);"
 								],
@@ -109,7 +109,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"account\": \"jereegonzalez@gmail.com\",\n    \"password\": \"pass123\"\n}",
+							"raw": "{\n    \"account\": \"jereegonzalez@gmail.com\",\n    \"password\": \"Password123\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1501,7 +1501,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"account\": \"jereegonzalez@gmail.com\",\n    \"password\": \"pass123\",\n    \"name\": \"Jeremias\",\n    \"surname\": \"Gonzalez\"\n}",
+							"raw": "{\n    \"account\": \"jereegonzalez@gmail.com\",\n    \"password\": \"Password123\",\n    \"name\": \"Jeremias\",\n    \"surname\": \"Gonzalez\",\n    \"birth_date\": \"28/04/1996\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -2282,6 +2282,66 @@
 							],
 							"path": [
 								"admin_user_enterprise"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "Mercado Pago",
+			"item": [
+				{
+					"name": "Generate payment",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{user_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"offer_pack\": \"SINGLE\",\n    \"quantity\": 5\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/mercadopago/generate_payment",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"mercadopago",
+								"generate_payment"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Offer pack",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/offer_pack",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"offer_pack"
 							]
 						}
 					},
