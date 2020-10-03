@@ -3,7 +3,7 @@ from flask_restful import abort
 from mongoengine import ReferenceField, EmbeddedDocument, \
     EmbeddedDocumentListField, StringField, DateTimeField, ObjectIdField, DictField, EmbeddedDocumentField, ListField
 
-from database.models.common import State
+from database.models.common import State, City
 from database.models.offer import Offer
 from database.models.user import EnterpriseUser
 from resources.helpers.log_helper import LOGGER
@@ -68,7 +68,13 @@ def filter_offers(filters):
             filter_references = reference_obj.objects(pk__in=values)
             query_param.append(('{}__in'.format(key), filter_references))
         elif type(field_type) == EmbeddedDocumentField:
-            query_param.append(('{}__{}__in'.format(key, 'street'), values))
+            for x in range(0, len(values)):
+                cities = City.objects(name__icontains=values[x])
+                if cities.count():
+                    values = cities
+                    query_param.append(('{}__{}__in'.format(key, 'city'), values))
+                else:
+                    return []
         elif type(field_type) == ListField:
             query_param.append(('{}__in'.format(key), values))
         elif type(field_type) == EmbeddedDocumentListField:
