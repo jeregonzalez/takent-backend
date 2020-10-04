@@ -180,7 +180,7 @@ def offer_id_state_must_exist(func):
 def offer_must_exist(func):
     @wraps(func)
     def wrapper(*args, **kwargs):
-        offer_helper.validate_offer_must_exist(id=kwargs.get('id'), user=get_jwt_identity().get('user_account'))
+        offer_helper.validate_offer_must_exist(id=kwargs.get('id_offer'))
         return func(*args, **kwargs)
 
     return wrapper

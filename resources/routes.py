@@ -1,18 +1,18 @@
 from resources.apis.allowed_user import AllowedUserApi
 from resources.apis.education import EducationLevelApi
-from resources.apis.enterprise import EnterpriseApi
+from resources.apis.enterprise import EnterpriseApi, ProfilePhotoEnterpriseApi, EnterprisePhotosApi
 from resources.apis.authentication import AuthenticationApi
 from resources.apis.enterprise_type import EnterpriseTypeApi
 from resources.apis.language import LanguageApi, LanguageLevelApi
 from resources.apis.mercadopago import MercadoPagoApi, OfferPackApi
 from resources.apis.mongo import MongoApi
 from resources.apis.place import CountriesApi, ProvincesApi, CitiesApi
-from resources.apis.pruebatake import PruebaTakeApi
+from resources.apis.postulant import PostulantApi
 from resources.apis.sector import SectorApi
 from resources.apis.profession import ProfessionApi
 from resources.apis.user import ImageApi, CurriculumApi, UserApi, PasswordRecoverApi, ChangePasswordApi, \
     UserExistsValidationApi, ActivateAccountApi, UserAttributesListApi
-from resources.apis.offer import OfferApi
+from resources.apis.offer import OfferApi, OfferImagesApi
 from resources.apis.reactivation_offer import ReactivateOfferApi
 from resources.apis.admin_user_and_enterprise import AdminUserEnterpriseApi
 
@@ -34,6 +34,8 @@ def initialize_routes(api):
                      '/api/v1/user/common/<attribute_name>')
     # Enterprise
     api.add_resource(EnterpriseApi, '/api/v1/enterprise')
+    api.add_resource(ProfilePhotoEnterpriseApi, '/api/v1/enterprise_profile_photo')
+    api.add_resource(EnterprisePhotosApi, '/api/v1/enterprise_photos', '/api/v1/enterprise_photos/<id_photo>')
     # Authentication
     api.add_resource(AuthenticationApi, '/api/v1/authentication')
     # Language
@@ -46,7 +48,9 @@ def initialize_routes(api):
                      '/api/v1/user/enterprise/recover_password')
     api.add_resource(ChangePasswordApi, '/api/v1/user/common/change_password',
                      '/api/v1/user/enterprise/change_password')
-    api.add_resource(OfferApi, '/api/v1/offer', '/api/v1/offer/<id>')
+    # Offer
+    api.add_resource(OfferApi, '/api/v1/offer', '/api/v1/offer/<id_offer>')
+    api.add_resource(OfferImagesApi, '/api/v1/offer_images/<id_offer>', '/api/v1/offer_images/<id_offer>/<id_image>')
     api.add_resource(ReactivateOfferApi, '/api/v1/reactivation/<id>')
     api.add_resource(AllowedUserApi, '/api/v1/allowed', '/api/v1/allowed/<account>')
     api.add_resource(SectorApi, '/api/v1/sector', '/api/v1/sector/<id>')
@@ -58,8 +62,5 @@ def initialize_routes(api):
     # Mercado Pago
     api.add_resource(OfferPackApi, '/api/v1/offer_pack')
     api.add_resource(MercadoPagoApi, '/api/v1/mercadopago/generate_payment')
-
-
-
-    # Api prueba email
-    api.add_resource(PruebaTakeApi, '/api/v1/prueba_take')
+    # Postulant
+    api.add_resource(PostulantApi, '/api/v1/postulant/<id_offer>')
