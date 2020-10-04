@@ -1,13 +1,16 @@
 from datetime import datetime
 
+from mongoengine import NULLIFY
+
 from database.db import db
-from .common import State, Address
+from .common import State, Address, Image
+from .enterprise import Enterprise
 from .user import CommonUser, EnterpriseUser
 
 
 class PostulantOffer(db.Document):
     postulant = db.ReferenceField(CommonUser)
-    state = db.ReferenceField(State, default=lambda: State.objects.get(name='En seleccion'))
+    state = db.ReferenceField(State, default=lambda: State.objects.get(name='in_selection'))
 
 
 class Offer(db.Document):
@@ -16,12 +19,13 @@ class Offer(db.Document):
     description = db.StringField(max_length=500)
     publication_date = db.DateTimeField(default=lambda: datetime.today())
     publication_user = db.ReferenceField(EnterpriseUser)
-    images = db.ListField(db.ImageField())
+    images = db.ListField(db.ReferenceField(Image))
     experience = db.StringField(required=True)
-    postulants = db.ListField(db.ReferenceField('PostulantOffer'))
+    postulants = db.ListField(db.ReferenceField(PostulantOffer))
     job_type = db.StringField(required=True)
     sector = db.StringField(required=True)
-    language = db.DictField()
+    language = db.ListField(db.StringField())
     address = db.EmbeddedDocumentField(Address)
     state = db.ReferenceField(State, default=lambda: State.objects.get(name='active'))
     duration = db.IntField(default=30)
+    enterprise = db.ReferenceField(Enterprise)

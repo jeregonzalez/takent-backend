@@ -5,7 +5,7 @@ from flask_restful import Resource, abort
 from mongoengine import FieldDoesNotExist, ValidationError, DoesNotExist
 
 from database.models.common import Image, State, ActivationTicket, CurriculumVitae
-from database.models.user import EnterpriseUser
+from database.models.user import EnterpriseUser, CommonUser
 from resources.helpers import password_helper, user_helper, enterprise_helper, auth_helper
 from resources.helpers.email_helper.email_helper import EmailAdmin, EmailActivation, \
     EmailChangePassword
@@ -92,6 +92,7 @@ class ImageApi(Resource):
         if not profile_photo:
             abort(400, message='No image sent')
         user = user_helper.get_user_from_jwt()
+        user.profile_photo.delete()
         new_image = Image(base64=profile_photo).save()
         user.update(profile_photo=new_image)
         return {'message': 'Profile photo uploaded successfully'}, 201

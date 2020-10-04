@@ -1,9 +1,9 @@
 from dateutil import parser
 from flask_restful import abort
 from mongoengine import ReferenceField, EmbeddedDocument, \
-    EmbeddedDocumentListField, StringField, DateTimeField, ObjectIdField
+    EmbeddedDocumentListField, StringField, DateTimeField, ObjectIdField, DictField, EmbeddedDocumentField, ListField
 
-from database.models.common import State
+from database.models.common import State, City
 from database.models.offer import Offer
 from database.models.user import EnterpriseUser
 from resources.helpers.log_helper import LOGGER
@@ -22,12 +22,12 @@ def validate_offer_id_state_must_exist(id=None, state=None, user=None):
                 abort(400, message='Offer not exist')
 
 
-def validate_offer_must_exist(id=None, user=None):
+def validate_offer_must_exist(id=None):
     if not id:
         return
     elif len(id) != 24:
         abort(400, message='Offer not exist')
-    if not Offer.objects(id=id, publication_user=EnterpriseUser.objects.get(account=user)).count():
+    if not Offer.objects(id=id).count():
         abort(400, message='Offer not exist')
 
 
@@ -59,7 +59,6 @@ def filter_offers(filters):
         field_type = get_field_type(key)
         query_param = []
         values = value.split(',')
-
         if type(field_type) == ObjectIdField:
             if len(values[0]) != 24:
                 return []
@@ -68,8 +67,16 @@ def filter_offers(filters):
             reference_obj = field_type.document_type_obj
             filter_references = reference_obj.objects(pk__in=values)
             query_param.append(('{}__in'.format(key), filter_references))
-        elif type(field_type) == EmbeddedDocument:
-            query_param.append(('{}__{}__in'.format(key, 'name'), values))
+        elif type(field_type) == EmbeddedDocumentField:
+            for x in range(0, len(values)):
+                cities = City.objects(name__icontains=values[x])
+                if cities.count():
+                    values = cities
+                    query_param.append(('{}__{}__in'.format(key, 'city'), values))
+                else:
+                    return []
+        elif type(field_type) == ListField:
+            query_param.append(('{}__in'.format(key), values))
         elif type(field_type) == EmbeddedDocumentListField:
             query_param.append(('{}__{}__in'.format(key, 'name'), values))
         elif type(field_type) == StringField:
