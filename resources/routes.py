@@ -7,6 +7,7 @@ from resources.apis.language import LanguageApi, LanguageLevelApi
 from resources.apis.mercadopago import MercadoPagoApi, OfferPackApi
 from resources.apis.mongo import MongoApi
 from resources.apis.place import CountriesApi, ProvincesApi, CitiesApi
+from resources.apis.pruebatake import PruebaTakeApi
 from resources.apis.sector import SectorApi
 from resources.apis.profession import ProfessionApi
 from resources.apis.user import ImageApi, CurriculumApi, UserApi, PasswordRecoverApi, ChangePasswordApi, \
@@ -57,3 +58,8 @@ def initialize_routes(api):
     # Mercado Pago
     api.add_resource(OfferPackApi, '/api/v1/offer_pack')
     api.add_resource(MercadoPagoApi, '/api/v1/mercadopago/generate_payment')
+
+
+
+    # Api prueba email
+    api.add_resource(PruebaTakeApi, '/api/v1/prueba_take')
