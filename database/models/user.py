@@ -13,7 +13,7 @@ class User(db.Document):
     surname = db.StringField(required=True)
     birth_date = db.DateTimeField()
     phone = db.IntField()
-    state = db.ReferenceField(State, default=lambda: State.objects.get(name='active'))
+    state = db.ReferenceField(State, default=lambda: State.objects.get(name='inactive'))
 
     meta = {
         'abstract': True,
