@@ -5,21 +5,6 @@ from mongoengine import ReferenceField, EmbeddedDocumentListField, StringField, 
 
 from database.models.common import City
 from database.models.offer import Offer
-from database.models.parametric_docs import State
-from database.models.user import EnterpriseUser
-
-
-def validate_offer_id_state_must_exist(id=None, state=None, user=None):
-    if not id and not state:
-        return
-
-    if id:
-        if len(id) != 24:
-            abort(400, message='Offer not exist')
-        else:
-            if not Offer.objects(id=id, publication_user=EnterpriseUser.objects.get(account=user),
-                                 state=State.objects.get(name='active')).count():
-                abort(400, message='Offer not exist')
 
 
 def offer_exists(_id=None):

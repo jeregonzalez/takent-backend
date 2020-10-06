@@ -3,14 +3,14 @@ from datetime import datetime
 from database.db import db
 from .common import Address, Image
 from .enterprise import Enterprise
-from .parametric_docs import State
+from .parametric_docs import StateOffer
 from .user import CommonUser, EnterpriseUser
 
 
 class Postulant(db.Document):
     postulation_date = db.DateTimeField()
     postulant = db.ReferenceField(CommonUser)
-    state = db.ReferenceField(State)
+    state = db.ReferenceField(StateOffer)
 
 
 class OfferLanguage(db.EmbeddedDocument):
@@ -31,5 +31,5 @@ class Offer(db.Document):
     language = db.EmbeddedDocumentField(OfferLanguage)
     address = db.EmbeddedDocumentField(Address)
     postulants = db.ListField(db.ReferenceField(Postulant))
-    state = db.ReferenceField(State)
+    state = db.ReferenceField(StateOffer, default=lambda: StateOffer.objects.get(name='active'))
     enterprise = db.ReferenceField(Enterprise)

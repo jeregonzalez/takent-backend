@@ -1,9 +1,10 @@
 from flask import request
 from flask_restful import Resource, abort
-from mongoengine import FieldDoesNotExist, ValidationError, InvalidQueryError
+from mongoengine import FieldDoesNotExist, ValidationError, InvalidQueryError, DoesNotExist
 
 from database.models.common import Image
 from database.models.offer import Offer
+from database.models.parametric_docs import StateOffer
 from resources.helpers import user_helper, offer_helper, enterprise_helper
 from resources.utils.decorators import authentication_required, validate_user_exists, validate_headers, \
     validate_offer_exists
@@ -44,6 +45,11 @@ class OfferApi(Resource):
 
     def put(self, id_offer=None):
         body = request.get_json()
+        if body.get('state'):
+            try:
+                body['state'] = StateOffer.objects.get(name=body['state'])
+            except DoesNotExist as e:
+                return UpdateException(e)
         try:
             Offer.objects.get(id=id_offer).update(**body)
         except (InvalidQueryError, ValidationError) as e:
