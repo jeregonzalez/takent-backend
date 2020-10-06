@@ -40,19 +40,18 @@ def initialize_routes(api):
     api.add_resource(ActivateAccountApi, '/api/v1/user/activate')
     api.add_resource(UserAttributesListApi, '/api/v1/user/common/<attribute_name>/<_id>',
                      '/api/v1/user/common/<attribute_name>')
-    # Enterprise
-    api.add_resource(EnterpriseApi, '/api/v1/enterprise')
-    api.add_resource(ProfilePhotoEnterpriseApi, '/api/v1/enterprise_profile_photo')
-    api.add_resource(EnterprisePhotosApi, '/api/v1/enterprise_photos', '/api/v1/enterprise_photos/<id_photo>')
-
     # Password
     api.add_resource(PasswordRecoverApi, '/api/v1/user/common/recover_password',
                      '/api/v1/user/enterprise/recover_password')
     api.add_resource(ChangePasswordApi, '/api/v1/user/common/change_password',
                      '/api/v1/user/enterprise/change_password')
+    #################
+    # Enterprise
+    api.add_resource(EnterpriseApi, '/api/v1/enterprise')
+    api.add_resource(ProfilePhotoEnterpriseApi, '/api/v1/enterprise_profile_photo')
+    api.add_resource(EnterprisePhotosApi, '/api/v1/enterprise_photos', '/api/v1/enterprise_photos/<id_photo>')
     # Offer
     api.add_resource(OfferApi, '/api/v1/offer', '/api/v1/offer/<id_offer>')
-    api.add_resource(AllowedUserApi, '/api/v1/allowed', '/api/v1/allowed/<account>')
     # Enterprise and admin user
     api.add_resource(AdminUserEnterpriseApi, '/api/v1/admin_user_enterprise')
     # Mercado Pago
@@ -60,3 +59,6 @@ def initialize_routes(api):
     api.add_resource(MercadoPagoApi, '/api/v1/mercadopago/generate_payment')
     # Postulant
     api.add_resource(PostulantApi, '/api/v1/postulant/<id_offer>')
+
+    # Para despues
+    api.add_resource(AllowedUserApi, '/api/v1/allowed', '/api/v1/allowed/<account>')
