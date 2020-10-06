@@ -3,12 +3,12 @@ from flask_restful import Resource
 
 from database.models.common import State
 from database.models.offer import Offer
-from resources.utils.decorators import authentication_required, validate_user_exists, validate_headers, offer_must_exist
+from resources.utils.decorators import authentication_required, validate_user_exists, validate_headers
 
 
 class ReactivateOfferApi(Resource):
     method_decorators = {
-        'post': [offer_must_exist, validate_user_exists, authentication_required, validate_headers]
+        'post': [validate_user_exists, authentication_required, validate_headers]
     }
 
     def post(self, id=None):

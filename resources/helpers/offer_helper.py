@@ -22,13 +22,8 @@ def validate_offer_id_state_must_exist(id=None, state=None, user=None):
                 abort(400, message='Offer not exist')
 
 
-def validate_offer_must_exist(id=None):
-    if not id:
-        return
-    elif len(id) != 24:
-        abort(400, message='Offer not exist')
-    if not Offer.objects(id=id).count():
-        abort(400, message='Offer not exist')
+def offer_exists(_id=None):
+    return bool(Offer.objects(id=_id).count())
 
 
 def validate_offer_must_not_exist(title):

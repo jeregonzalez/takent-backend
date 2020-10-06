@@ -9,8 +9,9 @@ from resources.consts.consts import RequestHeaderKey, RequestHeaderValue, JwtKey
 from resources.helpers import user_helper, enterprise_helper, offer_helper
 from resources.helpers.allowed_user_helper import validate_allowed_user_not_exists, validate_allowed_user_exists
 from resources.helpers.state_helper import validate_state_must_exist
-from resources.helpers.user_helper import validate_password, validate_birth_date
+from resources.helpers.user_helper import validate_password
 from resources.utils import exceptions
+from resources.utils.messages import Message
 
 
 def validate_headers(func):
@@ -75,44 +76,6 @@ def validate_user_not_exists(func):
     return wrapper
 
 
-def validate_user_birth_date(func):
-    @wraps(func)
-    def wrapper(*args, **kwargs):
-        body = request.get_json()
-        if 'birth_date' in body.get('user'):
-            validate_birth_date(body['user']['birth_date'])
-        if 'birth_date' in body:
-            validate_birth_date(body['birth_date'])
-        return func(*args, **kwargs)
-
-    return wrapper
-
-
-def validate_user_password(func):
-    @wraps(func)
-    def wrapper(*args, **kwargs):
-        body = request.get_json()
-        if body.get('user'):
-            if 'password' in body.get('user'):
-                validate_password(body['user']['password'])
-            if 'member_users' in body.get('enterprise'):
-                for member in body['enterprise']['member_users']:
-                    if 'password' in member:
-                        validate_password(member.get('password'))
-        if 'password' in body:
-            validate_password(body['password'])
-        if 'new_password' in body:
-            validate_password(body['new_password'])
-        if 'member_users' in body:
-            for member in body['member_users']:
-                if 'password' in member:
-                    validate_password(member.get('password'))
-
-        return func(*args, **kwargs)
-
-    return wrapper
-
-
 def validate_user_is_enterprise(func):
     @wraps(func)
     def wrapper(*args, **kwargs):
@@ -166,23 +129,12 @@ def validate_role_is_admin(func):
     return wrapper
 
 
-def offer_id_state_must_exist(func):
+def validate_offer_exists(func):
     @wraps(func)
     def wrapper(*args, **kwargs):
-        if request.args.get('id'):
-            offer_helper.validate_offer_id_state_must_exist(id=request.args.get('id'),
-                                                            user=get_jwt_identity().get('user_account'))
+        if kwargs.get('id_offer') and not offer_helper.offer_exists(_id=kwargs.get('id_offer')):
+            return Message.bad_request(message='Offer {} not exists'.format(kwargs.get('id_offer')))
         return func(*args, **kwargs)
-
-    return wrapper
-
-
-def offer_must_exist(func):
-    @wraps(func)
-    def wrapper(*args, **kwargs):
-        offer_helper.validate_offer_must_exist(id=kwargs.get('id_offer'))
-        return func(*args, **kwargs)
-
     return wrapper
 
 
@@ -202,16 +154,6 @@ def state_must_exist(func):
             validate_state_must_exist(state=kwargs.get('state'))
         if request.args.get('state'):
             validate_state_must_exist(state=request.args.get('state'))
-        return func(*args, **kwargs)
-
-    return wrapper
-
-
-def validate_offer_args(func):
-    @wraps(func)
-    def wrapper(*args, **kwargs):
-        if any(key not in offer_helper.get_fields() for key, value in request.args.items()):
-            abort(400, message='Any attribute in the filter is invalid')
         return func(*args, **kwargs)
 
     return wrapper
@@ -244,6 +186,31 @@ def role_must_be_admin(func):
     def wrapper(*args, **kwargs):
         if not user_helper.get_user_from_jwt().role.name == 'admin':
             abort(400, message='User\'s role is not admin')
+        return func(*args, **kwargs)
+
+    return wrapper
+
+
+def validate_user_password(func):
+    @wraps(func)
+    def wrapper(*args, **kwargs):
+        body = request.get_json()
+        if body.get('user'):
+            if 'password' in body.get('user'):
+                validate_password(body['user']['password'])
+            if 'member_users' in body.get('enterprise'):
+                for member in body['enterprise']['member_users']:
+                    if 'password' in member:
+                        validate_password(member.get('password'))
+        if 'password' in body:
+            validate_password(body['password'])
+        if 'new_password' in body:
+            validate_password(body['new_password'])
+        if 'member_users' in body:
+            for member in body['member_users']:
+                if 'password' in member:
+                    validate_password(member.get('password'))
+
         return func(*args, **kwargs)
 
     return wrapper
