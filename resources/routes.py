@@ -1,6 +1,6 @@
 from resources.apis.allowed_user import AllowedUserApi
 from resources.apis.education import EducationLevelApi
-from resources.apis.enterprise import EnterpriseApi, ProfilePhotoEnterpriseApi, EnterprisePhotosApi
+from resources.apis.enterprise import EnterpriseApi, ProfilePhotoEnterpriseApi, EnterpriseImagesApi
 from resources.apis.authentication import AuthenticationApi
 from resources.apis.enterprise_type import EnterpriseTypeApi
 from resources.apis.language import LanguageApi, LanguageLevelApi
@@ -48,8 +48,8 @@ def initialize_routes(api):
     #################
     # Enterprise
     api.add_resource(EnterpriseApi, '/api/v1/enterprise')
-    api.add_resource(ProfilePhotoEnterpriseApi, '/api/v1/enterprise_profile_photo')
-    api.add_resource(EnterprisePhotosApi, '/api/v1/enterprise_photos', '/api/v1/enterprise_photos/<id_photo>')
+    api.add_resource(ProfilePhotoEnterpriseApi, '/api/v1/enterprise/profile_photo')
+    api.add_resource(EnterpriseImagesApi, '/api/v1/enterprise/images')
     # Offer
     api.add_resource(OfferApi, '/api/v1/offer', '/api/v1/offer/<id_offer>')
     # Enterprise and admin user
