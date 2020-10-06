@@ -1,12 +1,12 @@
 from dateutil import parser
 from flask_restful import abort
-from mongoengine import ReferenceField, EmbeddedDocument, \
-    EmbeddedDocumentListField, StringField, DateTimeField, ObjectIdField, DictField, EmbeddedDocumentField, ListField
+from mongoengine import ReferenceField, EmbeddedDocumentListField, StringField, DateTimeField, ObjectIdField, \
+    EmbeddedDocumentField, ListField
 
-from database.models.common import State, City
+from database.models.common import City
 from database.models.offer import Offer
+from database.models.parametric_docs import State
 from database.models.user import EnterpriseUser
-from resources.helpers.log_helper import LOGGER
 
 
 def validate_offer_id_state_must_exist(id=None, state=None, user=None):
@@ -22,13 +22,8 @@ def validate_offer_id_state_must_exist(id=None, state=None, user=None):
                 abort(400, message='Offer not exist')
 
 
-def validate_offer_must_exist(id=None):
-    if not id:
-        return
-    elif len(id) != 24:
-        abort(400, message='Offer not exist')
-    if not Offer.objects(id=id).count():
-        abort(400, message='Offer not exist')
+def offer_exists(_id=None):
+    return bool(Offer.objects(id=_id).count())
 
 
 def validate_offer_must_not_exist(title):

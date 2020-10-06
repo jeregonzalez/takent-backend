@@ -59,7 +59,7 @@ class Email(ABC):
         :param destination_email: dirección de destinatario de email
         """
         self.destination_email = destination_email
-        self.smtp = smtplib.SMTP_SSL(host=SMTP_HOST, port=SMTP_PORT)
+        self.smtp = smtplib.SMTP(host=SMTP_HOST, port=SMTP_PORT)
         self.root_message = MIMEMultipart('related')
         self.alternative_message = MIMEMultipart('alternative')
         self.enterprise_name = enterprise_name

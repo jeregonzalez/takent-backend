@@ -1,31 +1,35 @@
 from datetime import datetime
 
-from mongoengine import NULLIFY
-
 from database.db import db
-from .common import State, Address, Image
+from .common import Address, Image
 from .enterprise import Enterprise
+from .parametric_docs import State
 from .user import CommonUser, EnterpriseUser
 
 
-class PostulantOffer(db.Document):
+class Postulant(db.Document):
+    postulation_date = db.DateTimeField()
     postulant = db.ReferenceField(CommonUser)
-    state = db.ReferenceField(State, default=lambda: State.objects.get(name='in_selection'))
+    state = db.ReferenceField(State)
+
+
+class OfferLanguage(db.EmbeddedDocument):
+    language = db.StringField()
+    certificate = db.BooleanField()
 
 
 class Offer(db.Document):
     title = db.StringField(required=True, max_length=100)
     position = db.StringField(required=True)
     description = db.StringField(max_length=500)
+    images = db.ListField(db.ReferenceField(Image))
     publication_date = db.DateTimeField(default=lambda: datetime.today())
     publication_user = db.ReferenceField(EnterpriseUser)
-    images = db.ListField(db.ReferenceField(Image))
-    experience = db.StringField(required=True)
-    postulants = db.ListField(db.ReferenceField(PostulantOffer))
-    job_type = db.StringField(required=True)
     sector = db.StringField(required=True)
-    language = db.ListField(db.StringField())
+    experience = db.StringField(required=True)
+    contract_type = db.StringField(required=True)
+    language = db.EmbeddedDocumentField(OfferLanguage)
     address = db.EmbeddedDocumentField(Address)
-    state = db.ReferenceField(State, default=lambda: State.objects.get(name='active'))
-    duration = db.IntField(default=30)
+    postulants = db.ListField(db.ReferenceField(Postulant))
+    state = db.ReferenceField(State)
     enterprise = db.ReferenceField(Enterprise)

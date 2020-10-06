@@ -1,10 +1,10 @@
+import re
+
 from flask_jwt_extended import get_jwt_identity
 from flask_restful import abort
-import re
 
 from database.models.user import CommonUser, EnterpriseUser
 from resources.consts.consts import JwtKey
-from datetime import datetime
 
 USER_TYPES = {
     'common': CommonUser,
@@ -57,13 +57,3 @@ def validate_password(password=None):
 
         if not result:
             abort(400, message='Password is invalid')
-
-
-def validate_birth_date(birth_date):
-    date = datetime.strptime(birth_date, "%d/%m/%Y")
-
-    if ((datetime.now() - date).days / 365) < 18:
-        abort(400, message='Debés ser mayor de 18 años')
-
-    if date < datetime(1900, 1, 1):
-        abort(400, message='Fecha inválida')

@@ -1,21 +1,24 @@
+from flask_restful import abort
+
+
 class Message:
 
     @staticmethod
-    def ok(response):
-        return response, 200
+    def ok(message=None):
+        return message if message is not None else {'message': 'OK'}, 200
 
     @staticmethod
-    def created(entity):
-        return {'message': '{} created successfully'.format(entity)}, 201
+    def created():
+        return {'message': 'Created'}, 201
 
     @staticmethod
-    def update():
+    def updated():
         return '', 204
 
     @staticmethod
-    def delete():
+    def deleted():
         return '', 204
 
     @staticmethod
-    def added(entity):
-        return {'message': '{} created and added successfully'.format(entity)}, 201
+    def bad_request(message):
+        abort(400, message=message)

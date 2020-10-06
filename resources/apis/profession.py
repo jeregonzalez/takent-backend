@@ -1,6 +1,6 @@
 from flask_restful import Resource
 
-from database.models.common import Profession
+from database.models.parametric_docs import Profession
 
 
 class ProfessionApi(Resource):

@@ -1,6 +1,6 @@
 from flask_restful import Resource
 
-from database.models.common import EducationLevel
+from database.models.parametric_docs import EducationLevel
 
 
 class EducationLevelApi(Resource):
