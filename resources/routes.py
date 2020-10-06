@@ -45,13 +45,12 @@ def initialize_routes(api):
                      '/api/v1/user/enterprise/recover_password')
     api.add_resource(ChangePasswordApi, '/api/v1/user/common/change_password',
                      '/api/v1/user/enterprise/change_password')
-    #################
     # Enterprise
     api.add_resource(EnterpriseApi, '/api/v1/enterprise')
     api.add_resource(ProfilePhotoEnterpriseApi, '/api/v1/enterprise/profile_photo')
     api.add_resource(EnterpriseImagesApi, '/api/v1/enterprise/images')
     # Offer
-    api.add_resource(OfferApi, '/api/v1/offer', '/api/v1/offer/<id_offer>')
+    api.add_resource(OfferApi, '/api/v1/offer/<id_offer>', '/api/v1/offer')
     # Enterprise and admin user
     api.add_resource(AdminUserEnterpriseApi, '/api/v1/admin_user_enterprise')
     # Mercado Pago

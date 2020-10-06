@@ -26,7 +26,7 @@ class OfferApi(Resource):
                 abort(400, message='Any attribute in the filter is invalid')
             filters = list(request.args.items())
             offers = offer_helper.filter_offers(filters)
-        return Message.ok(message=offers)
+        return offers
 
     def post(self):
         body = request.get_json()

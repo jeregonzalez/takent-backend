@@ -2,6 +2,7 @@ from datetime import datetime
 
 from database.db import db
 from .common import Address, Image
+from .enterprise import Enterprise
 from .parametric_docs import State
 from .user import CommonUser, EnterpriseUser
 
@@ -31,3 +32,4 @@ class Offer(db.Document):
     address = db.EmbeddedDocumentField(Address)
     postulants = db.ListField(db.ReferenceField(Postulant))
     state = db.ReferenceField(State)
+    enterprise = db.ReferenceField(Enterprise)

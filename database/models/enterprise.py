@@ -2,7 +2,6 @@ from mongoengine import NULLIFY
 
 from database.db import db
 from database.models.common import Address, Image
-from database.models.offer import Offer
 from database.models.parametric_docs import State
 from database.models.user import EnterpriseUser
 
@@ -23,4 +22,3 @@ class Enterprise(db.Document):
     enterprise_type = db.StringField()
     sector = db.StringField()
     state = db.ReferenceField(State, default=lambda: State.objects.get(name='active'))
-    offers = db.ListField(db.ReferenceField(Offer))

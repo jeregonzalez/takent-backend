@@ -15,7 +15,7 @@ class CustomEncoder(json.JSONEncoder):
     def default(self, obj):
         encoder = Encoder(obj)
         encoded_obj = encoder.encode()
-        if encoded_obj:
+        if encoded_obj is not None:
             return encoded_obj
         return json.JSONEncoder.default(self, obj)
 
@@ -70,6 +70,8 @@ class EncodeStrategyOffer(EncodeStrategy):
             response['address'] = self.obj.address.format_response()
         if self.obj.enterprise:
             response['enterprise'] = self.obj.enterprise.to_mongo()
+            if self.obj.address:
+                response['enterprise']['address'] = self.obj.address.format_response()
         return response
 
 
