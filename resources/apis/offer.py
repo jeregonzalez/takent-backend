@@ -1,13 +1,13 @@
 from flask import request
 from flask_restful import Resource, abort
-from mongoengine import FieldDoesNotExist, ValidationError, InvalidQueryError, DoesNotExist
+from mongoengine import FieldDoesNotExist, ValidationError, InvalidQueryError
 
 from database.models.common import Image
 from database.models.offer import Offer
 from resources.helpers import user_helper, offer_helper, enterprise_helper
 from resources.utils.decorators import authentication_required, validate_user_exists, validate_headers, \
     validate_offer_exists
-from resources.utils.exceptions import SaveException, UpdateException, GetException
+from resources.utils.exceptions import SaveException, UpdateException
 from resources.utils.messages import Message
 
 
@@ -26,6 +26,9 @@ class OfferApi(Resource):
             if any(key not in offer_helper.get_fields() for key, value in request.args.items()):
                 abort(400, message='Any attribute in the filter is invalid')
             filters = list(request.args.items())
+            user_info = user_helper.get_user_from_jwt(keys=['user_account', 'user_type'])
+            if user_info['user_type'] == 'enterprise':
+                filters.append(('enterprise', str(enterprise_helper.get_enterprise(user_account=user_info['user_account']).id)))
             offers = offer_helper.filter_offers(filters)
         return offers
 
