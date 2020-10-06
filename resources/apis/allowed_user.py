@@ -6,22 +6,19 @@ from database.models.enterprise import Enterprise
 from database.models.parametric_docs import State, Permission
 from database.models.user import EnterpriseUser
 from resources.helpers import user_helper, auth_helper
-from resources.utils.decorators import authentication_required, validate_headers, \
-    validate_enterprise_exists, \
-    validate_user_password, allowed_user_not_exists, allowed_user_exists, role_must_be_admin
 from resources.utils.exceptions import SchemaValidationErrorException, \
     MissingRequiredFieldsException
 from resources.utils.messages import Message
 
 
 class AllowedUserApi(Resource):
-    method_decorators = {
-        'get': [role_must_be_admin, authentication_required, validate_headers],
-        'post': [role_must_be_admin, validate_user_password, allowed_user_not_exists,
-                 validate_enterprise_exists, authentication_required, validate_headers],
-        'put': [allowed_user_exists, authentication_required, validate_headers],
-        'delete': [authentication_required, validate_headers]
-    }
+    # method_decorators = {
+    #     'get': [role_must_be_admin, authentication_required, validate_headers],
+    #     'post': [role_must_be_admin, validate_user_password, allowed_user_not_exists,
+    #              validate_enterprise_exists, authentication_required, validate_headers],
+    #     'put': [allowed_user_exists, authentication_required, validate_headers],
+    #     'delete': [authentication_required, validate_headers]
+    # }
 
     def get(self):
         if not request.args.get('account'):

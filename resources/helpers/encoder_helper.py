@@ -51,7 +51,6 @@ class EncodeStrategy:
 
 
 class EncodeStrategyUser(EncodeStrategy):
-
     HIDE_FIELDS = ['password', 'profile_photo', 'curriculum']
 
     def encode(self):
