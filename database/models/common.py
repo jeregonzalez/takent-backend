@@ -1,27 +1,9 @@
-from bson import ObjectId
-
 from database.db import db
-
-
-class City(db.Document):
-    code = db.IntField(primary_key=True)
-    name = db.StringField(required=True)
-    province_id = db.IntField(required=True)
-
-
-class Province(db.EmbeddedDocument):
-    code = db.IntField(primary_key=True)
-    name = db.StringField(required=True)
-    cities = db.ListField(db.ReferenceField(City))
-
-
-class Country(db.Document):
-    code = db.IntField(primary_key=True)
-    name = db.StringField(required=True)
-    provinces = db.SortedListField(db.EmbeddedDocumentField(Province), ordering='_id')
+from database.models.place import City, Country
 
 
 class Address(db.EmbeddedDocument):
+    city = db.ReferenceField(City)
     district = db.StringField()
     street = db.StringField()
     number = db.IntField()
@@ -29,7 +11,6 @@ class Address(db.EmbeddedDocument):
     apartment = db.StringField()
     floor = db.IntField()
     postal_code = db.IntField()
-    city = db.ReferenceField(City)
     location = db.DictField()
 
     def format_response(self):
@@ -43,90 +24,6 @@ class Address(db.EmbeddedDocument):
         return response
 
 
-class EducationLevel(db.Document):
-    name = db.StringField(required=True)
-
-
-class Education(db.EmbeddedDocument):
-    id = db.ObjectIdField(default=ObjectId)
-    start_date = db.DateTimeField()
-    end_date = db.DateTimeField()
-    institution = db.StringField()
-    name = db.StringField()
-    level = db.StringField()
-    description = db.StringField()
-
-
-class Experience(db.EmbeddedDocument):
-    id = db.ObjectIdField(default=ObjectId)
-    company = db.StringField(required=True)
-    start_date = db.DateTimeField(required=True)
-    end_date = db.DateTimeField()
-    position = db.StringField(required=True)
-    profession = db.StringField()
-    description = db.StringField()
-    reference = db.DictField()
-
-
-class Skill(db.EmbeddedDocument):
-    id = db.ObjectIdField(default=ObjectId)
-    name = db.StringField(required=True)
-    description = db.StringField()
-
-
-class UserLanguage(db.EmbeddedDocument):
-    id = db.ObjectIdField(default=ObjectId)
-    name = db.StringField(required=True)
-    writing_level = db.StringField(required=True)
-    reading_level = db.StringField(required=True)
-    certificate = db.BooleanField(default=False)
-    description = db.StringField(max_length=300)
-
-
-class LanguageLevel(db.Document):
-    name = db.StringField(primary_key=True)
-
-
-class Language(db.Document):
-    code = db.StringField(primary_key=True)
-    name = db.StringField()
-
-
-class State(db.Document):
-    name = db.StringField(primary_key=True)
-    description = db.StringField()
-
-
 class Image(db.Document):
+    name = db.StringField()
     base64 = db.StringField()
-
-
-class CurriculumVitae(db.Document):
-    name = db.StringField()
-    base64 = db.StringField(required=True)
-
-
-class ActivationTicket(db.Document):
-    account = db.EmailField(required=True)
-    user_type = db.StringField(required=True)
-
-
-class JobType(db.Document):
-    name = db.StringField(primary_key=True)
-
-
-class Sector(db.Document):
-    name = db.StringField(unique=True)
-
-
-class EnterpriseType(db.Document):
-    name = db.StringField(unique=True)
-
-
-class Profession(db.Document):
-    id = db.IntField(primary_key=True)
-    name = db.StringField()
-
-
-class ExperienceOffer(db.Document):
-    name = db.StringField()

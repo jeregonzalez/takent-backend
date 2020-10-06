@@ -4,7 +4,7 @@ from mongoengine import FieldDoesNotExist, ValidationError, InvalidQueryError
 
 from database.models.common import Image, State
 from database.models.enterprise import Enterprise
-from database.models.role import Role
+from database.models.permission import Role
 from database.models.user import EnterpriseUser
 from resources.helpers import user_helper, enterprise_helper, auth_helper
 from resources.utils.decorators import validate_headers, authentication_required, validate_user_exists, \

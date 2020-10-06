@@ -8,7 +8,7 @@ from database.models.common import Country, City, Province, EducationLevel, Lang
     EnterpriseType, Sector, Profession, ExperienceOffer
 from database.models.enterprise import Enterprise
 from database.models.mercadopago import OfferPack
-from database.models.role import Permission, Role
+from database.models.permission import Permission, Role
 from database.models.user import EnterpriseUser, CommonUser
 from resources.helpers import place_helper
 

@@ -1,8 +1,9 @@
 from mongoengine import NULLIFY
 
 from database.db import db
-from database.models.common import State, Address, CurriculumVitae, Image, Education, Experience, Skill, UserLanguage
-from database.models.role import Role
+from database.models.common import Image, Address
+from database.models.common_user import UserCurriculumVitae, UserEducation, UserExperience, UserSkill, UserLanguage
+from database.models.parametric_docs import State, Permission
 from resources.utils.exceptions import ImmutableFieldsException
 
 
@@ -37,17 +38,21 @@ class User(db.Document):
 
 
 class CommonUser(User):
-    address = db.EmbeddedDocumentField(Address)
-    curriculum = db.ReferenceField(CurriculumVitae, reverse_delete_rule=NULLIFY)
-    profile_photo = db.ReferenceField(Image, reverse_delete_rule=NULLIFY)
     description = db.StringField()
-    education = db.EmbeddedDocumentListField(Education)
-    experience = db.EmbeddedDocumentListField(Experience)
-    skill = db.EmbeddedDocumentListField(Skill)
+    curriculum = db.ReferenceField(UserCurriculumVitae, reverse_delete_rule=NULLIFY)
+    profile_photo = db.ReferenceField(Image, reverse_delete_rule=NULLIFY)
+    address = db.EmbeddedDocumentField(Address)
+    education = db.EmbeddedDocumentListField(UserEducation)
+    experience = db.EmbeddedDocumentListField(UserExperience)
+    skill = db.EmbeddedDocumentListField(UserSkill)
     language = db.EmbeddedDocumentListField(UserLanguage)
-    floor = db.IntField()
-    apartment = db.StringField()
 
 
 class EnterpriseUser(User):
-    role = db.ReferenceField(Role, required=True, default=lambda: Role.objects.get(name='admin'))
+    position = db.StringField()
+    permissions = db.ListField(db.ReferenceField(Permission))
+
+
+class ActivationTicket(db.Document):
+    account = db.EmailField(required=True)
+    user_type = db.StringField(required=True)

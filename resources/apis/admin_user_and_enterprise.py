@@ -6,7 +6,7 @@ from mongoengine import FieldDoesNotExist, ValidationError
 
 from database.models.common import ActivationTicket
 from database.models.enterprise import Enterprise
-from database.models.role import Role
+from database.models.permission import Role
 from database.models.user import EnterpriseUser
 from resources.helpers import user_helper, auth_helper
 from resources.helpers.email_helper.email_helper import EmailActivation

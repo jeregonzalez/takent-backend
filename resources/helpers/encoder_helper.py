@@ -10,8 +10,6 @@ from mongoengine.queryset.base import BaseQuerySet
 from database.models.offer import Offer
 from database.models.user import User, CommonUser
 
-HIDE_FIELDS = ['password', 'profile_photo', 'curriculum']
-
 
 class CustomEncoder(json.JSONEncoder):
     def default(self, obj):
@@ -57,8 +55,8 @@ class EncodeStrategyUser(EncodeStrategy):
     HIDE_FIELDS = ['password', 'profile_photo', 'curriculum']
 
     def encode(self):
-        response = self.obj.to_mongo
-        for field in HIDE_FIELDS:
+        response = self.obj.to_mongo()
+        for field in self.HIDE_FIELDS:
             response.pop(field, None)
             if isinstance(self.obj, CommonUser) and self.obj.address:
                 response['address'] = self.obj.address.format_response()
@@ -94,3 +92,10 @@ class EncodeStrategyDefault(EncodeStrategy):
 class EncodeStrategyBaseQuerySet(EncodeStrategy):
     def encode(self):
         return [item for item in self.obj]
+
+
+class EncodeStrategyEnterprise(EncodeStrategy):
+    HIDE_FIELDS = ['photos']
+
+    def encode(self):
+        pass
