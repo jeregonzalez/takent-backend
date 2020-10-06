@@ -14,7 +14,7 @@ from resources.utils.decorators import validate_headers, authentication_required
     validate_user_is_common, \
     validate_user_exists, validate_user_not_exists, validate_user_password
 from resources.utils.exceptions import MissingRequiredFieldsException, \
-    SchemaValidationErrorException, SaveException
+    SchemaValidationErrorException, SaveException, UpdateException
 from resources.utils.messages import Message
 
 
@@ -45,13 +45,16 @@ class UserApi(Resource):
 
     def put(self, user_type=None):
         body = request.get_json()
-        user_helper.get_user_from_jwt().update(**body)
+        try:
+            user_helper.get_user_from_jwt().update(**body)
+        except (FieldDoesNotExist, ValidationError) as e:
+            raise UpdateException(e)
         return Message.updated()
 
     def delete(self, user_type=None):
         user = user_helper.get_user_from_jwt()
         user.delete()
-        Message.deleted()
+        return Message.deleted()
 
 
 class ImageApi(Resource):
@@ -63,25 +66,25 @@ class ImageApi(Resource):
 
     def get(self):
         user = user_helper.get_user_from_jwt()
-        if not user.profile_photo:
-            return {'message': 'User {} does not have profile photo'.format(user.account)}, 200
-        return {'profile_photo': user.profile_photo.base64}, 200
+        return {'profile_photo': user.profile_photo.base64 if user.profile_photo else None}
 
     def post(self):
         profile_photo = request.get_json().get('profile_photo')
         if not profile_photo:
             abort(400, message='No image sent')
         user = user_helper.get_user_from_jwt()
-        user.profile_photo.delete()
+        if user.profile_photo:
+            user.profile_photo.delete()
         new_image = Image(base64=profile_photo).save()
         user.update(profile_photo=new_image)
-        return {'message': 'Profile photo uploaded successfully'}, 201
+        return Message.created()
 
     def delete(self):
         user = user_helper.get_user_from_jwt()
-        user.profile_photo.delete()
-        user.save()
-        return '', 204
+        if user.profile_photo:
+            user.profile_photo.delete()
+            user.save()
+        return Message.deleted()
 
 
 class CurriculumApi(Resource):
@@ -93,9 +96,7 @@ class CurriculumApi(Resource):
 
     def get(self):
         user = user_helper.get_user_from_jwt()
-        if not user.curriculum:
-            return {'message': 'User {} does not have curriculum'.format(user.account)}, 200
-        return user.curriculum, 200
+        return user.curriculum if user.curriculum else {}
 
     def post(self):
         body = request.get_json()
@@ -103,18 +104,17 @@ class CurriculumApi(Resource):
         try:
             new_curriculum = UserCurriculumVitae(**body)
             new_curriculum.save()
-        except FieldDoesNotExist:
-            raise SchemaValidationErrorException
-        except ValidationError:
-            raise MissingRequiredFieldsException
+        except (FieldDoesNotExist, ValidationError) as e:
+            raise SaveException(e)
         user.update(curriculum=new_curriculum)
-        return {'message': 'Curriculum uploaded successfully'}, 201
+        return Message.created()
 
     def delete(self):
         user = user_helper.get_user_from_jwt()
-        user.curriculum.delete()
-        user.save()
-        return '', 204
+        if user.curriculum:
+            user.curriculum.delete()
+            user.save()
+        return Message.deleted()
 
 
 class PasswordRecoverApi(Resource):
@@ -196,7 +196,7 @@ class UserAttributesListApi(Resource):
                 attribute_list = attribute_list.get(id=_id)
             except DoesNotExist:
                 attribute_list = []
-        return attribute_list, 200
+        return attribute_list
 
     def post(self, attribute_name, _id=None):
         user = user_helper.get_user_from_jwt()
@@ -206,7 +206,7 @@ class UserAttributesListApi(Resource):
         attribute_list = getattr(user, attribute_name)
         attribute_list.create(**body)
         attribute_list.save()
-        return {'message': '{} added successfully'.format(attribute_name)}, 201
+        return Message.created()
 
     def put(self, attribute_name, _id=None):
         user = user_helper.get_user_from_jwt()
@@ -228,7 +228,7 @@ class UserAttributesListApi(Resource):
         except ValidationError:
             raise SchemaValidationErrorException
         attribute_list.save()
-        return '', 204
+        return Message.updated()
 
     def delete(self, attribute_name, _id=None):
         user = user_helper.get_user_from_jwt()
@@ -243,4 +243,4 @@ class UserAttributesListApi(Resource):
             abort(400, message='{} with id {} not exists'.format(attribute_name, _id))
         delete_condition = {'pull__{}__id'.format(attribute_name): _id}
         user.update(**delete_condition)
-        return '', 204
+        return Message.deleted()

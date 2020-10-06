@@ -35,8 +35,6 @@ class AuthenticationApi(Resource):
         if not user_helper.user_exists(user_account=user_account):
             abort(400, message='User {} not exists'.format(user_account))
         user = user_helper.get_user(user_account=user_account)
-        if user.state.name == 'inactive':
-            abort(400, message='User {} is inactive'.format(user_account))
         authorized = auth_helper.check_password(hash_pw=user.password, password=user_password)
         if not authorized:
             abort(401, message='Account or password invalid')
