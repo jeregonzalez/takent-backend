@@ -5,7 +5,7 @@ class Message:
 
     @staticmethod
     def ok(message=None):
-        return {'message': message if message else 'OK'}, 200
+        return message if message is not None else {'message': 'OK'}, 200
 
     @staticmethod
     def created():
