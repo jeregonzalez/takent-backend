@@ -19,7 +19,7 @@ class State(db.Document):
     scope = db.StringField()
 
 
-class JobType(db.Document):
+class ContractType(db.Document):
     name = db.StringField(primary_key=True)
 
 

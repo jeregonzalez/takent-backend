@@ -125,7 +125,7 @@ def init_enterprises(enterprises):
 
 
 def init_professions():
-    professions_csv = './database/data/professions.csv'
+    professions_csv = './database/parametric_docs_data/profession.csv'
     if not os.path.exists(professions_csv):
         return
 
@@ -140,7 +140,7 @@ def init_professions():
 
 
 def init_languages():
-    languages_csv = './database/data/languages.csv'
+    languages_csv = './database/parametric_docs_data/language.csv'
     if not os.path.exists(languages_csv):
         return
     languages = []
@@ -167,7 +167,7 @@ def init_enterprise_type(enterprise_types):
 
 def init_sector():
     Sector.objects.delete()
-    sectors_csv = './database/data/sectors.csv'
+    sectors_csv = './database/parametric_docs_data/sector.csv'
     if not os.path.exists(sectors_csv):
         return
     sectors = []
