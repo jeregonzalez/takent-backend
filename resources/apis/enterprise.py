@@ -55,47 +55,38 @@ class ProfilePhotoEnterpriseApi(Resource):
     method_decorators = {
         'get': [validate_enterprise_exists, validate_user_is_enterprise, validate_user_exists, authentication_required,
                 validate_headers],
-        'post': [validate_enterprise_exists,
-                 validate_user_is_enterprise,
-                 validate_user_exists, authentication_required, validate_headers],
-        'put': [validate_enterprise_exists, validate_user_is_enterprise, validate_user_exists,
-                authentication_required, validate_headers],
-        'delete': [validate_enterprise_exists, validate_user_is_enterprise,
-                   validate_user_exists, authentication_required, validate_headers]
+        'post': [validate_enterprise_exists, validate_user_is_enterprise, validate_user_exists, authentication_required,
+                 validate_headers],
+        'put': [validate_enterprise_exists, validate_user_is_enterprise, validate_user_exists, authentication_required,
+                validate_headers],
+        'delete': [validate_enterprise_exists, validate_user_is_enterprise, validate_user_exists,
+                   authentication_required, validate_headers]
     }
 
     def get(self):
-        data = {}
-        image = Enterprise.objects.get(admin_user=user_helper.get_user_from_jwt()).profile_photo
-        if not image:
-            abort(400, message='Profile photo does not exist')
-        data['id'] = image.id
-        data['image'] = image.base64
+        user = user_helper.get_user_from_jwt(keys='user_account')
+        enterprise = enterprise_helper.get_enterprise(user_account=user)
+        return {'profile_photo': enterprise.profile_photo.base64 if enterprise.profile_photo else None}
 
-        return Message.ok(data)
-
-    def post(self, admin_user=None):
-        body = request.get_json()
-        try:
-            image = Image(base64=body.get('profile_photo')).save()
-            enterprise = Enterprise.objects.get(admin_user=user_helper.get_user_from_jwt())
-            if enterprise.profile_photo:
-                enterprise.profile_photo.delete()
-            enterprise.update(profile_photo=image)
-        except FieldDoesNotExist:
-            raise SchemaValidationErrorException
-        except ValidationError:
-            raise MissingRequiredFieldsException
-
-        return Message.created('Profile photo')
-
-    def delete(self, admin_user=None):
-        profile_photo = Enterprise.objects.get(admin_user=user_helper.get_user_from_jwt()).profile_photo
+    def post(self):
+        profile_photo = request.get_json().get('profile_photo')
         if not profile_photo:
-            abort(400, message='Profile photo does not exist')
-        profile_photo.delete()
+            abort(400, message='No image sent')
+        user = user_helper.get_user_from_jwt(keys='user_account')
+        enterprise = enterprise_helper.get_enterprise(user_account=user)
+        if enterprise.profile_photo:
+            enterprise.profile_photo.delete()
+        new_image = Image(base64=profile_photo).save()
+        enterprise.update(profile_photo=new_image)
+        return Message.created()
 
-        return Message.delete()
+    def delete(self):
+        user = user_helper.get_user_from_jwt(keys='user_account')
+        enterprise = enterprise_helper.get_enterprise(user_account=user)
+        if enterprise.profile_photo:
+            enterprise.profile_photo.delete()
+            enterprise.save()
+        return Message.deleted()
 
 
 class EnterprisePhotosApi(Resource):
