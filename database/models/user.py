@@ -3,7 +3,7 @@ from mongoengine import NULLIFY
 from database.db import db
 from database.models.common import Image, Address
 from database.models.common_user import UserCurriculumVitae, UserEducation, UserExperience, UserSkill, UserLanguage
-from database.models.parametric_docs import State, Permission
+from database.models.parametric_docs import Permission, StateUser
 from resources.utils.exceptions import ImmutableFieldsException
 
 
@@ -14,7 +14,7 @@ class User(db.Document):
     surname = db.StringField(required=True)
     birth_date = db.DateTimeField()
     phone = db.IntField()
-    state = db.ReferenceField(State, default=lambda: State.objects.get(name='inactive'))
+    state = db.ReferenceField(StateUser, default=lambda: StateUser.objects.get(name='inactive'))
 
     meta = {
         'abstract': True,
@@ -29,11 +29,11 @@ class User(db.Document):
         super(User, self).update(password=new_password)
 
     def activate(self):
-        active_state = State.objects.get(name='active')
+        active_state = StateUser.objects.get(name='active')
         return super(User, self).update(state=active_state)
 
     def deactivate(self):
-        inactive_state = State.objects.get(name='inactive')
+        inactive_state = StateUser.objects.get(name='inactive')
         return super(User, self).update(state=inactive_state)
 
 

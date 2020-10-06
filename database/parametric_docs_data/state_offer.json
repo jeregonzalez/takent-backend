@@ -3,15 +3,9 @@
     "name": "active"
   },
   {
-    "name": "inactive"
-  },
-  {
     "name": "in_selection"
   },
   {
     "name": "finished"
-  },
-  {
-    "name": "deleted"
   }
 ]

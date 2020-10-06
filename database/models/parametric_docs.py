@@ -14,9 +14,12 @@ class Language(db.Document):
     name = db.StringField()
 
 
-class State(db.Document):
+class StateUser(db.Document):
     name = db.StringField(primary_key=True)
-    scope = db.StringField()
+
+
+class StateOffer(db.Document):
+    name = db.StringField(primary_key=True)
 
 
 class ContractType(db.Document):

@@ -3,7 +3,7 @@ from flask_restful import Resource, abort
 from mongoengine import FieldDoesNotExist, ValidationError
 
 from database.models.enterprise import Enterprise
-from database.models.parametric_docs import State, Permission
+from database.models.parametric_docs import Permission
 from database.models.user import EnterpriseUser
 from resources.helpers import user_helper, auth_helper
 from resources.utils.exceptions import SchemaValidationErrorException, \
@@ -42,7 +42,6 @@ class AllowedUserApi(Resource):
             if 'password' in body:
                 body['password'] = auth_helper.hash_password(body['password'])
 
-            body['state'] = State.objects.get(name='active')
             user = EnterpriseUser(**body).save()
             Enterprise.objects.get(admin_user=user_helper.get_user_from_jwt()).update(push__member_users=user)
         except FieldDoesNotExist:
