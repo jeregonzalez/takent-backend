@@ -12,7 +12,7 @@ from resources.apis.sector import SectorApi
 from resources.apis.profession import ProfessionApi
 from resources.apis.user import ImageApi, CurriculumApi, UserApi, PasswordRecoverApi, ChangePasswordApi, \
     UserExistsValidationApi, ActivateAccountApi, UserAttributesListApi
-from resources.apis.offer import OfferApi
+from resources.apis.offer import OfferApi, OfferImagesApi
 from resources.apis.admin_user_and_enterprise import AdminUserEnterpriseApi
 
 
@@ -51,6 +51,7 @@ def initialize_routes(api):
     api.add_resource(EnterpriseImagesApi, '/api/v1/enterprise/images')
     # Offer
     api.add_resource(OfferApi, '/api/v1/offer/<id_offer>', '/api/v1/offer')
+    api.add_resource(OfferImagesApi, '/api/v1/offer/<id_offer>/images')
     # Enterprise and admin user
     api.add_resource(AdminUserEnterpriseApi, '/api/v1/admin_user_enterprise')
     # Mercado Pago

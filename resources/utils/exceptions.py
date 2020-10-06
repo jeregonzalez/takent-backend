@@ -12,6 +12,7 @@ MSG_UNSUPPORTED_RESPONSE_TYPE = 'Unsupported response type {}'
 MSG_IMMUTABLE_FIELDS = 'There are fields that cannot be updated'
 MSG_SAVE_ERROR = 'Error saving object: {}'
 MSG_UPDATE_ERROR = 'Error updating object: {}'
+MSG_GET_ERROR = 'Error getting object: {}'
 
 
 def message(code, info):
@@ -29,6 +30,13 @@ class UpdateException(HTTPException):
     def __init__(self, info):
         self.code = 400
         self.data = message(400, MSG_SAVE_ERROR.format(info))
+        super().__init__()
+
+
+class GetException(HTTPException):
+    def __init__(self, info):
+        self.code = 400
+        self.data = message(400, MSG_GET_ERROR.format(info))
         super().__init__()
 
 
