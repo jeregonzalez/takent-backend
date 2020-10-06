@@ -4,8 +4,8 @@ from flask_restful import abort
 class Message:
 
     @staticmethod
-    def ok(message):
-        return message, 200
+    def ok(message=None):
+        return {'message': message if message else 'OK'}, 200
 
     @staticmethod
     def created():

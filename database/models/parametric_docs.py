@@ -44,3 +44,7 @@ class OfferPack(db.Document):
 
 class Permission(db.Document):
     name = db.StringField(primary_key=True)
+
+
+class ExperienceLevel(db.Document):
+    name = db.StringField(primary_key=True)

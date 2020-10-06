@@ -1,22 +1,17 @@
 [
   {
-    "name": "active",
-    "description": "Active entity"
+    "name": "active"
   },
   {
-    "name": "inactive",
-    "description": "Inactive entity"
+    "name": "inactive"
   },
   {
-    "name": "in_selection",
-    "description": "Offer in selection process"
+    "name": "in_selection"
   },
   {
-    "name": "finished",
-    "description": "Offer finished"
+    "name": "finished"
   },
   {
-    "name": "deleted",
-    "description": "Offer or user deleted logically"
+    "name": "deleted"
   }
 ]
