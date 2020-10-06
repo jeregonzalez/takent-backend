@@ -2,9 +2,8 @@ from flask import request
 from flask_restful import Resource, abort
 from mongoengine import FieldDoesNotExist, ValidationError
 
-from database.models.common import State
 from database.models.enterprise import Enterprise
-from database.models.permission import Role
+from database.models.parametric_docs import State, Permission
 from database.models.user import EnterpriseUser
 from resources.helpers import user_helper, auth_helper
 from resources.utils.decorators import authentication_required, validate_headers, \
@@ -39,7 +38,7 @@ class AllowedUserApi(Resource):
         body = request.get_json()
         try:
             if 'role' not in body:
-                body['role'] = Role.objects.get(name='member')
+                body['role'] = Permission.objects.get(name='member')
             elif 'admin' == body['role']:
                 if not 'birth_date' in body:
                     raise SchemaValidationErrorException
@@ -60,7 +59,7 @@ class AllowedUserApi(Resource):
         body = request.get_json()
         try:
             if 'role' not in body:
-                body['role'] = Role.objects.get(name='member')
+                body['role'] = Permission.objects.get(name='member')
             elif 'admin' == body['role']:
                 if not 'birth_date' in body:
                     raise SchemaValidationErrorException

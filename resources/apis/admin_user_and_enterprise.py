@@ -4,10 +4,9 @@ from flask import request
 from flask_restful import Resource, abort
 from mongoengine import FieldDoesNotExist, ValidationError
 
-from database.models.common import ActivationTicket
 from database.models.enterprise import Enterprise
-from database.models.permission import Role
-from database.models.user import EnterpriseUser
+from database.models.parametric_docs import Permission
+from database.models.user import EnterpriseUser, ActivationTicket
 from resources.helpers import user_helper, auth_helper
 from resources.helpers.email_helper.email_helper import EmailActivation
 from resources.helpers.log_helper import LOGGER
@@ -68,7 +67,7 @@ class AdminUserEnterpriseApi(Resource):
                 saved_users = []
                 for member_user in member_users:
                     member_user['password'] = auth_helper.hash_password(member_user.get('password'))
-                    member_user['role'] = Role.objects.get(name='member')
+                    member_user['role'] = Permission.objects.get(name='member')
                     saved_users.append(EnterpriseUser(**member_user).save())
                 body['enterprise']['member_users'] = saved_users
                 print(saved_users)

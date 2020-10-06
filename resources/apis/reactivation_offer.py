@@ -1,8 +1,8 @@
 from flask import request
 from flask_restful import Resource
 
-from database.models.common import State
 from database.models.offer import Offer
+from database.models.parametric_docs import State
 from resources.utils.decorators import authentication_required, validate_user_exists, validate_headers
 
 

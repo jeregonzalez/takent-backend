@@ -4,8 +4,10 @@ from flask import request
 from flask_restful import Resource, abort
 from mongoengine import FieldDoesNotExist, ValidationError, DoesNotExist
 
-from database.models.common import Image, State, ActivationTicket, CurriculumVitae
-from database.models.user import EnterpriseUser, CommonUser
+from database.models.common import Image
+from database.models.common_user import UserCurriculumVitae
+from database.models.parametric_docs import State
+from database.models.user import EnterpriseUser, CommonUser, ActivationTicket
 from resources.helpers import password_helper, user_helper, enterprise_helper, auth_helper
 from resources.helpers.email_helper.email_helper import EmailAdmin, EmailActivation, \
     EmailChangePassword
@@ -121,7 +123,7 @@ class CurriculumApi(Resource):
         body = request.get_json()
         user = user_helper.get_user_from_jwt()
         try:
-            new_curriculum = CurriculumVitae(**body)
+            new_curriculum = UserCurriculumVitae(**body)
             new_curriculum.save()
         except FieldDoesNotExist:
             raise SchemaValidationErrorException

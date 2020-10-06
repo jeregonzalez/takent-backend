@@ -3,7 +3,7 @@ from flask import request
 from flask_restful import Resource, abort
 from mongoengine import DoesNotExist
 
-from database.models.mercadopago import OfferPack
+from database.models.parametric_docs import OfferPack
 from resources.helpers.log_helper import LOGGER
 from resources.utils.decorators import authentication_required, validate_user_exists, \
     validate_user_is_enterprise, validate_headers

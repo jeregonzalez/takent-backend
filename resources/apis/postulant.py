@@ -2,8 +2,8 @@ from flask import request
 from flask_restful import Resource, abort
 from mongoengine import FieldDoesNotExist, ValidationError, DoesNotExist
 
-from database.models.common import State
-from database.models.offer import Applicant, Offer
+from database.models.offer import Offer, Postulant
+from database.models.parametric_docs import State
 from resources.helpers import user_helper
 from resources.utils.decorators import validate_user_exists, authentication_required, validate_headers
 from resources.utils.exceptions import SchemaValidationErrorException, MissingRequiredFieldsException
@@ -33,7 +33,7 @@ class PostulantApi(Resource):
         try:
             offer = Offer.objects.get(id=id_offer)
             body['postulant'] = user_helper.get_user_from_jwt()
-            postulant = Applicant(**body).save()
+            postulant = Postulant(**body).save()
             offer.update(push__postulants=postulant)
         except FieldDoesNotExist:
             raise SchemaValidationErrorException
@@ -47,7 +47,7 @@ class PostulantApi(Resource):
 
         try:
             body['state'] = State.objects.get(name=body['state'])
-            Applicant.get(id=id_postulant).update(**body)
+            Postulant.get(id=id_postulant).update(**body)
         except FieldDoesNotExist:
             raise SchemaValidationErrorException
         except ValidationError:
@@ -60,7 +60,7 @@ class PostulantApi(Resource):
     def delete(self, id_offer):
         # id offer es el id del postulante
         try:
-            Applicant.objects.get(id=id_offer).delete()
+            Postulant.objects.get(id=id_offer).delete()
         except DoesNotExist:
             abort(400, message='Postulant does not exist')
         return Message.delete()

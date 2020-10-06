@@ -2,9 +2,9 @@ from flask import request
 from flask_restful import Resource, abort
 from mongoengine import FieldDoesNotExist, ValidationError, InvalidQueryError
 
-from database.models.common import Image, State
+from database.models.common import Image
 from database.models.enterprise import Enterprise
-from database.models.permission import Role
+from database.models.parametric_docs import Permission, State
 from database.models.user import EnterpriseUser
 from resources.helpers import user_helper, enterprise_helper, auth_helper
 from resources.utils.decorators import validate_headers, authentication_required, validate_user_exists, \
@@ -43,7 +43,7 @@ class EnterpriseApi(Resource):
             saved_users = []
             for member_user in member_users:
                 member_user['password'] = auth_helper.hash_password(member_user.get('password'))
-                member_user['role'] = Role.objects.get(name='member')
+                member_user['role'] = Permission.objects.get(name='member')
                 saved_users.append(EnterpriseUser(**member_user).save())
             body['member_users'] = saved_users
 

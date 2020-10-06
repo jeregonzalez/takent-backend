@@ -1,6 +1,6 @@
 from flask_restful import Resource
 
-from database.models.common import Language, LanguageLevel
+from database.models.parametric_docs import Language, LanguageLevel
 
 
 class LanguageApi(Resource):

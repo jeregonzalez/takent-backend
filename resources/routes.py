@@ -5,7 +5,7 @@ from resources.apis.authentication import AuthenticationApi
 from resources.apis.enterprise_type import EnterpriseTypeApi
 from resources.apis.language import LanguageApi, LanguageLevelApi
 from resources.apis.mercadopago import MercadoPagoApi, OfferPackApi
-from resources.apis.mongo import MongoApi
+from resources.apis.development import MongoApi
 from resources.apis.place import CountriesApi, ProvincesApi, CitiesApi
 from resources.apis.postulant import PostulantApi
 from resources.apis.sector import SectorApi

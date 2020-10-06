@@ -3,8 +3,9 @@ from flask_restful import abort
 from mongoengine import ReferenceField, EmbeddedDocument, \
     EmbeddedDocumentListField, StringField, DateTimeField, ObjectIdField, DictField, EmbeddedDocumentField, ListField
 
-from database.models.common import State, City
+from database.models.common import City
 from database.models.offer import Offer
+from database.models.parametric_docs import State
 from database.models.user import EnterpriseUser
 from resources.helpers.log_helper import LOGGER
 

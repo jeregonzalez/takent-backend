@@ -8,7 +8,6 @@ from jwt import ExpiredSignatureError
 from resources.consts.consts import RequestHeaderKey, RequestHeaderValue, JwtKey
 from resources.helpers import user_helper, enterprise_helper, offer_helper
 from resources.helpers.allowed_user_helper import validate_allowed_user_not_exists, validate_allowed_user_exists
-from resources.helpers.state_helper import validate_state_must_exist
 from resources.helpers.user_helper import validate_password
 from resources.utils import exceptions
 from resources.utils.messages import Message
@@ -142,18 +141,6 @@ def offer_must_not_exist(func):
     @wraps(func)
     def wrapper(*args, **kwargs):
         offer_helper.validate_offer_must_not_exist(request.get_json().get('title'))
-        return func(*args, **kwargs)
-
-    return wrapper
-
-
-def state_must_exist(func):
-    @wraps(func)
-    def wrapper(*args, **kwargs):
-        if 'state' in kwargs:
-            validate_state_must_exist(state=kwargs.get('state'))
-        if request.args.get('state'):
-            validate_state_must_exist(state=request.args.get('state'))
         return func(*args, **kwargs)
 
     return wrapper

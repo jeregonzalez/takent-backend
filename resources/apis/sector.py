@@ -2,7 +2,7 @@ from flask import request
 from flask_restful import Resource, abort
 from mongoengine import FieldDoesNotExist, ValidationError
 
-from database.models.common import Sector
+from database.models.parametric_docs import Sector
 from resources.utils.exceptions import SchemaValidationErrorException, MissingRequiredFieldsException
 from resources.utils.messages import Message
 
