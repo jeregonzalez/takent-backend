@@ -4,7 +4,6 @@ from flask_restful import Resource, abort
 from mongoengine import DoesNotExist
 
 from database.models.parametric_docs import OfferPack
-from resources.helpers.log_helper import LOGGER
 from resources.utils.decorators import authentication_required, validate_user_exists, \
     validate_user_is_enterprise, validate_headers
 from resources.utils.messages import Message
@@ -26,7 +25,6 @@ class OfferPackApi(Resource):
 
 
 class MercadoPagoApi(Resource):
-
     method_decorators = {
         'post': [validate_user_is_enterprise, validate_user_exists, authentication_required, validate_headers]
     }
@@ -44,7 +42,6 @@ class MercadoPagoApi(Resource):
                             ProjectVars.get_project_var('MP_CLIENT_SECRET'))
         offer_pack_item = offer_pack_obj.item_template
         offer_pack_item['quantity'] = body.get('quantity') if body.get('quantity') else 1
-        LOGGER.info(offer_pack_item)
         preference = {
             'items': [offer_pack_item]
         }

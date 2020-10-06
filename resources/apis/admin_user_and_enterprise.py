@@ -82,4 +82,5 @@ class AdminUserEnterpriseApi(Resource):
         except Exception:
             new_user.delete()
             abort(400)
-        return {'message': 'User {} and Enterprise {} created successfully'.format(new_user.account, new_enterprise.business_name)}, 201
+        return {'message': 'User {} and Enterprise {} created successfully'.format(new_user.account,
+                                                                                   new_enterprise.business_name)}, 201

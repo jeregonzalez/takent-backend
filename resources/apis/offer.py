@@ -11,7 +11,6 @@ from resources.utils.messages import Message
 
 
 class OfferApi(Resource):
-
     method_decorators = {
         'get': [validate_offer_exists, validate_user_exists, authentication_required, validate_headers],
         'post': [validate_user_exists, authentication_required, validate_headers],

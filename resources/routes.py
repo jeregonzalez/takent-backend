@@ -13,17 +13,25 @@ from resources.apis.profession import ProfessionApi
 from resources.apis.user import ImageApi, CurriculumApi, UserApi, PasswordRecoverApi, ChangePasswordApi, \
     UserExistsValidationApi, ActivateAccountApi, UserAttributesListApi
 from resources.apis.offer import OfferApi
-from resources.apis.reactivation_offer import ReactivateOfferApi
 from resources.apis.admin_user_and_enterprise import AdminUserEnterpriseApi
 
 
 def initialize_routes(api):
-    # Mongo
+    # Development apis
     api.add_resource(MongoApi, '/api/v1/init/mongodb')
     # Places
     api.add_resource(CountriesApi, '/api/v1/countries')
     api.add_resource(ProvincesApi, '/api/v1/provinces')
     api.add_resource(CitiesApi, '/api/v1/cities/<int:province_id>')
+    # Parametric documents
+    api.add_resource(LanguageApi, '/api/v1/language')
+    api.add_resource(LanguageLevelApi, '/api/v1/language_level')
+    api.add_resource(EducationLevelApi, '/api/v1/education_level')
+    api.add_resource(ProfessionApi, '/api/v1/profession')
+    api.add_resource(SectorApi, '/api/v1/sector')
+    api.add_resource(EnterpriseTypeApi, '/api/v1/enterprise_type')
+    # Authentication
+    api.add_resource(AuthenticationApi, '/api/v1/authentication')
     # Users
     api.add_resource(UserApi, '/api/v1/user/<user_type>')
     api.add_resource(ImageApi, '/api/v1/user/common/profile_photo')
@@ -36,13 +44,7 @@ def initialize_routes(api):
     api.add_resource(EnterpriseApi, '/api/v1/enterprise')
     api.add_resource(ProfilePhotoEnterpriseApi, '/api/v1/enterprise_profile_photo')
     api.add_resource(EnterprisePhotosApi, '/api/v1/enterprise_photos', '/api/v1/enterprise_photos/<id_photo>')
-    # Authentication
-    api.add_resource(AuthenticationApi, '/api/v1/authentication')
-    # Language
-    api.add_resource(LanguageApi, '/api/v1/language')
-    api.add_resource(LanguageLevelApi, '/api/v1/language_level')
-    # Education
-    api.add_resource(EducationLevelApi, '/api/v1/education_level')
+
     # Password
     api.add_resource(PasswordRecoverApi, '/api/v1/user/common/recover_password',
                      '/api/v1/user/enterprise/recover_password')
@@ -50,12 +52,7 @@ def initialize_routes(api):
                      '/api/v1/user/enterprise/change_password')
     # Offer
     api.add_resource(OfferApi, '/api/v1/offer', '/api/v1/offer/<id_offer>')
-    api.add_resource(ReactivateOfferApi, '/api/v1/reactivation/<id>')
     api.add_resource(AllowedUserApi, '/api/v1/allowed', '/api/v1/allowed/<account>')
-    api.add_resource(SectorApi, '/api/v1/sector', '/api/v1/sector/<id>')
-    api.add_resource(EnterpriseTypeApi, '/api/v1/enterprise_type', '/api/v1/enterprise_type/<id>')
-    # Profession
-    api.add_resource(ProfessionApi, '/api/v1/profession')
     # Enterprise and admin user
     api.add_resource(AdminUserEnterpriseApi, '/api/v1/admin_user_enterprise')
     # Mercado Pago

@@ -5,7 +5,6 @@ from mongoengine import FieldDoesNotExist, ValidationError, DoesNotExist
 from database.models.offer import Offer, Postulant
 from database.models.parametric_docs import State
 from resources.helpers import user_helper
-from resources.utils.decorators import validate_user_exists, authentication_required, validate_headers
 from resources.utils.exceptions import SchemaValidationErrorException, MissingRequiredFieldsException
 from resources.utils.messages import Message
 

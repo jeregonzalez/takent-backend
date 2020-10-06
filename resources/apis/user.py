@@ -6,16 +6,16 @@ from mongoengine import FieldDoesNotExist, ValidationError, DoesNotExist
 
 from database.models.common import Image
 from database.models.common_user import UserCurriculumVitae
-from database.models.parametric_docs import State
-from database.models.user import EnterpriseUser, CommonUser, ActivationTicket
-from resources.helpers import password_helper, user_helper, enterprise_helper, auth_helper
-from resources.helpers.email_helper.email_helper import EmailAdmin, EmailActivation, \
+from database.models.user import ActivationTicket
+from resources.helpers import password_helper, user_helper, auth_helper
+from resources.helpers.email_helper.email_helper import EmailActivation, \
     EmailChangePassword
 from resources.utils.decorators import validate_headers, authentication_required, \
     validate_user_is_common, \
     validate_user_exists, validate_user_not_exists, validate_user_password
 from resources.utils.exceptions import MissingRequiredFieldsException, \
-    SchemaValidationErrorException
+    SchemaValidationErrorException, SaveException
+from resources.utils.messages import Message
 
 
 class UserApi(Resource):
@@ -33,47 +33,25 @@ class UserApi(Resource):
         body = request.get_json()
         if body.get('password'):
             body['password'] = auth_helper.hash_password(body['password'])
-
         try:
             new_user = user_helper.USER_TYPES[user_type](**body)
-            if not 'birth_date' in body:
-                if type(new_user) == EnterpriseUser:
-                    if 'member' != new_user.role.name:
-                        raise SchemaValidationErrorException
-                else:
-                    raise SchemaValidationErrorException
-
             new_user.save()
-
-        except FieldDoesNotExist:
-            raise SchemaValidationErrorException
-        except ValidationError:
-            raise MissingRequiredFieldsException
+        except (FieldDoesNotExist, ValidationError) as e:
+            raise SaveException(e)
         activation_ticket = ActivationTicket(account=new_user.account, user_type=user_type).save()
         Thread(target=lambda: EmailActivation(destination_email=new_user.account,
                                               ticket_hash=activation_ticket.id).send_email()).start()
-        return {'message': 'User {} created successfully'.format(new_user.account)}, 201
+        return Message.created()
 
     def put(self, user_type=None):
         body = request.get_json()
         user_helper.get_user_from_jwt().update(**body)
-        return '', 204
+        return Message.updated()
 
     def delete(self, user_type=None):
         user = user_helper.get_user_from_jwt()
-        user.update(state=State.objects.get(name='inactive'))
-        if isinstance(user, EnterpriseUser) and user.role.name == 'admin':
-            if not enterprise_helper.enterprise_exists(user_account=user.account):
-                return '', 204
-            enterprise = enterprise_helper.get_enterprise(user_account=user.account)
-            enterprise.deactivate()
-
-            def send_emails():
-                for member_user in enterprise.member_users:
-                    EmailAdmin(destination_email=member_user.account).send_email()
-
-            Thread(target=send_emails).start()
-        return '', 204
+        user.delete()
+        Message.deleted()
 
 
 class ImageApi(Resource):

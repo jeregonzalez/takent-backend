@@ -5,10 +5,6 @@ from database.models.common import Country, City
 
 class CountriesApi(Resource):
     def get(self):
-        """
-        Obtener todos los paises
-        :return:
-        """
         countries = []
         for country in Country.objects.only('code', 'name'):
             countries.append({'code': country.code, 'name': country.name})
@@ -17,10 +13,6 @@ class CountriesApi(Resource):
 
 class ProvincesApi(Resource):
     def get(self):
-        """
-        Obtener todas las provincias de Argentina
-        :return:
-        """
         if not Country.objects.count():
             return [], 200
         provinces = []
@@ -31,11 +23,6 @@ class ProvincesApi(Resource):
 
 class CitiesApi(Resource):
     def get(self, province_id):
-        """
-        Obtener todas las localidades de una provincia determinada
-        :param province_id:
-        :return:
-        """
         cities = []
         for city in City.objects(province_id=province_id).order_by('name'):
             cities.append({'code': city.code, 'name': city.name})
