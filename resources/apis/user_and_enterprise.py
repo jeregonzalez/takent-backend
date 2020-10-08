@@ -23,10 +23,8 @@ class UserAndEnterpriseApi(Resource):
         body = request.get_json()
         user = body.get('user')
         enterprise = body.get('enterprise')
-        new_user = EnterpriseUser(**user)
         if not user or not enterprise:
             abort(400, message='User and enterprise needed')
-
         if user.get('password'):
             user['password'] = auth_helper.hash_password(user['password'])
         try:
