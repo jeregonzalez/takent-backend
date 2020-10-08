@@ -140,7 +140,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"account\": \"jeremias.gonzalez@windriver.com\",\n    \"password\": \"Password123\"\n}",
+							"raw": "{\n    \"account\": \"jereegonzalez@gmail.com\",\n    \"password\": \"Password123\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -244,7 +244,7 @@
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n    \"start_date\": \"2014-01-01 00:00:00\",\n    \"end_date\": \"2019-01-01 00:00:00\",\n    \"institution\": \"UTN Córdoba\",\n    \"name\": \"Ingeniero en sistemas\",\n    \"level\": \"Degree\",\n    \"description\": \"Alguna descripción\"\n}",
+									"raw": "{\n    \"start_date\": \"2014-01-01 00:00:00\",\n    \"end_date\": \"2019-01-01 00:00:00\",\n    \"institution\": \"UTN Córdoba\",\n    \"title\": \"Ingeniero en sistemas\",\n    \"level\": \"Degree\",\n    \"description\": \"Alguna descripción\"\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -763,7 +763,7 @@
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n    \"name\": \"Ingles\",\n    \"writing_level\": \"Basic\",\n    \"reading_level\": \"Basic\"\n}",
+									"raw": "{\n    \"language\": \"Ingles\",\n    \"writing_level\": \"Basic\",\n    \"communication_level\": \"Basic\",\n    \"certificate\": true\n}",
 									"options": {
 										"raw": {
 											"language": "json"
