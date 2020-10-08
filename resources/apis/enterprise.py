@@ -52,8 +52,7 @@ class EnterpriseApi(Resource):
 
 class ProfilePhotoEnterpriseApi(Resource):
     method_decorators = {
-        'get': [validate_enterprise_exists, validate_user_is_enterprise, validate_user_exists, authentication_required,
-                validate_headers],
+        'get': [validate_enterprise_exists, validate_user_exists, authentication_required, validate_headers],
         'post': [validate_enterprise_exists, validate_user_is_enterprise, validate_user_exists, authentication_required,
                  validate_headers],
         'put': [validate_enterprise_exists, validate_user_is_enterprise, validate_user_exists, authentication_required,
