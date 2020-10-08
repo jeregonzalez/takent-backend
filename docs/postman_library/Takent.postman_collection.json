@@ -140,7 +140,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"account\": \"jereegonzalez@gmail.com\",\n    \"password\": \"Password123\"\n}",
+							"raw": "{\n    \"account\": \"jeremias.gonzalez@windriver.com\",\n    \"password\": \"Password123\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -848,6 +848,41 @@
 										"common",
 										"language",
 										"5f263bba55b824d3dfab8da9"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"protocolProfileBehavior": {},
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "Postulation",
+					"item": [
+						{
+							"name": "Postulate to offer",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{user_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"url": {
+									"raw": "{{host}}/postulate/5f7e508d028a06b96366bdc9",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"postulate",
+										"5f7e508d028a06b96366bdc9"
 									]
 								}
 							},
@@ -1657,6 +1692,132 @@
 					"_postman_isSubFolder": true
 				},
 				{
+					"name": "Postulant",
+					"item": [
+						{
+							"name": "All Postulants",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{user_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{host}}/offer/5f7bb4b47b064261bc3ac606/postulant",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"offer",
+										"5f7bb4b47b064261bc3ac606",
+										"postulant"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Postulant",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{user_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{host}}/offer/5f7bb4b47b064261bc3ac606/postulant/5f7bb4b47b064261bc3ac606",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"offer",
+										"5f7bb4b47b064261bc3ac606",
+										"postulant",
+										"5f7bb4b47b064261bc3ac606"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Postulant",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{user_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "PUT",
+								"header": [],
+								"url": {
+									"raw": "{{host}}/offer/5f7bb4b47b064261bc3ac606/postulant/5f7bb4b47b064261bc3ac606",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"offer",
+										"5f7bb4b47b064261bc3ac606",
+										"postulant",
+										"5f7bb4b47b064261bc3ac606"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Postulant",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{user_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{host}}/offer/5f7bb4b47b064261bc3ac606/postulant/5f7bb4b47b064261bc3ac606",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"offer",
+										"5f7bb4b47b064261bc3ac606",
+										"postulant",
+										"5f7bb4b47b064261bc3ac606"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"protocolProfileBehavior": {},
+					"_postman_isSubFolder": true
+				},
+				{
 					"name": "Offer by id",
 					"request": {
 						"auth": {
@@ -1672,13 +1833,13 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{host}}/offer/5f7cd0f1c7e8097f9bed1a22",
+							"raw": "{{host}}/offer/5f7e508d028a06b96366bdc9",
 							"host": [
 								"{{host}}"
 							],
 							"path": [
 								"offer",
-								"5f7cd0f1c7e8097f9bed1a22"
+								"5f7e508d028a06b96366bdc9"
 							]
 						}
 					},
@@ -1803,7 +1964,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"title\": \"holaaa\"\r\n}",
+							"raw": "{\r\n    \"state\": \"in_selection\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1811,13 +1972,13 @@
 							}
 						},
 						"url": {
-							"raw": "{{host}}/offer/5f47dd3b5f2529800fba4993",
+							"raw": "{{host}}/offer/5f7cf6b555acc720f9e41fc3",
 							"host": [
 								"{{host}}"
 							],
 							"path": [
 								"offer",
-								"5f47dd3b5f2529800fba4993"
+								"5f7cf6b555acc720f9e41fc3"
 							]
 						}
 					},
