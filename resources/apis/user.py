@@ -204,8 +204,11 @@ class UserAttributesListApi(Resource):
         if not hasattr(user, attribute_name):
             abort(400, message='Attribute {} not exists'.format(attribute_name))
         attribute_list = getattr(user, attribute_name)
-        attribute_list.create(**body)
-        attribute_list.save()
+        try:
+            attribute_list.create(**body)
+            attribute_list.save()
+        except (FieldDoesNotExist, ValidationError) as e:
+            raise SaveException(e)
         return Message.created()
 
     def put(self, attribute_name, _id=None):
