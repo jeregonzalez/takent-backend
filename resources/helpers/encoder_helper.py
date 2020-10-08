@@ -7,6 +7,7 @@ from flask_mongoengine import Document
 from mongoengine import EmbeddedDocument
 from mongoengine.queryset.base import BaseQuerySet
 
+from database.models.enterprise import Enterprise
 from database.models.offer import Offer
 from database.models.user import User, CommonUser
 
@@ -27,6 +28,8 @@ class Encoder:
             self._strategy = EncodeStrategyUser(obj)
         elif issubclass(obj.__class__, Offer):
             self._strategy = EncodeStrategyOffer(obj)
+        elif issubclass(obj.__class__, Enterprise):
+            self._strategy = EncodeStrategyEnterprise(obj)
         elif issubclass(obj.__class__, BaseQuerySet):
             self._strategy = EncodeStrategyBaseQuerySet(obj)
         elif issubclass(obj.__class__, Document) or issubclass(obj.__class__, EmbeddedDocument):
@@ -99,4 +102,7 @@ class EncodeStrategyEnterprise(EncodeStrategy):
     HIDE_FIELDS = ['photos']
 
     def encode(self):
-        pass
+        response = self.obj.to_mongo()
+        if self.obj.address:
+            response['address'] = self.obj.address.format_response()
+        return response

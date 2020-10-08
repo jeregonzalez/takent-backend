@@ -7,7 +7,7 @@ from resources.apis.language import LanguageApi, LanguageLevelApi
 from resources.apis.mercadopago import MercadoPagoApi, OfferPackApi
 from resources.apis.development import MongoApi
 from resources.apis.place import CountriesApi, ProvincesApi, CitiesApi
-from resources.apis.postulant import PostulantApi
+from resources.apis.postulant import PostulantApi, PostulateApi
 from resources.apis.sector import SectorApi
 from resources.apis.profession import ProfessionApi
 from resources.apis.user import ImageApi, CurriculumApi, UserApi, PasswordRecoverApi, ChangePasswordApi, \
@@ -52,13 +52,16 @@ def initialize_routes(api):
     # Offer
     api.add_resource(OfferApi, '/api/v1/offer/<id_offer>', '/api/v1/offer')
     api.add_resource(OfferImagesApi, '/api/v1/offer/<id_offer>/images')
+    # Postulant
+    api.add_resource(PostulantApi, '/api/v1/offer/<id_offer>/postulant',
+                     '/api/v1/offer/<id_offer>/postulant/<id_postulant>')
+    # Postulate
+    api.add_resource(PostulateApi, '/api/v1/postulate/<id_offer>')
     # Enterprise and admin user
     api.add_resource(UserAndEnterpriseApi, '/api/v1/user_and_enterprise')
     # Mercado Pago
     api.add_resource(OfferPackApi, '/api/v1/offer_pack')
     api.add_resource(MercadoPagoApi, '/api/v1/mercadopago/generate_payment')
-    # Postulant
-    api.add_resource(PostulantApi, '/api/v1/postulant/<id_offer>')
 
     # Para despues
     api.add_resource(AllowedUserApi, '/api/v1/allowed', '/api/v1/allowed/<account>')

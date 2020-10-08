@@ -3,7 +3,7 @@ import json
 import os
 
 from database.models.parametric_docs import ContractType, EducationLevel, EnterpriseType, ExperienceLevel, Language, \
-    LanguageLevel, OfferPack, Permission, Profession, Sector, StateUser, StateOffer
+    LanguageLevel, OfferPack, Permission, Profession, Sector, StateUser, StateOffer, StatePostulant
 from database.models.place import Country, City, Province
 from resources.helpers import place_helper
 from resources.helpers.log_helper import LOGGER
@@ -22,7 +22,8 @@ MODEL_MAP = {
     'profession': Profession,
     'sector': Sector,
     'state_user': StateUser,
-    'state_offer': StateOffer
+    'state_offer': StateOffer,
+    'state_postulant': StatePostulant
 }
 
 

@@ -3,14 +3,14 @@ from datetime import datetime
 from database.db import db
 from .common import Address, Image
 from .enterprise import Enterprise
-from .parametric_docs import StateOffer
+from .parametric_docs import StateOffer, StatePostulant
 from .user import CommonUser, EnterpriseUser
 
 
 class Postulant(db.Document):
-    postulation_date = db.DateTimeField()
+    postulation_date = db.DateTimeField(default=lambda: datetime.today())
     postulant = db.ReferenceField(CommonUser)
-    state = db.ReferenceField(StateOffer)
+    state = db.ReferenceField(StateOffer, default=lambda: StatePostulant.objects.get(name='pending'))
 
 
 class OfferLanguage(db.EmbeddedDocument):
