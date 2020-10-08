@@ -1,13 +1,14 @@
 from flask import request
+from flask_jwt_extended import get_jwt_identity
 from flask_restful import Resource, abort
-from mongoengine import FieldDoesNotExist, ValidationError, InvalidQueryError
+from mongoengine import FieldDoesNotExist, ValidationError, InvalidQueryError, DoesNotExist
 
 from database.models.common import Image
 from database.models.enterprise import Enterprise
 from resources.helpers import user_helper, enterprise_helper
 from resources.utils.decorators import validate_headers, authentication_required, validate_user_exists, \
     validate_user_is_enterprise, validate_enterprise_exists, validate_enterprise_not_exists
-from resources.utils.exceptions import SaveException, UpdateException
+from resources.utils.exceptions import SaveException, UpdateException, GetException
 from resources.utils.messages import Message
 
 
@@ -52,7 +53,7 @@ class EnterpriseApi(Resource):
 
 class ProfilePhotoEnterpriseApi(Resource):
     method_decorators = {
-        'get': [validate_enterprise_exists, validate_user_exists, authentication_required, validate_headers],
+        'get': [validate_user_exists, authentication_required, validate_headers],
         'post': [validate_enterprise_exists, validate_user_is_enterprise, validate_user_exists, authentication_required,
                  validate_headers],
         'put': [validate_enterprise_exists, validate_user_is_enterprise, validate_user_exists, authentication_required,
@@ -62,8 +63,20 @@ class ProfilePhotoEnterpriseApi(Resource):
     }
 
     def get(self):
-        user = user_helper.get_user_from_jwt(keys='user_account')
-        enterprise = enterprise_helper.get_enterprise(user_account=user)
+        id_enterprise = request.args.get('id')
+        if id_enterprise:
+            try:
+                enterprise = Enterprise.objects.get(id=id_enterprise)
+            except DoesNotExist as e:
+                raise GetException(e)
+        else:
+            if get_jwt_identity().get('user_type') != 'enterprise':
+                abort(400, message='User must be enterprise')
+            if not enterprise_helper.enterprise_exists(user_account=get_jwt_identity().get('user_account')):
+                abort(400, message='User {} does not have an enterprise associated'
+                      .format(get_jwt_identity().get('user_account')))
+            user = user_helper.get_user_from_jwt(keys='user_account')
+            enterprise = enterprise_helper.get_enterprise(user_account=user)
         return {'profile_photo': enterprise.profile_photo.base64 if enterprise.profile_photo else None}
 
     def post(self):
