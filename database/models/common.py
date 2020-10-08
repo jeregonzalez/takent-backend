@@ -11,7 +11,7 @@ class Address(db.EmbeddedDocument):
     apartment = db.StringField()
     floor = db.IntField()
     postal_code = db.IntField()
-    location = db.DictField()
+    location = db.EmbeddedDocumentField('Location')
 
     def format_response(self):
         response = super(Address, self).to_mongo()
@@ -27,3 +27,9 @@ class Address(db.EmbeddedDocument):
 class Image(db.Document):
     name = db.StringField()
     base64 = db.StringField()
+
+
+class Location(db.EmbeddedDocument):
+    lat = db.FloatField()
+    lng = db.FloatField()
+    zoom = db.FloatField()
