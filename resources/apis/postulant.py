@@ -1,63 +1,70 @@
 from flask import request
-from flask_restful import Resource, abort
+from flask_restful import Resource
 from mongoengine import FieldDoesNotExist, ValidationError, DoesNotExist
 
 from database.models.offer import Offer, Postulant
+from database.models.parametric_docs import StatePostulant
 from resources.helpers import user_helper
-from resources.utils.exceptions import SchemaValidationErrorException, MissingRequiredFieldsException
+from resources.utils.decorators import validate_headers, authentication_required, validate_user_exists, \
+    validate_offer_exists, validate_user_is_enterprise, validate_user_is_common, validate_postulant_exists
+from resources.utils.exceptions import SaveException, \
+    UpdateException
 from resources.utils.messages import Message
 
 
 class PostulantApi(Resource):
-    # method_decorators = {
-    #     'get': [offer_must_exist, validate_user_exists, authentication_required, validate_headers],
-    #     'post': [validate_user_exists, authentication_required, validate_headers],
-    #     'put': [offer_must_exist, validate_user_exists, authentication_required, validate_headers],
-    #     'delete': [validate_user_exists, authentication_required, validate_headers]
-    # }
+    method_decorators = {
+        'get': [validate_postulant_exists, validate_offer_exists, validate_user_is_enterprise, validate_user_exists,
+                authentication_required, validate_headers],
+        'post': [validate_user_exists, validate_user_is_enterprise, authentication_required, validate_headers],
+        'put': [validate_postulant_exists, validate_offer_exists, validate_user_is_enterprise, validate_user_exists,
+                authentication_required, validate_headers],
+        'delete': [validate_postulant_exists, validate_offer_exists, validate_user_is_enterprise, validate_user_exists,
+                   authentication_required, validate_headers]
+    }
 
-    def get(self, id_offer=None):
+    def get(self, id_offer=None, id_postulant=None):
         offer = Offer.objects.get(id=id_offer)
-        data = []
-        for postulant in offer.postulants:
-            aux = {'id': postulant.id, 'account': postulant.postulant.to_mongo(), 'state': postulant.state.to_mongo()}
-            del aux['account']['password']
-            data.append(aux)
+        postulants = offer.postulants
+        if id_postulant:
+            postulants = filter(lambda x: x.id == id_postulant, postulants)
+        return postulants
 
-        return Message.ok(data)
+    def put(self, id_offer=None, id_postulant=None):
+        body = request.get_json()
+        try:
+            if body.get('state'):
+                body['state'] = StatePostulant.objects.get(id=body['state'])
+            Postulant.objects.get(id=id_postulant).update(**body)
+        except (DoesNotExist, FieldDoesNotExist, ValidationError) as e:
+            raise UpdateException(e)
+        return Message.updated()
+
+    def delete(self, id_offer=None, id_postulant=None):
+        offer = Offer.objects.get(id=id_offer)
+        offer.update(pull__postulants=id_postulant)
+        offer.save()
+        Postulant.objects.get(id=id_postulant).delete()
+        return Message.deleted()
+
+
+class PostulateApi(Resource):
+    method_decorators = {
+        'post': [validate_offer_exists, validate_user_is_common, validate_user_exists, authentication_required,
+                 validate_headers]
+    }
 
     def post(self, id_offer=None):
-        body = {}
+        offer = Offer.objects.get(id=id_offer)
+        postulant_info = {
+            'postulant': user_helper.get_user_from_jwt()
+        }
+        print(postulant_info)
         try:
-            offer = Offer.objects.get(id=id_offer)
-            body['postulant'] = user_helper.get_user_from_jwt()
-            postulant = Postulant(**body).save()
+            postulant = Postulant(**postulant_info)
+            postulant.save()
             offer.update(push__postulants=postulant)
-        except FieldDoesNotExist:
-            raise SchemaValidationErrorException
-        except ValidationError:
-            raise MissingRequiredFieldsException
-
-        return Message.ok(postulant.postulant.account)
-
-    def put(self, id_postulant=None):
-        body = request.get_json()
-
-        try:
-            Postulant.get(id=id_postulant).update(**body)
-        except FieldDoesNotExist:
-            raise SchemaValidationErrorException
-        except ValidationError:
-            raise MissingRequiredFieldsException
-        except DoesNotExist:
-            abort(400, message='State does not exist')
-
-        return Message.update()
-
-    def delete(self, id_offer):
-        # id offer es el id del postulante
-        try:
-            Postulant.objects.get(id=id_offer).delete()
-        except DoesNotExist:
-            abort(400, message='Postulant does not exist')
-        return Message.delete()
+            offer.save()
+        except (FieldDoesNotExist, ValidationError) as e:
+            raise SaveException(e)
+        return Message.created()

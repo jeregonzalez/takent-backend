@@ -11,14 +11,6 @@ def offer_exists(_id=None):
     return bool(Offer.objects(id=_id).count())
 
 
-def validate_offer_must_not_exist(title):
-    if not title:
-        abort(400, message='Field title not exist')
-
-    if Offer.objects(title=title).count():
-        abort(400, message='Offer {} exist'.format(title))
-
-
 def get_fields():
     return Offer._fields.keys()
 

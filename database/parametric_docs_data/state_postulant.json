@@ -1,0 +1,14 @@
+[
+  {
+    "name": "pending"
+  },
+  {
+    "name": "selected"
+  },
+  {
+    "name": "contacted"
+  },
+  {
+    "name": "discarded"
+  }
+]

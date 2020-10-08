@@ -6,7 +6,7 @@ from flask_restful import abort
 from jwt import ExpiredSignatureError
 
 from resources.consts.consts import RequestHeaderKey, RequestHeaderValue, JwtKey
-from resources.helpers import user_helper, enterprise_helper, offer_helper
+from resources.helpers import user_helper, enterprise_helper, offer_helper, postulant_helper
 from resources.helpers.user_helper import validate_password
 from resources.utils import exceptions
 from resources.utils.messages import Message
@@ -116,22 +116,20 @@ def validate_enterprise_not_exists(func):
     return wrapper
 
 
-def validate_role_is_admin(func):
-    @wraps(func)
-    def wrapper(*args, **kwargs):
-        if user_helper.get_user(user_account=get_jwt_identity().get('user_account'),
-                                user_type='enterprise').role.name != 'admin':
-            abort(403, message='You do not have permissions to do this action')
-        return func(*args, **kwargs)
-
-    return wrapper
-
-
 def validate_offer_exists(func):
     @wraps(func)
     def wrapper(*args, **kwargs):
         if kwargs.get('id_offer') and not offer_helper.offer_exists(_id=kwargs.get('id_offer')):
             return Message.bad_request(message='Offer {} not exists'.format(kwargs.get('id_offer')))
+        return func(*args, **kwargs)
+    return wrapper
+
+
+def validate_postulant_exists(func):
+    @wraps(func)
+    def wrapper(*args, **kwargs):
+        if kwargs.get('id_postulant') and not postulant_helper.postulant_exists(_id=kwargs.get('id_postulant')):
+            return Message.bad_request(message='Postulant {} not exists'.format(kwargs.get('id_postulant')))
         return func(*args, **kwargs)
     return wrapper
 
