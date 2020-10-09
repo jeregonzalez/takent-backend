@@ -1,4 +1,4 @@
-from resources.apis.allowed_user import AllowedUserApi
+from resources.apis.member_user import MemberUserApi
 from resources.apis.education import EducationLevelApi
 from resources.apis.enterprise import EnterpriseApi, ProfilePhotoEnterpriseApi, EnterpriseImagesApi
 from resources.apis.authentication import AuthenticationApi
@@ -40,6 +40,7 @@ def initialize_routes(api):
     api.add_resource(ActivateAccountApi, '/api/v1/user/activate')
     api.add_resource(UserAttributesListApi, '/api/v1/user/common/<attribute_name>/<_id>',
                      '/api/v1/user/common/<attribute_name>')
+    api.add_resource(MemberUserApi, '/api/v1/member_user', '/api/v1/member_user/<account>')
     # Password
     api.add_resource(PasswordRecoverApi, '/api/v1/user/common/recover_password',
                      '/api/v1/user/enterprise/recover_password')
@@ -62,6 +63,3 @@ def initialize_routes(api):
     # Mercado Pago
     api.add_resource(OfferPackApi, '/api/v1/offer_pack')
     api.add_resource(MercadoPagoApi, '/api/v1/mercadopago/generate_payment')
-
-    # Para despues
-    api.add_resource(AllowedUserApi, '/api/v1/allowed', '/api/v1/allowed/<account>')

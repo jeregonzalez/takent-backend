@@ -157,3 +157,31 @@ def validate_user_password(func):
         return func(*args, **kwargs)
 
     return wrapper
+
+
+def validate_member_user_exists(func):
+    @wraps(func)
+    def wrapper(*args, **kwargs):
+        permission = get_jwt_identity().get('permission')
+        if permission == 'admin':
+            member_user_account = kwargs.get('account')
+        else:
+            member_user_account = get_jwt_identity().get('user_account')
+        if not member_user_account:
+            abort(400, message='Missing member user account')
+        if not user_helper.user_exists(user_account=member_user_account, user_type='enterprise'):
+            abort(400, message='User {} not exists'.format(member_user_account))
+        return func(*args, **kwargs)
+
+    return wrapper
+
+
+def validate_permission_is_admin(func):
+    @wraps(func)
+    def wrapper(*args, **kwargs):
+        permission = get_jwt_identity().get('permission')
+        if permission != 'admin':
+            abort(403, message='Unauthorized')
+        return func(*args, **kwargs)
+
+    return wrapper

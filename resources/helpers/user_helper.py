@@ -57,3 +57,11 @@ def validate_password(password=None):
 
         if not result:
             abort(400, message='Password is invalid')
+
+
+def get_member_user(user_account=None):
+    if user_account:
+        user = get_user(user_account=user_account, user_type='enterprise')
+    else:
+        user = get_user_from_jwt()
+    return user

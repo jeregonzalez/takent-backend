@@ -5,7 +5,11 @@ from resources.helpers import user_helper
 
 def enterprise_exists(user_account):
     user = user_helper.get_user(user_account=user_account, user_type='enterprise')
-    return bool(Enterprise.objects(admin_user=user.account).count())
+    if user.permission.name == 'admin':
+        enterprise = Enterprise.objects(admin_user=user.account).count()
+    else:
+        enterprise = Enterprise.objects(member_users=user.account).count()
+    return bool(enterprise)
 
 
 def get_enterprise(user_account=None):
@@ -13,5 +17,8 @@ def get_enterprise(user_account=None):
         user = user_helper.get_user(user_account=user_account, user_type='enterprise')
     else:
         user = user_helper.get_user_from_jwt()
-    enterprise = Enterprise.objects.get(admin_user=user.account)
+    if user.permission.name == 'admin':
+        enterprise = Enterprise.objects.get(admin_user=user.account)
+    else:
+        enterprise = Enterprise.objects.get(member_users=user.account)
     return enterprise
