@@ -50,7 +50,7 @@ class CommonUser(User):
 
 class EnterpriseUser(User):
     position = db.StringField()
-    permissions = db.ListField(db.ReferenceField(Permission))
+    permission = db.ReferenceField(Permission, default=lambda: Permission.objects.get(name='admin'))
 
 
 class ActivationTicket(db.Document):

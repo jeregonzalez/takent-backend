@@ -37,79 +37,209 @@
 			"protocolProfileBehavior": {}
 		},
 		{
-			"name": "Places",
+			"name": "Parametric Data",
 			"item": [
 				{
-					"name": "Countries",
-					"request": {
-						"method": "GET",
-						"header": [
-							{
-								"key": "Content-Type",
-								"value": "text/csv",
-								"type": "text",
-								"disabled": true
+					"name": "Places",
+					"item": [
+						{
+							"name": "Countries",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "text/csv",
+										"type": "text",
+										"disabled": true
+									},
+									{
+										"key": "Accept",
+										"value": "text/csv",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{host}}/countries",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"countries"
+									]
+								}
 							},
-							{
-								"key": "Accept",
-								"value": "text/csv",
-								"type": "text"
-							}
-						],
+							"response": []
+						},
+						{
+							"name": "Provinces",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{host}}/provinces",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"provinces"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Cities",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{host}}/cities/6",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"cities",
+										"6"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"protocolProfileBehavior": {},
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "Language",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "file",
+							"file": {}
+						},
 						"url": {
-							"raw": "{{host}}/countries",
+							"raw": "{{host}}/language",
 							"host": [
 								"{{host}}"
 							],
 							"path": [
-								"countries"
+								"language"
 							]
 						}
 					},
 					"response": []
 				},
 				{
-					"name": "Provinces",
+					"name": "Language level",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
 					"request": {
 						"method": "GET",
-						"header": [
-							{
-								"key": "Content-Type",
-								"value": "application/json",
-								"type": "text"
-							}
-						],
+						"header": [],
+						"body": {
+							"mode": "file",
+							"file": {}
+						},
 						"url": {
-							"raw": "{{host}}/provinces",
+							"raw": "{{host}}/language_level",
 							"host": [
 								"{{host}}"
 							],
 							"path": [
-								"provinces"
+								"language_level"
 							]
 						}
 					},
 					"response": []
 				},
 				{
-					"name": "Cities",
+					"name": "Education level",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
 					"request": {
 						"method": "GET",
-						"header": [
-							{
-								"key": "Content-Type",
-								"value": "application/json",
-								"type": "text"
-							}
-						],
+						"header": [],
+						"body": {
+							"mode": "file",
+							"file": {}
+						},
 						"url": {
-							"raw": "{{host}}/cities/6",
+							"raw": "{{host}}/education_level",
 							"host": [
 								"{{host}}"
 							],
 							"path": [
-								"cities",
-								"6"
+								"education_level"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Sector",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/sector",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"sector"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Profession",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/profession",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"profession"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Enterprise Type",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/enterprise_type",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"enterprise_type"
 							]
 						}
 					},
@@ -1487,6 +1617,141 @@
 			"protocolProfileBehavior": {}
 		},
 		{
+			"name": "Member User",
+			"item": [
+				{
+					"name": "Member User",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{user_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/member_user/asdasd@gmail.com",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"member_user",
+								"asdasd@gmail.com"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Member User",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{user_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"account\": \"asdasd@gmail.com\",\n    \"password\": \"Password123\",\n    \"name\": \"Jeremias\",\n    \"surname\": \"Gonzalez\",\n    \"birth_date\": \"28/04/1996\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/member_user",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"member_user"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Member User",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{user_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Jeremias2\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/member_user/asdasd@gmail.com",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"member_user",
+								"asdasd@gmail.com"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Member User",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{user_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/member_user/asdasd@gmail.com",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"member_user",
+								"asdasd@gmail.com"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
 			"name": "User",
 			"item": [
 				{
@@ -2320,317 +2585,6 @@
 							],
 							"path": [
 								"enterprise"
-							]
-						}
-					},
-					"response": []
-				}
-			],
-			"protocolProfileBehavior": {}
-		},
-		{
-			"name": "Language",
-			"item": [
-				{
-					"name": "Language",
-					"protocolProfileBehavior": {
-						"disableBodyPruning": true
-					},
-					"request": {
-						"method": "GET",
-						"header": [],
-						"body": {
-							"mode": "file",
-							"file": {}
-						},
-						"url": {
-							"raw": "{{host}}/language",
-							"host": [
-								"{{host}}"
-							],
-							"path": [
-								"language"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Language level",
-					"protocolProfileBehavior": {
-						"disableBodyPruning": true
-					},
-					"request": {
-						"method": "GET",
-						"header": [],
-						"body": {
-							"mode": "file",
-							"file": {}
-						},
-						"url": {
-							"raw": "{{host}}/language_level",
-							"host": [
-								"{{host}}"
-							],
-							"path": [
-								"language_level"
-							]
-						}
-					},
-					"response": []
-				}
-			],
-			"protocolProfileBehavior": {}
-		},
-		{
-			"name": "Education Level",
-			"item": [
-				{
-					"name": "Education level",
-					"protocolProfileBehavior": {
-						"disableBodyPruning": true
-					},
-					"request": {
-						"method": "GET",
-						"header": [],
-						"body": {
-							"mode": "file",
-							"file": {}
-						},
-						"url": {
-							"raw": "{{host}}/education_level",
-							"host": [
-								"{{host}}"
-							],
-							"path": [
-								"education_level"
-							]
-						}
-					},
-					"response": []
-				}
-			],
-			"event": [
-				{
-					"listen": "prerequest",
-					"script": {
-						"id": "bcdc44a0-3009-498a-9ff3-324ad5d90984",
-						"type": "text/javascript",
-						"exec": [
-							""
-						]
-					}
-				},
-				{
-					"listen": "test",
-					"script": {
-						"id": "31eeddcf-fdb1-48b3-85b8-e38fde2b810b",
-						"type": "text/javascript",
-						"exec": [
-							""
-						]
-					}
-				}
-			],
-			"protocolProfileBehavior": {}
-		},
-		{
-			"name": "Sector",
-			"item": [
-				{
-					"name": "Sector",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{host}}/sector",
-							"host": [
-								"{{host}}"
-							],
-							"path": [
-								"sector"
-							]
-						}
-					},
-					"response": []
-				}
-			],
-			"protocolProfileBehavior": {}
-		},
-		{
-			"name": "Profession",
-			"item": [
-				{
-					"name": "Profession",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{host}}/profession",
-							"host": [
-								"{{host}}"
-							],
-							"path": [
-								"profession"
-							]
-						}
-					},
-					"response": []
-				}
-			],
-			"protocolProfileBehavior": {}
-		},
-		{
-			"name": "Enterprise type",
-			"item": [
-				{
-					"name": "Enterprise Type",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{host}}/enterprise_type?",
-							"host": [
-								"{{host}}"
-							],
-							"path": [
-								"enterprise_type"
-							],
-							"query": [
-								{
-									"key": "",
-									"value": null
-								}
-							]
-						}
-					},
-					"response": []
-				}
-			],
-			"protocolProfileBehavior": {}
-		},
-		{
-			"name": "Allowed",
-			"item": [
-				{
-					"name": "Get allowed user",
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{user_token}}",
-									"type": "string"
-								}
-							]
-						},
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{host}}/allowed?account=abcde",
-							"host": [
-								"{{host}}"
-							],
-							"path": [
-								"allowed"
-							],
-							"query": [
-								{
-									"key": "account",
-									"value": "abcde"
-								}
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Post allowed user",
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{user_token}}",
-									"type": "string"
-								}
-							]
-						},
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"account\": \"hello@gmail.com\",\r\n    \"password\": \"Pass1234567\",\r\n    \"name\": \"Jeremias\",\r\n    \"surname\": \"Gonzalez\"\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{host}}/allowed",
-							"host": [
-								"{{host}}"
-							],
-							"path": [
-								"allowed"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Put allowed user",
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{user_token}}",
-									"type": "string"
-								}
-							]
-						},
-						"method": "PUT",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"name\": \"HOLAA\"\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{host}}/allowed/helo@gmail.com",
-							"host": [
-								"{{host}}"
-							],
-							"path": [
-								"allowed",
-								"helo@gmail.com"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Delete allowed user",
-					"request": {
-						"method": "DELETE",
-						"header": [],
-						"url": {
-							"raw": "{{host}}/allowed/helo@gmail.com",
-							"host": [
-								"{{host}}"
-							],
-							"path": [
-								"allowed",
-								"helo@gmail.com"
 							]
 						}
 					},

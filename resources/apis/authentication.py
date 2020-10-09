@@ -42,7 +42,9 @@ class AuthenticationApi(Resource):
             abort(401, message='Account or password invalid')
         expires = datetime.timedelta(hours=4)
         user_type = 'common' if isinstance(user, CommonUser) else 'enterprise'
-        access_token = create_access_token(identity={'user_type': user_type,
-                                                     'user_account': user.account},
+        identity = {'user_type': user_type, 'user_account': user.account}
+        if user_type == 'enterprise':
+            identity['permission'] = user.permission.name
+        access_token = create_access_token(identity=identity,
                                            expires_delta=expires)
         return {'token': access_token}, 200
