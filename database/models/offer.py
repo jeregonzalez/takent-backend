@@ -10,7 +10,7 @@ from .user import CommonUser, EnterpriseUser
 class Postulant(db.Document):
     postulation_date = db.DateTimeField(default=lambda: datetime.today())
     postulant = db.ReferenceField(CommonUser)
-    state = db.ReferenceField(StateOffer, default=lambda: StatePostulant.objects.get(name='pending'))
+    state = db.ReferenceField(StatePostulant, default=lambda: StatePostulant.objects.get(name='pending'))
 
 
 class OfferLanguage(db.EmbeddedDocument):

@@ -26,15 +26,16 @@ class PostulantApi(Resource):
     def get(self, id_offer=None, id_postulant=None):
         offer = Offer.objects.get(id=id_offer)
         postulants = offer.postulants
+        print(postulants)
         if id_postulant:
-            postulants = filter(lambda x: x.id == id_postulant, postulants)
+            postulants = list(filter(lambda x: str(x.id) == id_postulant, postulants))[0]
         return postulants
 
     def put(self, id_offer=None, id_postulant=None):
         body = request.get_json()
         try:
             if body.get('state'):
-                body['state'] = StatePostulant.objects.get(id=body['state'])
+                body['state'] = StatePostulant.objects.get(name=body['state'])
             Postulant.objects.get(id=id_postulant).update(**body)
         except (DoesNotExist, FieldDoesNotExist, ValidationError) as e:
             raise UpdateException(e)
@@ -42,9 +43,9 @@ class PostulantApi(Resource):
 
     def delete(self, id_offer=None, id_postulant=None):
         offer = Offer.objects.get(id=id_offer)
-        offer.update(pull__postulants=id_postulant)
-        offer.save()
-        Postulant.objects.get(id=id_postulant).delete()
+        postulant = Postulant.objects.get(id=id_postulant)
+        offer.update(pull__postulants=postulant)
+        postulant.delete()
         return Message.deleted()
 
 
@@ -59,12 +60,10 @@ class PostulateApi(Resource):
         postulant_info = {
             'postulant': user_helper.get_user_from_jwt()
         }
-        print(postulant_info)
         try:
             postulant = Postulant(**postulant_info)
             postulant.save()
             offer.update(push__postulants=postulant)
-            offer.save()
         except (FieldDoesNotExist, ValidationError) as e:
             raise SaveException(e)
         return Message.created()
