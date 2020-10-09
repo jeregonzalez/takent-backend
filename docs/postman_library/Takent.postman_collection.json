@@ -876,13 +876,13 @@
 								"method": "POST",
 								"header": [],
 								"url": {
-									"raw": "{{host}}/postulate/5f7e508d028a06b96366bdc9",
+									"raw": "{{host}}/postulate/5f7f90d0cca79db2ec99d40a",
 									"host": [
 										"{{host}}"
 									],
 									"path": [
 										"postulate",
-										"5f7e508d028a06b96366bdc9"
+										"5f7f90d0cca79db2ec99d40a"
 									]
 								}
 							},
@@ -1710,13 +1710,13 @@
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": "{{host}}/offer/5f7bb4b47b064261bc3ac606/postulant",
+									"raw": "{{host}}/offer/5f7f90cdcca79db2ec99d409/postulant",
 									"host": [
 										"{{host}}"
 									],
 									"path": [
 										"offer",
-										"5f7bb4b47b064261bc3ac606",
+										"5f7f90cdcca79db2ec99d409",
 										"postulant"
 									]
 								}
@@ -1739,15 +1739,15 @@
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": "{{host}}/offer/5f7bb4b47b064261bc3ac606/postulant/5f7bb4b47b064261bc3ac606",
+									"raw": "{{host}}/offer/5f7f90cdcca79db2ec99d409/postulant/5f7f925ed7f42e0bd6d8e159",
 									"host": [
 										"{{host}}"
 									],
 									"path": [
 										"offer",
-										"5f7bb4b47b064261bc3ac606",
+										"5f7f90cdcca79db2ec99d409",
 										"postulant",
-										"5f7bb4b47b064261bc3ac606"
+										"5f7f925ed7f42e0bd6d8e159"
 									]
 								}
 							},
@@ -1768,16 +1768,25 @@
 								},
 								"method": "PUT",
 								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"state\": \"contacted\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
 								"url": {
-									"raw": "{{host}}/offer/5f7bb4b47b064261bc3ac606/postulant/5f7bb4b47b064261bc3ac606",
+									"raw": "{{host}}/offer/5f7f90d0cca79db2ec99d40a/postulant/5f7f925ed7f42e0bd6d8e159",
 									"host": [
 										"{{host}}"
 									],
 									"path": [
 										"offer",
-										"5f7bb4b47b064261bc3ac606",
+										"5f7f90d0cca79db2ec99d40a",
 										"postulant",
-										"5f7bb4b47b064261bc3ac606"
+										"5f7f925ed7f42e0bd6d8e159"
 									]
 								}
 							},
@@ -1799,15 +1808,15 @@
 								"method": "DELETE",
 								"header": [],
 								"url": {
-									"raw": "{{host}}/offer/5f7bb4b47b064261bc3ac606/postulant/5f7bb4b47b064261bc3ac606",
+									"raw": "{{host}}/offer/5f7faa6c7037d507df64ef1e/postulant/5f7faa837037d507df64ef27",
 									"host": [
 										"{{host}}"
 									],
 									"path": [
 										"offer",
-										"5f7bb4b47b064261bc3ac606",
+										"5f7faa6c7037d507df64ef1e",
 										"postulant",
-										"5f7bb4b47b064261bc3ac606"
+										"5f7faa837037d507df64ef27"
 									]
 								}
 							},
@@ -1833,13 +1842,13 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{host}}/offer/5f7e508d028a06b96366bdc9",
+							"raw": "{{host}}/offer/5f7f90cdcca79db2ec99d409",
 							"host": [
 								"{{host}}"
 							],
 							"path": [
 								"offer",
-								"5f7e508d028a06b96366bdc9"
+								"5f7f90cdcca79db2ec99d409"
 							]
 						}
 					},
