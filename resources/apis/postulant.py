@@ -1,10 +1,13 @@
+from threading import Thread
+
 from flask import request
-from flask_restful import Resource
+from flask_restful import Resource, abort
 from mongoengine import FieldDoesNotExist, ValidationError, DoesNotExist
 
 from database.models.offer import Offer, Postulant
 from database.models.parametric_docs import StatePostulant
-from resources.helpers import user_helper
+from resources.helpers import user_helper, enterprise_helper
+from resources.helpers.email_helper.email_helper import EmailContact
 from resources.utils.decorators import validate_headers, authentication_required, validate_user_exists, \
     validate_offer_exists, validate_user_is_enterprise, validate_user_is_common, validate_postulant_exists
 from resources.utils.exceptions import SaveException, \
@@ -26,7 +29,6 @@ class PostulantApi(Resource):
     def get(self, id_offer=None, id_postulant=None):
         offer = Offer.objects.get(id=id_offer)
         postulants = offer.postulants
-        print(postulants)
         if id_postulant:
             postulants = list(filter(lambda x: str(x.id) == id_postulant, postulants))[0]
         return postulants
@@ -66,4 +68,25 @@ class PostulateApi(Resource):
             offer.update(push__postulants=postulant)
         except (FieldDoesNotExist, ValidationError) as e:
             raise SaveException(e)
+        return Message.created()
+
+
+class ContactPostulantApi(Resource):
+    method_decorators = {
+        'post': [validate_postulant_exists, validate_offer_exists, validate_user_is_enterprise, validate_user_exists,
+                 authentication_required, validate_headers]
+    }
+
+    def post(self, id_offer=None, id_postulant=None):
+        comment = request.get_json().get('comment')
+        postulant = Postulant.objects.get(id=id_postulant)
+        if postulant.state.name != 'pending':
+            abort(400, message='Postulant {} is not in pending state'.format(id_postulant))
+        postulant.update(state=StatePostulant.objects.get(name='contacted'))
+        enterprise = enterprise_helper.get_enterprise()
+        Thread(target=lambda: EmailContact(destination_email=postulant.postulant.id,
+                                           enterprise_name=enterprise.fantasy_name,
+                                           user_name=postulant.postulant.name,
+                                           email_contact=enterprise.contact_email,
+                                           comment=comment).send_email()).start()
         return Message.created()

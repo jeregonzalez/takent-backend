@@ -30,7 +30,7 @@ IMAGES = {
     'email_delete_admin': {
         'button_be_admin': 'button_be_admin.jpeg'
     },
-    'email_take': {
+    'email_contact': {
         'button_take': 'button_contact.jpeg'
     }
 }
@@ -39,21 +39,21 @@ EMAILS_MAP = {
     'email_activation': 'email_activation.html',
     'email_change_password': 'email_change_password.html',
     'email_delete_admin': 'email_delete_admin.html',
-    'email_take': 'email_take.html'
+    'email_contact': 'email_contact.html'
 }
 
 SUBJECTS = {
     'email_activation': 'Activación de cuenta - Takent',
     'email_change_password': 'Cambio de clave de acceso - Takent',
     'email_delete_admin': 'Asignación de nuevo admin - Takent',
-    'email_take': 'Hola {}, la empresa {} quiere contactarse con vos'
+    'email_contact': 'Hola {}, la empresa {} quiere contactarse con vos'
 }
 
 
 class Email(ABC):
     email_type = None
 
-    def __init__(self, destination_email, enterprise_name=None, user_name=None, commentary=None):
+    def __init__(self, destination_email):
         """
         Inicializador del email
         :param destination_email: dirección de destinatario de email
@@ -62,9 +62,6 @@ class Email(ABC):
         self.smtp = smtplib.SMTP(host=SMTP_HOST, port=SMTP_PORT)
         self.root_message = MIMEMultipart('related')
         self.alternative_message = MIMEMultipart('alternative')
-        self.enterprise_name = enterprise_name
-        self.user_name = user_name
-        self.commentary = commentary
 
     def _init_email(self):
         """
@@ -154,14 +151,20 @@ class EmailChangePassword(Email):
 
 class EmailAdmin(Email):
     def __init__(self, destination_email, enterprise_name, user_name):
-        super().__init__(destination_email, enterprise_name, user_name)
+        super().__init__(destination_email)
         self.email_type = 'email_delete_admin'
+        self.enterprise_name = enterprise_name
+        self.user_name = user_name
 
 
-class EmailTake(Email):
-    def __init__(self, destination_email, enterprise_name=None, user_name=None, commentary=None):
-        super().__init__(destination_email, enterprise_name, user_name, commentary)
-        self.email_type = 'email_take'
+class EmailContact(Email):
+    def __init__(self, destination_email, enterprise_name, user_name, email_contact, comment=None):
+        super().__init__(destination_email)
+        self.email_type = 'email_contact'
+        self.enterprise_name = enterprise_name
+        self.user_name = user_name
+        self.comment = comment
+        self.email_contact = email_contact
 
     def _init_email(self):
         self.root_message['Subject'] = SUBJECTS.get(self.email_type).format(self.user_name, self.enterprise_name)
@@ -174,11 +177,8 @@ class EmailTake(Email):
         current_dir = os.path.dirname(os.path.realpath(__file__))
         with open('{}/html/{}'.format(current_dir, EMAILS_MAP.get(self.email_type))) as html_file:
             body_message = html_file.read()
-
-        if not self.commentary:
-            self.commentary = ""
-        body_message = body_message.replace('$(commentary)', self.commentary)
+        body_message = body_message.replace('$(comment)', self.comment if self.comment else "")
         body_message = body_message.replace('$(user_name)', self.user_name)
         body_message = body_message.replace('$(enterprise)', self.enterprise_name)
-
+        body_message = body_message.replace('$(email_contact)', self.email_contact)
         self.alternative_message.attach(MIMEText(body_message, 'html'))
