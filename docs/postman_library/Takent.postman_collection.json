@@ -2175,7 +2175,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{host}}/offer?title=o",
+							"raw": "{{host}}/offer?sort=random",
 							"host": [
 								"{{host}}"
 							],
@@ -2184,13 +2184,84 @@
 							],
 							"query": [
 								{
-									"key": "title",
-									"value": "o"
+									"key": "strict",
+									"value": "true",
+									"description": "true o false (filtrado estricto)",
+									"disabled": true
 								},
 								{
-									"key": "job_type",
-									"value": "Jornada completa",
+									"key": "id",
+									"value": "5f8138a6e78e29fc12af86c4",
 									"disabled": true
+								},
+								{
+									"key": "title",
+									"value": "ejemplo",
+									"disabled": true
+								},
+								{
+									"key": "position",
+									"value": "Desa",
+									"disabled": true
+								},
+								{
+									"key": "description",
+									"value": "alguna",
+									"disabled": true
+								},
+								{
+									"key": "publication_date",
+									"value": "28/04/1996,05/01/2021",
+									"disabled": true
+								},
+								{
+									"key": "sector",
+									"value": "asd",
+									"disabled": true
+								},
+								{
+									"key": "experience",
+									"value": "ejemplo",
+									"disabled": true
+								},
+								{
+									"key": "contract_type",
+									"value": "ejemplo",
+									"disabled": true
+								},
+								{
+									"key": "language.language",
+									"value": "ESPAÑOL",
+									"disabled": true
+								},
+								{
+									"key": "language.certificate",
+									"value": "true",
+									"disabled": true
+								},
+								{
+									"key": "address.province",
+									"value": "La Rioja",
+									"disabled": true
+								},
+								{
+									"key": "address.city",
+									"value": "AMINGA",
+									"disabled": true
+								},
+								{
+									"key": "state",
+									"value": "active",
+									"disabled": true
+								},
+								{
+									"key": "enterprise",
+									"value": "5f8137d8e78e29fc12af86b8",
+									"disabled": true
+								},
+								{
+									"key": "sort",
+									"value": "random"
 								}
 							]
 						}
