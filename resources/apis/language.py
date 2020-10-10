@@ -5,10 +5,7 @@ from database.models.parametric_docs import Language, LanguageLevel
 
 class LanguageApi(Resource):
     def get(self):
-        languages = []
-        for language in Language.objects:
-            languages.append(language)
-        return languages
+        return Language.objects.order_by('+name')
 
 
 class LanguageLevelApi(Resource):

@@ -27,7 +27,12 @@ class OfferApi(Resource):
             ok, bad_keys = offer_helper.validate_filter_keys(keys=list(request.args.keys()))
             if not ok:
                 raise GetException('{} are not valid keys'.format(bad_keys))
-            offers = offer_helper.filter_offers(filters=list(request.args.items()))
+            user_info = user_helper.get_user_from_jwt(keys=['user_account', 'user_type'])
+            filters = list(request.args.items())
+            if user_info['user_type'] == 'enterprise':
+                filters.append(
+                    ('enterprise', str(enterprise_helper.get_enterprise(user_account=user_info['user_account']).id)))
+            offers = offer_helper.filter_offers(filters=filters)
         return offers
 
     def post(self):
@@ -66,8 +71,10 @@ class OfferImagesApi(Resource):
     }
 
     def get(self, id_offer):
+        quantity = request.args.get('quantity')
         offer = Offer.objects.get(id=id_offer)
-        return [image.base64 for image in offer.images if image.base64]
+        images = [image.base64 for image in offer.images if image.base64]
+        return images[:int(quantity)] if quantity else images
 
     def post(self, id_offer):
         images = request.get_json().get('images')

@@ -2,7 +2,7 @@ import random
 
 from dateutil import parser
 from mongoengine import ReferenceField, EmbeddedDocumentListField, StringField, DateTimeField, ObjectIdField, \
-    EmbeddedDocumentField, ListField, InvalidQueryError, LookUpError
+    EmbeddedDocumentField, ListField, InvalidQueryError, LookUpError, Q
 
 from database.models.common import City
 from database.models.offer import Offer
@@ -39,6 +39,7 @@ def filter_offers(filters):
     """
     mongo_query_params = []
     strict = any(key == 'strict' and value.lower() == 'true' for key, value in filters)
+    args = []
     for key, value in filters:
         field_type = get_field_type(key)
         query_param = []
@@ -54,8 +55,11 @@ def filter_offers(filters):
         elif type(field_type) == EmbeddedDocumentListField:
             query_param.append(('{}__{}__in'.format(key, 'name'), values))
         elif type(field_type) == StringField:
-            operator = 'iexact' if strict else 'icontains'
-            query_param.append(('{}__{}'.format(key, operator), value))
+            if len(values) == 1:
+                operator = 'iexact' if strict else 'icontains'
+            else:
+                operator = 'in'
+            query_param.append(('{}__{}'.format(key, operator), values if len(values) > 1 else value))
         elif type(field_type) == DateTimeField:
             try:
                 start_date = parser.parse(values[0])
@@ -85,6 +89,7 @@ def filter_offers(filters):
             query_param.append(('address__city__in', city_codes))
         mongo_query_params.extend(query_param)
     mongo_query_params = dict(mongo_query_params)
+    print(mongo_query_params)
     sort = [filter_sort for filter_sort in filters if filter_sort[0] == 'sort']
     if sort:
         sort = sort[0][1]
