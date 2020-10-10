@@ -8,7 +8,7 @@ from database.models.parametric_docs import StateOffer
 from resources.helpers import user_helper, offer_helper, enterprise_helper
 from resources.utils.decorators import authentication_required, validate_user_exists, validate_headers, \
     validate_offer_exists
-from resources.utils.exceptions import SaveException, UpdateException
+from resources.utils.exceptions import SaveException, UpdateException, GetException
 from resources.utils.messages import Message
 
 
@@ -24,13 +24,10 @@ class OfferApi(Resource):
         if id_offer:
             offers = Offer.objects.get(id=id_offer)
         else:
-            if any(key not in offer_helper.get_fields() for key, value in request.args.items()):
-                abort(400, message='Any attribute in the filter is invalid')
-            filters = list(request.args.items())
-            user_info = user_helper.get_user_from_jwt(keys=['user_account', 'user_type'])
-            if user_info['user_type'] == 'enterprise':
-                filters.append(('enterprise', str(enterprise_helper.get_enterprise(user_account=user_info['user_account']).id)))
-            offers = offer_helper.filter_offers(filters)
+            ok, bad_keys = offer_helper.validate_filter_keys(keys=list(request.args.keys()))
+            if not ok:
+                raise GetException('{} are not valid keys'.format(bad_keys))
+            offers = offer_helper.filter_offers(filters=list(request.args.items()))
         return offers
 
     def post(self):
