@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "88672502-da3e-4dc8-af79-951d9c1e4bfe",
+		"_postman_id": "eb2bd5f9-3871-4b60-84da-bc986a33e366",
 		"name": "Takent",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -257,7 +257,7 @@
 						{
 							"listen": "test",
 							"script": {
-								"id": "a16debe5-cb9b-4b69-a087-ca1cbade373a",
+								"id": "7bad97d0-7229-4734-b84a-ff2445d2d4a6",
 								"exec": [
 									"pm.environment.set(\"user_token\", pm.response.json().token);"
 								],
@@ -2082,6 +2082,46 @@
 										"5f7faa6c7037d507df64ef1e",
 										"postulant",
 										"5f7faa837037d507df64ef27"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Contact postulant",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{user_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"comment\": \"Pinchi tragasable\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{host}}/offer/5f81059da53829401c32ffce/postulant/5f8105bba53829401c32ffd7/contact",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"offer",
+										"5f81059da53829401c32ffce",
+										"postulant",
+										"5f8105bba53829401c32ffd7",
+										"contact"
 									]
 								}
 							},
