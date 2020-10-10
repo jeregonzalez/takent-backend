@@ -1872,14 +1872,21 @@
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": "{{host}}/offer/5f7cd0f1c7e8097f9bed1a4c/images",
+									"raw": "{{host}}/offer/5f8138a6e78e29fc12af86c4/images",
 									"host": [
 										"{{host}}"
 									],
 									"path": [
 										"offer",
-										"5f7cd0f1c7e8097f9bed1a4c",
+										"5f8138a6e78e29fc12af86c4",
 										"images"
+									],
+									"query": [
+										{
+											"key": "quantity",
+											"value": "0",
+											"disabled": true
+										}
 									]
 								}
 							},
