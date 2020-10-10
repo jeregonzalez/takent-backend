@@ -5,4 +5,4 @@ from database.models.parametric_docs import Sector
 
 class SectorApi(Resource):
     def get(self):
-        return [sector for sector in Sector.objects()]
+        return Sector.objects.order_by('+name')

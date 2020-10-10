@@ -196,6 +196,12 @@ class UserAttributesListApi(Resource):
                 attribute_list = attribute_list.get(id=_id)
             except DoesNotExist:
                 attribute_list = []
+
+        def sort_func(e):
+            return e.start_date
+
+        if attribute_name in ['experience', 'education']:
+            attribute_list.sort(key=sort_func, reverse=True)
         return attribute_list
 
     def post(self, attribute_name, _id=None):
