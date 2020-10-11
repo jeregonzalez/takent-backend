@@ -35,17 +35,15 @@ class UserAndEnterpriseApi(Resource):
             raise SaveException(e)
 
         enterprise['admin_user'] = new_user
+        if enterprise.get('profile_photo'):
+            new_image = Image(base64=enterprise['profile_photo']).save()
+            enterprise['profile_photo'] = new_image
         try:
             new_enterprise = Enterprise(**enterprise)
             new_enterprise.validate()
         except (FieldDoesNotExist, ValidationError) as e:
             raise SaveException(e)
 
-        if enterprise.get('profile_photo'):
-            new_image = Image(base64=enterprise['profile_photo']).save()
-            enterprise.update(profile_photo=new_image)
-        else:
-            enterprise.update(profile_photo=None)
         new_user.save()
         new_enterprise.save()
         activation_ticket = ActivationTicket(account=new_user.account, user_type='enterprise').save()
