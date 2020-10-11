@@ -4,6 +4,7 @@ from flask import request
 from flask_restful import Resource, abort
 from mongoengine import FieldDoesNotExist, ValidationError
 
+from database.models.common import Image
 from database.models.enterprise import Enterprise
 from database.models.user import EnterpriseUser, ActivationTicket
 from resources.helpers import auth_helper
@@ -40,6 +41,11 @@ class UserAndEnterpriseApi(Resource):
         except (FieldDoesNotExist, ValidationError) as e:
             raise SaveException(e)
 
+        if enterprise.get('profile_photo'):
+            new_image = Image(base64=enterprise['profile_photo']).save()
+            enterprise.update(profile_photo=new_image)
+        else:
+            enterprise.update(profile_photo=None)
         new_user.save()
         new_enterprise.save()
         activation_ticket = ActivationTicket(account=new_user.account, user_type='enterprise').save()
