@@ -39,10 +39,20 @@ class OfferApi(Resource):
         body = request.get_json()
         body['publication_user'] = user_helper.get_user_from_jwt()
         body['enterprise'] = enterprise_helper.get_enterprise()
+        images = body.get('images')
+        if images:
+            del body['images']
         try:
-            Offer(**body).save()
+            new_offer = Offer(**body).save()
         except (FieldDoesNotExist, ValidationError) as e:
             raise SaveException(e)
+        images_obj = []
+        if images:
+            for image in images:
+                new_image = Image(base64=image).save()
+                images_obj.append(new_image)
+            if images_obj:
+                new_offer.update(images=images_obj)
         return Message.created()
 
     def put(self, id_offer=None):
