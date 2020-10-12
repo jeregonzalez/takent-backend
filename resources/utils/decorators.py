@@ -6,7 +6,8 @@ from flask_restful import abort
 from jwt import ExpiredSignatureError
 
 from resources.consts.consts import RequestHeaderKey, RequestHeaderValue, JwtKey
-from resources.helpers import user_helper, enterprise_helper, offer_helper, postulant_helper
+from resources.helpers import user_helper, enterprise_helper, offer_helper, postulant_helper, service_helper, \
+    service_request_helper
 from resources.helpers.user_helper import validate_password
 from resources.utils import exceptions
 from resources.utils.messages import Message
@@ -184,4 +185,23 @@ def validate_permission_is_admin(func):
             abort(403, message='Unauthorized')
         return func(*args, **kwargs)
 
+    return wrapper
+
+
+def validate_service_exists(func):
+    @wraps(func)
+    def wrapper(*args, **kwargs):
+        if kwargs.get('service_id') and not service_helper.service_exists(_id=kwargs.get('service_id')):
+            return Message.bad_request(message='Service {} not exists'.format(kwargs.get('service_id')))
+        return func(*args, **kwargs)
+
+    return wrapper
+
+
+def validate_service_request_exists(func):
+    @wraps(func)
+    def wrapper(*args, **kwargs):
+        if kwargs.get('service_request_id') and not service_request_helper.service_request_exists(_id=kwargs.get('service_request_id')):
+            return Message.bad_request(message='Service request {} not exists'.format(kwargs.get('service_request_id')))
+        return func(*args, **kwargs)
     return wrapper
