@@ -195,3 +195,12 @@ def validate_service_exists(func):
         return func(*args, **kwargs)
 
     return wrapper
+
+
+def validate_service_request_exists(func):
+    @wraps(func)
+    def wrapper(*args, **kwargs):
+        if kwargs.get('id_postulant') and not postulant_helper.postulant_exists(_id=kwargs.get('id_postulant')):
+            return Message.bad_request(message='Postulant {} not exists'.format(kwargs.get('id_postulant')))
+        return func(*args, **kwargs)
+    return wrapper

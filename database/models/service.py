@@ -2,7 +2,7 @@ from datetime import datetime
 
 from database.db import db
 from database.models.common import Image, Address
-from database.models.parametric_docs import StateService
+from database.models.parametric_docs import StateService, StateServiceRequest
 from database.models.user import CommonUser
 
 
@@ -10,6 +10,7 @@ class ServiceRequest(db.Document):
     request_date = db.DateTimeField(default=lambda: datetime.today())
     score = db.IntField()
     user = db.ReferenceField(CommonUser)
+    state = db.ReferenceField(StateServiceRequest, default=lambda: StateServiceRequest.objects.get(name='pending'))
 
 
 class Service(db.Document):

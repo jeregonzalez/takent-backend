@@ -1,0 +1,67 @@
+from flask import request
+from flask_restful import Resource
+from mongoengine import DoesNotExist, FieldDoesNotExist, ValidationError
+
+from database.models.parametric_docs import StateServiceRequest
+from database.models.service import Service, ServiceRequest
+from resources.helpers import user_helper
+from resources.utils.decorators import validate_headers, authentication_required, validate_user_exists, \
+    validate_user_is_common, validate_service_exists, validate_service_request_exists
+from resources.utils.exceptions import UpdateException, SaveException
+from resources.utils.messages import Message
+
+
+class ServiceRequestApi(Resource):
+    method_decorators = {
+        'get': [validate_service_request_exists, validate_service_exists, validate_user_is_common, validate_user_exists,
+                authentication_required, validate_headers],
+        'post': [validate_user_exists, validate_user_is_common, authentication_required, validate_headers],
+        'put': [validate_service_request_exists, validate_service_exists, validate_user_is_common, validate_user_exists,
+                authentication_required, validate_headers],
+        'delete': [validate_service_request_exists, validate_service_exists, validate_user_is_common,
+                   validate_user_exists, authentication_required, validate_headers]
+    }
+
+    def get(self, service_id=None, service_request_id=None):
+        service = Service.objects.get(id=service_id)
+        service_requests = service.service_requests
+        if service_request_id:
+            service_requests = list(filter(lambda x: str(x.id) == service_request_id, service_requests))[0]
+        return service_requests
+
+    def put(self, service_id=None, service_request_id=None):
+        body = request.get_json()
+        try:
+            if body.get('state'):
+                body['state'] = StateServiceRequest.objects.get(name=body['state'])
+            ServiceRequest.objects.get(id=service_request_id).update(**body)
+        except (DoesNotExist, FieldDoesNotExist, ValidationError) as e:
+            raise UpdateException(e)
+        return Message.updated()
+
+    def delete(self, service_id=None, service_request_id=None):
+        service = Service.objects.get(id=service_id)
+        service_request = ServiceRequest.objects.get(id=service_request_id)
+        service.update(pull__service_requests=service_request)
+        service_request.delete()
+        return Message.deleted()
+
+
+class NewServiceRequestApi(Resource):
+    method_decorators = {
+        'post': [validate_service_exists, validate_user_is_common, validate_user_exists, authentication_required,
+                 validate_headers]
+    }
+
+    def post(self, service_id=None):
+        service = Service.objects.get(id=service_id)
+        user_info = {
+            'user': user_helper.get_user_from_jwt()
+        }
+        try:
+            service_request = ServiceRequest(**user_info)
+            service_request.save()
+            service.update(push__service_requests=service_request)
+        except (FieldDoesNotExist, ValidationError) as e:
+            raise SaveException(e)
+        return Message.created()
