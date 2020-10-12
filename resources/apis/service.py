@@ -1,7 +1,8 @@
 from flask import request
-from flask_restful import Resource
+from flask_restful import Resource, abort
 from mongoengine import FieldDoesNotExist, ValidationError, DoesNotExist, InvalidQueryError
 
+from database.models.common import Image
 from database.models.parametric_docs import StateService
 from database.models.service import Service
 from resources.helpers import service_helper, user_helper
@@ -54,4 +55,42 @@ class ServiceApi(Resource):
 
     def delete(self, service_id=None):
         Service.objects.get(id=service_id).delete()
+        return Message.deleted()
+
+
+class ServiceImagesApi(Resource):
+    method_decorators = {
+        'get': [validate_service_exists, validate_user_exists, authentication_required, validate_headers],
+        'post': [validate_service_exists, validate_user_exists, authentication_required, validate_headers],
+        'delete': [validate_service_exists, validate_user_exists, authentication_required, validate_headers]
+    }
+
+    def get(self, id_offer):
+        quantity = request.args.get('quantity')
+        offer = Service.objects.get(id=id_offer)
+        images = [image.base64 for image in offer.images if image.base64]
+        return images[:int(quantity)] if quantity else images
+
+    def post(self, id_offer):
+        images = request.get_json().get('images')
+        if not images:
+            abort(400, message='No images sent')
+        service = Service.objects.get(id=id_offer)
+        if service.images:
+            for image in service.images:
+                image.delete()
+        images_obj = []
+        for image in images:
+            new_image = Image(base64=image).save()
+            images_obj.append(new_image)
+        service.update(images=images_obj)
+        return Message.created()
+
+    def delete(self, id_offer):
+        service = Service.objects.get(id=id_offer)
+        if service.images:
+            for image in service.images:
+                service.images.remove(image)
+                image.delete()
+            service.save()
         return Message.deleted()

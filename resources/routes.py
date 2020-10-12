@@ -10,7 +10,7 @@ from resources.apis.place import CountriesApi, ProvincesApi, CitiesApi
 from resources.apis.postulant import PostulantApi, PostulateApi, ContactPostulantApi
 from resources.apis.sector import SectorApi
 from resources.apis.profession import ProfessionApi
-from resources.apis.service import ServiceApi
+from resources.apis.service import ServiceApi, ServiceImagesApi
 from resources.apis.user import ImageApi, CurriculumApi, UserApi, PasswordRecoverApi, ChangePasswordApi, \
     UserExistsValidationApi, ActivateAccountApi, UserAttributesListApi
 from resources.apis.offer import OfferApi, OfferImagesApi
@@ -68,3 +68,4 @@ def initialize_routes(api):
     api.add_resource(MercadoPagoApi, '/api/v1/mercadopago/generate_payment')
     # Services
     api.add_resource(ServiceApi, '/api/v1/service/<service_id>', '/api/v1/service')
+    api.add_resource(ServiceImagesApi, '/api/v1/service/<service_id>/images')
