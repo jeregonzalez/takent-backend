@@ -6,7 +6,7 @@ from mongoengine import FieldDoesNotExist, ValidationError, DoesNotExist
 
 from database.models.common import Image
 from database.models.common_user import UserCurriculumVitae
-from database.models.user import ActivationTicket
+from database.models.user import ActivationTicket, CommonUser
 from resources.helpers import password_helper, user_helper, auth_helper
 from resources.helpers.email_helper.email_helper import EmailActivation, \
     EmailChangePassword
@@ -14,7 +14,7 @@ from resources.utils.decorators import validate_headers, authentication_required
     validate_user_is_common, \
     validate_user_exists, validate_user_not_exists, validate_user_password
 from resources.utils.exceptions import MissingRequiredFieldsException, \
-    SchemaValidationErrorException, SaveException, UpdateException
+    SchemaValidationErrorException, SaveException, UpdateException, GetException
 from resources.utils.messages import Message
 
 
@@ -89,16 +89,25 @@ class ImageApi(Resource):
 
 class CurriculumApi(Resource):
     method_decorators = {
-        'get': [validate_user_is_common, validate_user_exists, authentication_required, validate_headers],
+        'get': [validate_user_exists, authentication_required, validate_headers],
         'post': [validate_user_is_common, validate_user_exists, authentication_required, validate_headers],
         'delete': [validate_user_is_common, validate_user_exists, authentication_required, validate_headers]
     }
 
     def get(self):
-        user = user_helper.get_user_from_jwt()
+        user_id = request.args.get('user_id')
+        if user_id:
+            try:
+                user = CommonUser.objects.get(account=user_id)
+            except DoesNotExist as e:
+                raise GetException(e)
+        elif user_helper.get_user_from_jwt(keys='user_type') == 'enterprise':
+            abort(400, message='Missing user id')
+        else:
+            user = user_helper.get_user_from_jwt()
         return user.curriculum if user.curriculum else {}
 
-    def post(self):
+    def post(self, user_id=None):
         body = request.get_json()
         user = user_helper.get_user_from_jwt()
         try:
@@ -109,7 +118,7 @@ class CurriculumApi(Resource):
         user.update(curriculum=new_curriculum)
         return Message.created()
 
-    def delete(self):
+    def delete(self, user_id=None):
         user = user_helper.get_user_from_jwt()
         if user.curriculum:
             user.curriculum.delete()
