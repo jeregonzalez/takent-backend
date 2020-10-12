@@ -46,7 +46,7 @@ class ServiceApi(Resource):
             try:
                 body['state'] = StateService.objects.get(name=body['state'])
             except DoesNotExist as e:
-                return UpdateException(e)
+                raise UpdateException(e)
         try:
             Service.objects.get(id=service_id).update(**body)
         except (InvalidQueryError, ValidationError) as e:
@@ -65,17 +65,17 @@ class ServiceImagesApi(Resource):
         'delete': [validate_service_exists, validate_user_exists, authentication_required, validate_headers]
     }
 
-    def get(self, id_offer):
+    def get(self, service_id):
         quantity = request.args.get('quantity')
-        offer = Service.objects.get(id=id_offer)
+        offer = Service.objects.get(id=service_id)
         images = [image.base64 for image in offer.images if image.base64]
         return images[:int(quantity)] if quantity else images
 
-    def post(self, id_offer):
+    def post(self, service_id):
         images = request.get_json().get('images')
         if not images:
             abort(400, message='No images sent')
-        service = Service.objects.get(id=id_offer)
+        service = Service.objects.get(id=service_id)
         if service.images:
             for image in service.images:
                 image.delete()
@@ -86,8 +86,8 @@ class ServiceImagesApi(Resource):
         service.update(images=images_obj)
         return Message.created()
 
-    def delete(self, id_offer):
-        service = Service.objects.get(id=id_offer)
+    def delete(self, service_id):
+        service = Service.objects.get(id=service_id)
         if service.images:
             for image in service.images:
                 service.images.remove(image)

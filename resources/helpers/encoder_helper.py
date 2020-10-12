@@ -9,6 +9,7 @@ from mongoengine.queryset.base import BaseQuerySet
 
 from database.models.enterprise import Enterprise
 from database.models.offer import Offer, Postulant
+from database.models.service import Service, ServiceRequest
 from database.models.user import User, CommonUser
 
 
@@ -28,10 +29,14 @@ class Encoder:
             self._strategy = EncodeStrategyUser(obj)
         elif issubclass(obj.__class__, Offer):
             self._strategy = EncodeStrategyOffer(obj)
+        elif issubclass(obj.__class__, Service):
+            self._strategy = EncodeStrategyService(obj)
         elif issubclass(obj.__class__, Enterprise):
             self._strategy = EncodeStrategyEnterprise(obj)
         elif issubclass(obj.__class__, Postulant):
             self._strategy = EncodeStrategyPostulant(obj)
+        elif issubclass(obj.__class__, ServiceRequest):
+            self._strategy = EncodeStrategyServiceRequest(obj)
         elif issubclass(obj.__class__, BaseQuerySet):
             self._strategy = EncodeStrategyBaseQuerySet(obj)
         elif issubclass(obj.__class__, Document) or issubclass(obj.__class__, EmbeddedDocument):
@@ -118,4 +123,24 @@ class EncodeStrategyPostulant(EncodeStrategy):
             response['postulant'] = self.obj.postulant.to_mongo()
             if self.obj.postulant.address:
                 response['postulant']['address'] = self.obj.postulant.address.format_response()
+        return response
+
+
+class EncodeStrategyService(EncodeStrategy):
+
+    def encode(self):
+        response = self.obj.to_mongo()
+        if self.obj.address:
+            response['address'] = self.obj.address.format_response()
+        return response
+
+
+class EncodeStrategyServiceRequest(EncodeStrategy):
+
+    def encode(self):
+        response = self.obj.to_mongo()
+        if self.obj.user:
+            response['user'] = self.obj.user.to_mongo()
+            if self.obj.user.address:
+                response['user']['address'] = self.obj.user.address.format_response()
         return response

@@ -29,7 +29,7 @@ class SaveException(HTTPException):
 class UpdateException(HTTPException):
     def __init__(self, info):
         self.code = 400
-        self.data = message(400, MSG_SAVE_ERROR.format(info))
+        self.data = message(400, MSG_UPDATE_ERROR.format(info))
         super().__init__()
 
 
