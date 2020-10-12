@@ -2,11 +2,11 @@ import random
 
 from dateutil import parser
 from mongoengine import ReferenceField, EmbeddedDocumentListField, StringField, DateTimeField, ObjectIdField, \
-    EmbeddedDocumentField, ListField, InvalidQueryError, LookUpError, Q
+    ListField, InvalidQueryError, LookUpError
 
 from database.models.common import City
 from database.models.offer import Offer
-from database.models.place import Province, Country
+from database.models.place import Country
 from resources.utils.exceptions import GetException
 
 FILTER_OPTIONS = ['strict', 'sort']
@@ -39,7 +39,6 @@ def filter_offers(filters):
     """
     mongo_query_params = []
     strict = any(key == 'strict' and value.lower() == 'true' for key, value in filters)
-    args = []
     for key, value in filters:
         field_type = get_field_type(key)
         query_param = []
@@ -89,7 +88,6 @@ def filter_offers(filters):
             query_param.append(('address__city__in', city_codes))
         mongo_query_params.extend(query_param)
     mongo_query_params = dict(mongo_query_params)
-    print(mongo_query_params)
     sort = [filter_sort for filter_sort in filters if filter_sort[0] == 'sort']
     if sort:
         sort = sort[0][1]

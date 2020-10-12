@@ -26,6 +26,14 @@ class StatePostulant(db.Document):
     name = db.StringField(primary_key=True)
 
 
+class StateService(db.Document):
+    name = db.StringField(primary_key=True)
+
+
+class StateServiceRequest(db.Document):
+    name = db.StringField(primary_key=True)
+
+
 class ContractType(db.Document):
     name = db.StringField(primary_key=True)
 

@@ -1,0 +1,11 @@
+[
+  {
+    "name": "pending"
+  },
+  {
+    "name": "in_course"
+  },
+  {
+    "name": "completed"
+  }
+]
