@@ -79,12 +79,23 @@ def filter_offers(filters):
             query_param.append(('{}__in'.format(keys), values))
         elif key.startswith('address'):
             keys = key.split('.')
+            is_int = False
+            if values:
+                try:
+                    int(values[0])
+                    is_int = True
+                except ValueError:
+                    pass
+            if is_int:
+                values = [int(value) for value in values]
             if keys[1] == 'province':
+
                 province_codes = [province.code for province in Country.objects.get(code=1).provinces
-                                  if province.name in values]
+                                  if (province.code if is_int else province.name) in values]
                 city_codes = [city.code for city in City.objects(province_id__in=province_codes)]
             else:
-                city_codes = [city.code for city in City.objects(name__in=values)]
+                kwargs = {'{}__in'.format('code' if is_int else 'name'): values}
+                city_codes = [city.code for city in City.objects(**kwargs)]
             query_param.append(('address__city__in', city_codes))
         mongo_query_params.extend(query_param)
     mongo_query_params = dict(mongo_query_params)
