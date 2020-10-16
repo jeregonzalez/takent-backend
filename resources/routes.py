@@ -7,7 +7,7 @@ from resources.apis.language import LanguageApi, LanguageLevelApi
 from resources.apis.mercadopago import MercadoPagoApi, OfferPackApi
 from resources.apis.development import MongoApi
 from resources.apis.place import CountriesApi, ProvincesApi, CitiesApi
-from resources.apis.postulant import PostulantApi, PostulateApi, ContactPostulantApi
+from resources.apis.postulant import PostulantApi, PostulateApi, StatePostulantApi
 from resources.apis.sector import SectorApi
 from resources.apis.profession import ProfessionApi
 from resources.apis.service import ServiceApi, ServiceImagesApi
@@ -61,7 +61,7 @@ def initialize_routes(api):
     # Postulate
     api.add_resource(PostulateApi, '/api/v1/postulate/<id_offer>')
     # Contact postulant
-    api.add_resource(ContactPostulantApi, '/api/v1/offer/<id_offer>/postulant/<id_postulant>/contact')
+    api.add_resource(StatePostulantApi, '/api/v1/offer/<id_offer>/postulant/<id_postulant>/<action>')
     # Enterprise and admin user
     api.add_resource(UserAndEnterpriseApi, '/api/v1/user_and_enterprise')
     # Mercado Pago
