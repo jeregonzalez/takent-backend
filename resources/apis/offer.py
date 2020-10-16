@@ -6,6 +6,7 @@ from database.models.common import Image
 from database.models.offer import Offer
 from database.models.parametric_docs import StateOffer
 from resources.helpers import user_helper, offer_helper, enterprise_helper
+from resources.helpers.design_patterns.state.offer import OfferStateManager
 from resources.utils.decorators import authentication_required, validate_user_exists, validate_headers, \
     validate_offer_exists
 from resources.utils.exceptions import SaveException, UpdateException, GetException
@@ -56,14 +57,20 @@ class OfferApi(Resource):
         return Message.created()
 
     def put(self, id_offer=None):
+        offer = Offer.objects.get(id=id_offer)
         body = request.get_json()
         if body.get('state'):
+            state = body.get('state')
+            if state not in [state.name for state in StateOffer.objects]:
+                raise UpdateException('State {} not exists'.format(state))
+            state_manager = OfferStateManager(offer.state.name)
             try:
-                body['state'] = StateOffer.objects.get(name=body['state'])
-            except DoesNotExist as e:
-                return UpdateException(e)
+                state_manager.change(state=state)
+            except Exception as e:
+                raise UpdateException(e)
+            body['state'] = StateOffer.objects.get(name=state_manager.state.name)
         try:
-            Offer.objects.get(id=id_offer).update(**body)
+            offer.update(**body)
         except (InvalidQueryError, ValidationError) as e:
             raise UpdateException(e)
         return Message.updated()

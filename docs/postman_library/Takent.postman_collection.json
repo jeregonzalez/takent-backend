@@ -2002,6 +2002,133 @@
 					"name": "Postulant",
 					"item": [
 						{
+							"name": "Change State",
+							"item": [
+								{
+									"name": "Pre select postulant",
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "{{user_token}}",
+													"type": "string"
+												}
+											]
+										},
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"comment\": \"Pinchi tragasable\"\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{host}}/offer/5f89ca13749bb1f7ea898df4/postulant/5f89ca66749bb1f7ea898dfd/pre_select",
+											"host": [
+												"{{host}}"
+											],
+											"path": [
+												"offer",
+												"5f89ca13749bb1f7ea898df4",
+												"postulant",
+												"5f89ca66749bb1f7ea898dfd",
+												"pre_select"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Contact postulant",
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "{{user_token}}",
+													"type": "string"
+												}
+											]
+										},
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"comment\": \"Pinchi tragasable\"\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{host}}/offer/5f81059da53829401c32ffce/postulant/5f8105bba53829401c32ffd7/contact",
+											"host": [
+												"{{host}}"
+											],
+											"path": [
+												"offer",
+												"5f81059da53829401c32ffce",
+												"postulant",
+												"5f8105bba53829401c32ffd7",
+												"contact"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Discard postulant",
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "{{user_token}}",
+													"type": "string"
+												}
+											]
+										},
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"comment\": \"Pinchi tragasable\"\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{host}}/offer/5f89ca13749bb1f7ea898df4/postulant/5f89ca66749bb1f7ea898dfd/discard",
+											"host": [
+												"{{host}}"
+											],
+											"path": [
+												"offer",
+												"5f89ca13749bb1f7ea898df4",
+												"postulant",
+												"5f89ca66749bb1f7ea898dfd",
+												"discard"
+											]
+										}
+									},
+									"response": []
+								}
+							],
+							"protocolProfileBehavior": {},
+							"_postman_isSubFolder": true
+						},
+						{
 							"name": "All Postulants",
 							"request": {
 								"auth": {
@@ -2124,46 +2251,6 @@
 										"5f7faa6c7037d507df64ef1e",
 										"postulant",
 										"5f7faa837037d507df64ef27"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "Contact postulant",
-							"request": {
-								"auth": {
-									"type": "bearer",
-									"bearer": [
-										{
-											"key": "token",
-											"value": "{{user_token}}",
-											"type": "string"
-										}
-									]
-								},
-								"method": "POST",
-								"header": [],
-								"body": {
-									"mode": "raw",
-									"raw": "{\n    \"comment\": \"Pinchi tragasable\"\n}",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
-								},
-								"url": {
-									"raw": "{{host}}/offer/5f81059da53829401c32ffce/postulant/5f8105bba53829401c32ffd7/contact",
-									"host": [
-										"{{host}}"
-									],
-									"path": [
-										"offer",
-										"5f81059da53829401c32ffce",
-										"postulant",
-										"5f8105bba53829401c32ffd7",
-										"contact"
 									]
 								}
 							},
