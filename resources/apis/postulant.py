@@ -8,6 +8,7 @@ from database.models.offer import Offer, Postulant
 from database.models.parametric_docs import StatePostulant
 from resources.helpers import user_helper, enterprise_helper
 from resources.helpers.email_helper.email_helper import EmailContact
+from resources.helpers.state_postulant_helper import PostulantStateManager
 from resources.utils.decorators import validate_headers, authentication_required, validate_user_exists, \
     validate_offer_exists, validate_user_is_enterprise, validate_user_is_common, validate_postulant_exists
 from resources.utils.exceptions import SaveException, \
@@ -71,22 +72,34 @@ class PostulateApi(Resource):
         return Message.created()
 
 
-class ContactPostulantApi(Resource):
+class StatePostulantApi(Resource):
+
+    ACTION_STATE_MAP = {
+        'pre_select': 'pre_selected',
+        'contact': 'contacted',
+        'discard': 'discarded'
+    }
+
     method_decorators = {
         'post': [validate_postulant_exists, validate_offer_exists, validate_user_is_enterprise, validate_user_exists,
                  authentication_required, validate_headers]
     }
 
-    def post(self, id_offer=None, id_postulant=None):
-        comment = request.get_json().get('comment')
+    def post(self, id_offer=None, id_postulant=None, action=None):
+        state = self.ACTION_STATE_MAP.get(action)
+        if not state or state not in [state.name for state in StatePostulant.objects]:
+            raise SaveException('State {} not exists'.format(state))
+        body = request.get_json()
         postulant = Postulant.objects.get(id=id_postulant)
-        if postulant.state.name != 'pending':
-            abort(400, message='Postulant {} is not in pending state'.format(id_postulant))
-        postulant.update(state=StatePostulant.objects.get(name='contacted'))
         enterprise = enterprise_helper.get_enterprise()
+        state_manager = PostulantStateManager(postulant, enterprise)
+        try:
+            state_manager.change(state=state)
+        except Exception as e:
+            raise SaveException(e)
         Thread(target=lambda: EmailContact(destination_email=postulant.postulant.id,
                                            enterprise_name=enterprise.fantasy_name,
                                            user_name=postulant.postulant.name,
                                            email_contact=enterprise.contact_email,
-                                           comment=comment).send_email()).start()
+                                           comment=body.get('comment')).send_email()).start()
         return Message.created()
