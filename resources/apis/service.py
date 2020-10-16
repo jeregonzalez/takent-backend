@@ -34,10 +34,20 @@ class ServiceApi(Resource):
     def post(self):
         body = request.get_json()
         body['publication_user'] = user_helper.get_user_from_jwt()
+        images = body.get('images')
+        if images:
+            del body['images']
         try:
-            Service(**body).save()
+            new_service = Service(**body).save()
         except (FieldDoesNotExist, ValidationError) as e:
             raise SaveException(e)
+        images_obj = []
+        if images:
+            for image in images:
+                new_image = Image(base64=image).save()
+                images_obj.append(new_image)
+            if images_obj:
+                new_service.update(images=images_obj)
         return Message.created()
 
     def put(self, service_id=None):
