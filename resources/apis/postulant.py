@@ -1,14 +1,14 @@
 from threading import Thread
 
 from flask import request
-from flask_restful import Resource, abort
+from flask_restful import Resource
 from mongoengine import FieldDoesNotExist, ValidationError, DoesNotExist
 
 from database.models.offer import Offer, Postulant
 from database.models.parametric_docs import StatePostulant
 from resources.helpers import user_helper, enterprise_helper
 from resources.helpers.email_helper.email_helper import EmailContact
-from resources.helpers.state_postulant_helper import PostulantStateManager
+from resources.helpers.design_patterns.state.postulant import PostulantStateManager
 from resources.utils.decorators import validate_headers, authentication_required, validate_user_exists, \
     validate_offer_exists, validate_user_is_enterprise, validate_user_is_common, validate_postulant_exists
 from resources.utils.exceptions import SaveException, \
