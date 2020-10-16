@@ -33,6 +33,8 @@ class OfferApi(Resource):
             if user_info['user_type'] == 'enterprise':
                 filters.append(
                     ('enterprise', str(enterprise_helper.get_enterprise(user_account=user_info['user_account']).id)))
+            else:
+                filters.append(('state', 'active'))
             offers = offer_helper.filter_offers(filters=filters)
         return offers
 
