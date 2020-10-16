@@ -14,7 +14,7 @@ class OfferState(object):
 
 class Active(OfferState):
     name = 'active'
-    allowed = ['in_selection', 'deleted']
+    allowed = ['in_selection', 'deleted', 'finished']
 
 
 class InSelection(OfferState):
