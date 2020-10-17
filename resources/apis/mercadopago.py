@@ -26,7 +26,7 @@ class OfferPackApi(Resource):
 
 class MercadoPagoApi(Resource):
     method_decorators = {
-        'post': [validate_user_is_enterprise, validate_user_exists, authentication_required, validate_headers]
+        'post': [validate_user_exists, authentication_required, validate_headers]
     }
 
     def post(self):
