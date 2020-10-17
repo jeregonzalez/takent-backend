@@ -55,6 +55,7 @@ class OfferPack(db.Document):
     id = db.StringField(primary_key=True)
     common_name = db.StringField()
     item_template = db.DictField()
+    offers_quantity = db.IntField()
 
 
 class Permission(db.Document):

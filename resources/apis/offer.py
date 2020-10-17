@@ -42,6 +42,8 @@ class OfferApi(Resource):
         body = request.get_json()
         body['publication_user'] = user_helper.get_user_from_jwt()
         body['enterprise'] = enterprise_helper.get_enterprise()
+        if body.get('enterprise').available_offers == 0:
+            raise SaveException('No available offers')
         images = body.get('images')
         if images:
             del body['images']
@@ -56,6 +58,7 @@ class OfferApi(Resource):
                 images_obj.append(new_image)
             if images_obj:
                 new_offer.update(images=images_obj)
+        body.get('enterprise').update(available_offers=body.get('enterprise').available_offers - 1)
         return Message.created()
 
     def put(self, id_offer=None):
