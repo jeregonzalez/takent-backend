@@ -70,6 +70,7 @@ class MPNotificationsApi(Resource):
 
     def post(self):
         body = request.get_json()
+        return Message.created()
         notification_url = body.get('resource')
         if not notification_url:
             raise SaveException('Could not find notification url')
