@@ -2005,46 +2005,6 @@
 							"name": "Change State",
 							"item": [
 								{
-									"name": "Pre select postulant",
-									"request": {
-										"auth": {
-											"type": "bearer",
-											"bearer": [
-												{
-													"key": "token",
-													"value": "{{user_token}}",
-													"type": "string"
-												}
-											]
-										},
-										"method": "POST",
-										"header": [],
-										"body": {
-											"mode": "raw",
-											"raw": "{\n    \"comment\": \"Pinchi tragasable\"\n}",
-											"options": {
-												"raw": {
-													"language": "json"
-												}
-											}
-										},
-										"url": {
-											"raw": "{{host}}/offer/5f89ca13749bb1f7ea898df4/postulant/5f89ca66749bb1f7ea898dfd/pre_select",
-											"host": [
-												"{{host}}"
-											],
-											"path": [
-												"offer",
-												"5f89ca13749bb1f7ea898df4",
-												"postulant",
-												"5f89ca66749bb1f7ea898dfd",
-												"pre_select"
-											]
-										}
-									},
-									"response": []
-								},
-								{
 									"name": "Contact postulant",
 									"request": {
 										"auth": {
@@ -2079,6 +2039,46 @@
 												"postulant",
 												"5f8105bba53829401c32ffd7",
 												"contact"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Pre select postulant",
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "{{user_token}}",
+													"type": "string"
+												}
+											]
+										},
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"comment\": \"Pinchi tragasable\"\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{host}}/offer/5f89ca13749bb1f7ea898df4/postulant/5f89ca66749bb1f7ea898dfd/pre_select",
+											"host": [
+												"{{host}}"
+											],
+											"path": [
+												"offer",
+												"5f89ca13749bb1f7ea898df4",
+												"postulant",
+												"5f89ca66749bb1f7ea898dfd",
+												"pre_select"
 											]
 										}
 									},
@@ -3378,6 +3378,71 @@
 							],
 							"path": [
 								"offer_pack"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Notification",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/mercadopago/notification?id=10619999490&topic=payment",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"mercadopago",
+								"notification"
+							],
+							"query": [
+								{
+									"key": "id",
+									"value": "10619999490"
+								},
+								{
+									"key": "topic",
+									"value": "payment"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Query Notification",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://api.mercadolibre.com/collections/notifications/10616608420?access_token=APP_USR-8710455338243142-101721-b182e01cb94c9663b462c91ba96522a6-653415207",
+							"protocol": "https",
+							"host": [
+								"api",
+								"mercadolibre",
+								"com"
+							],
+							"path": [
+								"collections",
+								"notifications",
+								"10616608420"
+							],
+							"query": [
+								{
+									"key": "access_token",
+									"value": "APP_USR-8710455338243142-101721-b182e01cb94c9663b462c91ba96522a6-653415207"
+								}
 							]
 						}
 					},
