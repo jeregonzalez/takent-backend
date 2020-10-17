@@ -4,7 +4,7 @@ from resources.apis.enterprise import EnterpriseApi, ProfilePhotoEnterpriseApi, 
 from resources.apis.authentication import AuthenticationApi
 from resources.apis.enterprise_type import EnterpriseTypeApi
 from resources.apis.language import LanguageApi, LanguageLevelApi
-from resources.apis.mercadopago import MercadoPagoApi, OfferPackApi
+from resources.apis.mercadopago import MercadoPagoApi, OfferPackApi, MPNotificationsApi
 from resources.apis.development import MongoApi
 from resources.apis.place import CountriesApi, ProvincesApi, CitiesApi
 from resources.apis.postulant import PostulantApi, PostulateApi, StatePostulantApi
@@ -67,6 +67,7 @@ def initialize_routes(api):
     # Mercado Pago
     api.add_resource(OfferPackApi, '/api/v1/offer_pack')
     api.add_resource(MercadoPagoApi, '/api/v1/mercadopago/generate_payment')
+    api.add_resource(MPNotificationsApi, '/api/v1/mercadopago/notification')
     # Services
     api.add_resource(ServiceApi, '/api/v1/service/<service_id>', '/api/v1/service')
     api.add_resource(ServiceImagesApi, '/api/v1/service/<service_id>/images')

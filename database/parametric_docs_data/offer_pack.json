@@ -1,52 +1,86 @@
 [
   {
     "id": "SINGLE",
-    "common_name": "Ofertas sueltas",
+    "common_name": "Ofertas individuales",
     "item_template": {
+      "id": "SINGLE",
       "title": "Oferta",
       "quantity": 1,
       "currency_id": "AR",
       "unit_price": 100
-    }
+    },
+    "offers_quantity": 1
   },
   {
     "id": "THREE_PACK",
     "common_name": "Pack 3 ofertas",
     "item_template": {
+      "id": "THREE_PACK",
       "title": "Pack 3 ofertas",
       "quantity": 1,
       "currency_id": "AR",
       "unit_price": 250
-    }
+    },
+    "offers_quantity": 3
   },
   {
     "id": "FIVE_PACK",
     "common_name": "Pack 5 ofertas",
     "item_template": {
+      "id": "FIVE_PACK",
       "title": "Pack 5 ofertas",
       "quantity": 1,
       "currency_id": "AR",
       "unit_price": 400
-    }
+    },
+    "offers_quantity": 5
   },
   {
     "id": "TEN_PACK",
     "common_name": "Pack 10 ofertas",
     "item_template": {
+      "id": "TEN_PACK",
       "title": "Pack 10 ofertas",
       "quantity": 1,
       "currency_id": "AR",
       "unit_price": 800
-    }
+    },
+    "offers_quantity": 10
   },
   {
     "id": "TWENTY_PACK",
     "common_name": "Pack 20 ofertas",
     "item_template": {
+      "id": "TWENTY_PACK",
       "title": "Pack 20 ofertas",
       "quantity": 1,
       "currency_id": "AR",
       "unit_price": 1500
-    }
+    },
+    "offers_quantity": 20
+  },
+  {
+    "id": "FIFTY_PACK",
+    "common_name": "Pack 50 ofertas",
+    "item_template": {
+      "id": "FIFTY_PACK",
+      "title": "Pack 50 ofertas",
+      "quantity": 1,
+      "currency_id": "AR",
+      "unit_price": 5000
+    },
+    "offers_quantity": 50
+  },
+  {
+    "id": "ONE_HUNDRED_PACK",
+    "common_name": "Pack 100 ofertas",
+    "item_template": {
+      "id": "ONE_HUNDRED_PACK",
+      "title": "Pack 100 ofertas",
+      "quantity": 1,
+      "currency_id": "AR",
+      "unit_price": 7500
+    },
+    "offers_quantity": 100
   }
 ]
