@@ -14,7 +14,7 @@ class PostulantState(object):
 
 class Pending(PostulantState):
     name = 'pending'
-    allowed = ['pre_selected', 'discarded']
+    allowed = ['pre_selected', 'contacted', 'discarded']
 
 
 class PreSelected(PostulantState):
