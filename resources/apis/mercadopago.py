@@ -49,7 +49,10 @@ class MercadoPagoApi(Resource):
         offer_pack_item['quantity'] = body.get('quantity') if body.get('quantity') else 1
         preference = {
             'items': [offer_pack_item],
-            'external_reference': password_helper.get_random_alphanumeric_string(length=24)
+            'external_reference': password_helper.get_random_alphanumeric_string(length=24),
+            'payer': {
+                'email': 'payer@email.com'
+            }
         }
         preference_result = mp.create_preference(preference)
         if preference_result.get('status') != 201:
