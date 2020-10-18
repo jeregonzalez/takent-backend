@@ -1,10 +1,10 @@
 [
   {
     "id": "SINGLE",
-    "common_name": "Ofertas individuales",
+    "common_name": "Publicaciones individuales",
     "item_template": {
       "id": "SINGLE",
-      "title": "Oferta",
+      "title": "Publicación",
       "quantity": 1,
       "currency_id": "AR",
       "unit_price": 100
@@ -13,10 +13,10 @@
   },
   {
     "id": "THREE_PACK",
-    "common_name": "Pack 3 ofertas",
+    "common_name": "Pack 3 publicaciones",
     "item_template": {
       "id": "THREE_PACK",
-      "title": "Pack 3 ofertas",
+      "title": "Pack 3 publicaciones",
       "quantity": 1,
       "currency_id": "AR",
       "unit_price": 250
@@ -25,10 +25,10 @@
   },
   {
     "id": "FIVE_PACK",
-    "common_name": "Pack 5 ofertas",
+    "common_name": "Pack 5 publicaciones",
     "item_template": {
       "id": "FIVE_PACK",
-      "title": "Pack 5 ofertas",
+      "title": "Pack 5 publicaciones",
       "quantity": 1,
       "currency_id": "AR",
       "unit_price": 400
@@ -37,10 +37,10 @@
   },
   {
     "id": "TEN_PACK",
-    "common_name": "Pack 10 ofertas",
+    "common_name": "Pack 10 publicaciones",
     "item_template": {
       "id": "TEN_PACK",
-      "title": "Pack 10 ofertas",
+      "title": "Pack 10 publicaciones",
       "quantity": 1,
       "currency_id": "AR",
       "unit_price": 800
@@ -49,10 +49,10 @@
   },
   {
     "id": "TWENTY_PACK",
-    "common_name": "Pack 20 ofertas",
+    "common_name": "Pack 20 publicaciones",
     "item_template": {
       "id": "TWENTY_PACK",
-      "title": "Pack 20 ofertas",
+      "title": "Pack 20 publicaciones",
       "quantity": 1,
       "currency_id": "AR",
       "unit_price": 1500
@@ -61,10 +61,10 @@
   },
   {
     "id": "FIFTY_PACK",
-    "common_name": "Pack 50 ofertas",
+    "common_name": "Pack 50 publicaciones",
     "item_template": {
       "id": "FIFTY_PACK",
-      "title": "Pack 50 ofertas",
+      "title": "Pack 50 publicaciones",
       "quantity": 1,
       "currency_id": "AR",
       "unit_price": 5000
@@ -73,10 +73,10 @@
   },
   {
     "id": "ONE_HUNDRED_PACK",
-    "common_name": "Pack 100 ofertas",
+    "common_name": "Pack 100 publicaciones",
     "item_template": {
       "id": "ONE_HUNDRED_PACK",
-      "title": "Pack 100 ofertas",
+      "title": "Pack 100 publicaciones",
       "quantity": 1,
       "currency_id": "AR",
       "unit_price": 7500
