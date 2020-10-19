@@ -49,11 +49,13 @@ class MercadoPagoApi(Resource):
         offer_pack_item['quantity'] = body.get('quantity') if body.get('quantity') else 1
         preference = {
             'items': [offer_pack_item],
-            'external_reference': password_helper.get_random_alphanumeric_string(length=24),
-            'payer': {
-                'email': 'test_user_88688921@testuser.com'
-            }
+            'external_reference': password_helper.get_random_alphanumeric_string(length=24)
         }
+        email = request.args.get('payer')
+        if email:
+            preference['payer'] = {
+                'email': email
+            }
         preference_result = mp.create_preference(preference)
         if preference_result.get('status') != 201:
             raise SaveException('Unable to get preference id')
