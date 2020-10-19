@@ -51,7 +51,7 @@ class MercadoPagoApi(Resource):
             'items': [offer_pack_item],
             'external_reference': password_helper.get_random_alphanumeric_string(length=24),
             'payer': {
-                'email': 'payer@email.com'
+                'email': 'test_user_88688921@testuser.com'
             }
         }
         preference_result = mp.create_preference(preference)
