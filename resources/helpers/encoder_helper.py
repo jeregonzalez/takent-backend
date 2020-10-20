@@ -130,6 +130,12 @@ class EncodeStrategyService(EncodeStrategy):
 
     def encode(self):
         response = self.obj.to_mongo()
+        response['publication_user'] = {
+            '_id': self.obj.publication_user.id,
+            'name': self.obj.publication_user.name,
+            'surname': self.obj.publication_user.surname,
+            'phone': self.obj.publication_user.phone
+        }
         if self.obj.address:
             response['address'] = self.obj.address.format_response()
         return response
