@@ -18,6 +18,11 @@ class OfferLanguage(db.EmbeddedDocument):
     certificate = db.BooleanField()
 
 
+class StateOfferHistory(db.EmbeddedDocument):
+    date = db.DateTimeField(default=lambda: datetime.today())
+    state = db.StringField()
+
+
 class Offer(db.Document):
     title = db.StringField(required=True, max_length=100)
     position = db.StringField(required=True)
@@ -33,3 +38,14 @@ class Offer(db.Document):
     postulants = db.ListField(db.ReferenceField(Postulant))
     state = db.ReferenceField(StateOffer, default=lambda: StateOffer.objects.get(name='active'))
     enterprise = db.ReferenceField(Enterprise)
+    states_history = db.EmbeddedDocumentListField(StateOfferHistory)
+
+    def save(self, *args, **kwargs):
+        self.states_history.create(state=self.state.name)
+        return super(Offer, self).save(*args, **kwargs)
+
+    def update(self, *args, **kwargs):
+        state = kwargs.get('state')
+        if state:
+            kwargs['push__states_history'] = StateOfferHistory(state=state.name)
+        return super(Offer, self).update(*args, **kwargs)
