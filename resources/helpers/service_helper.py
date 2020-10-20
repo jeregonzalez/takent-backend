@@ -1,14 +1,16 @@
 import random
 
 from dateutil import parser
+from flask import request
 from mongoengine import ObjectIdField, ReferenceField, ListField, EmbeddedDocumentListField, StringField, DateTimeField, \
-    InvalidQueryError, LookUpError
+    InvalidQueryError, LookUpError, FloatField
 
 from database.models.place import Country, City
 from database.models.service import Service
+from resources.helpers import user_helper
 from resources.utils.exceptions import GetException
 
-FILTER_OPTIONS = ['strict', 'sort']
+FILTER_OPTIONS = ['strict', 'sort', 'exclude_mine', 'only_mine']
 
 
 def service_exists(_id=None):
@@ -58,6 +60,19 @@ def filter_services(filters):
             else:
                 operator = 'in'
             query_param.append(('{}__{}'.format(key, operator), values if len(values) > 1 else value))
+        elif type(field_type) == FloatField:
+            try:
+                min_cost = values[0]
+            except Exception:
+                min_cost = None
+            try:
+                max_cost = values[1]
+            except Exception:
+                max_cost = None
+            if min_cost:
+                query_param.append(('{}__gte'.format(key), min_cost))
+            if max_cost:
+                query_param.append(('{}__lte'.format(key), max_cost))
         elif type(field_type) == DateTimeField:
             try:
                 start_date = parser.parse(values[0])
@@ -82,6 +97,10 @@ def filter_services(filters):
             query_param.append(('address__city__in', city_codes))
         mongo_query_params.extend(query_param)
     mongo_query_params = dict(mongo_query_params)
+    if request.args.get('exclude_mine'):
+        mongo_query_params['publication_user__ne'] = user_helper.get_user_from_jwt(keys='user_account')
+    elif request.args.get('only_mine'):
+        mongo_query_params['publication_user'] = user_helper.get_user_from_jwt(keys='user_account')
     sort = [filter_sort for filter_sort in filters if filter_sort[0] == 'sort']
     if sort:
         sort = sort[0][1]

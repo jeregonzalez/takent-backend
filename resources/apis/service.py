@@ -6,6 +6,7 @@ from database.models.common import Image
 from database.models.parametric_docs import StateService
 from database.models.service import Service
 from resources.helpers import service_helper, user_helper
+from resources.helpers.design_patterns.state.service import ServiceStateManager
 from resources.utils.decorators import validate_headers, authentication_required, validate_user_exists, \
     validate_service_exists, validate_user_is_common
 from resources.utils.exceptions import GetException, SaveException, UpdateException
@@ -51,14 +52,20 @@ class ServiceApi(Resource):
         return Message.created()
 
     def put(self, service_id=None):
+        service = Service.objects.get(id=service_id)
         body = request.get_json()
         if body.get('state'):
+            state = body.get('state')
+            if state not in [state.name for state in StateService.objects]:
+                raise UpdateException('State {} not exists'.format(state))
+            state_manager = ServiceStateManager(service.state.name)
             try:
-                body['state'] = StateService.objects.get(name=body['state'])
-            except DoesNotExist as e:
+                state_manager.change(state=state)
+            except Exception as e:
                 raise UpdateException(e)
+            body['state'] = StateService.objects.get(name=state_manager.state.name)
         try:
-            Service.objects.get(id=service_id).update(**body)
+            service.update(**body)
         except (InvalidQueryError, ValidationError) as e:
             raise UpdateException(e)
         return Message.updated()

@@ -1,6 +1,3 @@
-from database.models.parametric_docs import StateOffer
-
-
 class OfferState(object):
     name = 'state'
     allowed = []

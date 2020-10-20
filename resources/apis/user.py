@@ -59,13 +59,20 @@ class UserApi(Resource):
 
 class ImageApi(Resource):
     method_decorators = {
-        'get': [validate_user_is_common, validate_user_exists, authentication_required, validate_headers],
+        'get': [validate_user_exists, authentication_required, validate_headers],
         'post': [validate_user_is_common, validate_user_exists, authentication_required, validate_headers],
         'delete': [validate_user_is_common, validate_user_exists, authentication_required, validate_headers]
     }
 
     def get(self):
-        user = user_helper.get_user_from_jwt()
+        user_id = request.args.get('user_id')
+        if user_id:
+            try:
+                user = CommonUser.objects.get(account=user_id)
+            except DoesNotExist as e:
+                raise GetException(e)
+        else:
+            user = user_helper.get_user_from_jwt()
         return {'profile_photo': user.profile_photo.base64 if user.profile_photo else None}
 
     def post(self):

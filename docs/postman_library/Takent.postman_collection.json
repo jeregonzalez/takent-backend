@@ -270,7 +270,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"account\": \"jereegonzalez@gmail.com\",\n    \"password\": \"Password123\"\n}",
+							"raw": "{\n    \"account\": \"jereegonzalez2@gmail.com\",\n    \"password\": \"Password123\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1041,13 +1041,13 @@
 								"method": "POST",
 								"header": [],
 								"url": {
-									"raw": "{{host}}/request_service/5f7f90d0cca79db2ec99d40a",
+									"raw": "{{host}}/request_service/5f8eeab0a9b356efabe9d1f0",
 									"host": [
 										"{{host}}"
 									],
 									"path": [
 										"request_service",
-										"5f7f90d0cca79db2ec99d40a"
+										"5f8eeab0a9b356efabe9d1f0"
 									]
 								}
 							},
@@ -1196,7 +1196,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{host}}/user/common/profile_photo",
+							"raw": "{{host}}/user/common/profile_photo?user_id=jereegonzalez@gmail.com",
 							"host": [
 								"{{host}}"
 							],
@@ -1204,6 +1204,12 @@
 								"user",
 								"common",
 								"profile_photo"
+							],
+							"query": [
+								{
+									"key": "user_id",
+									"value": "jereegonzalez@gmail.com"
+								}
 							]
 						}
 					},
@@ -2633,13 +2639,13 @@
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": "{{host}}/service/5f83b0fa1aa8402a2a51e48e/request",
+									"raw": "{{host}}/service/5f8eeab0a9b356efabe9d1f0/request",
 									"host": [
 										"{{host}}"
 									],
 									"path": [
 										"service",
-										"5f83b0fa1aa8402a2a51e48e",
+										"5f8eeab0a9b356efabe9d1f0",
 										"request"
 									]
 								}
@@ -2693,7 +2699,7 @@
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n    \"state\": \"contacted\"\n}",
+									"raw": "{\n    \"state\": \"in_course\"\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -2701,15 +2707,15 @@
 									}
 								},
 								"url": {
-									"raw": "{{host}}/service/5f7f90d0cca79db2ec99d40a/request/5f7f925ed7f42e0bd6d8e159",
+									"raw": "{{host}}/service/5f8eeab0a9b356efabe9d1f0/request/5f8ef716a8b70b84e050f4d4",
 									"host": [
 										"{{host}}"
 									],
 									"path": [
 										"service",
-										"5f7f90d0cca79db2ec99d40a",
+										"5f8eeab0a9b356efabe9d1f0",
 										"request",
-										"5f7f925ed7f42e0bd6d8e159"
+										"5f8ef716a8b70b84e050f4d4"
 									]
 								}
 							},
@@ -2765,13 +2771,13 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{host}}/service/5f83b00498d7feed0a22e032",
+							"raw": "{{host}}/service/5f8eeab0a9b356efabe9d1f0",
 							"host": [
 								"{{host}}"
 							],
 							"path": [
 								"service",
-								"5f83b00498d7feed0a22e032"
+								"5f8eeab0a9b356efabe9d1f0"
 							]
 						}
 					},
@@ -2851,6 +2857,22 @@
 								{
 									"key": "address.province",
 									"value": "La Rioja",
+									"disabled": true
+								},
+								{
+									"key": "exclude_mine",
+									"value": "true",
+									"description": "excluir mis servicios",
+									"disabled": true
+								},
+								{
+									"key": "only_mine",
+									"value": "true",
+									"disabled": true
+								},
+								{
+									"key": "cost",
+									"value": "100,300",
 									"disabled": true
 								}
 							]
@@ -2947,13 +2969,13 @@
 							}
 						},
 						"url": {
-							"raw": "{{host}}/service/5f83b00498d7feed0a22e032",
+							"raw": "{{host}}/service/5f8ef4edc14674c5e9196b23",
 							"host": [
 								"{{host}}"
 							],
 							"path": [
 								"service",
-								"5f83b00498d7feed0a22e032"
+								"5f8ef4edc14674c5e9196b23"
 							]
 						}
 					},
