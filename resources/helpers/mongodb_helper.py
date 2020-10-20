@@ -3,8 +3,8 @@ import json
 import os
 
 from database.models.parametric_docs import ContractType, EducationLevel, EnterpriseType, ExperienceLevel, Language, \
-    LanguageLevel, OfferPack, Permission, Profession, Sector, StateUser, StateOffer, StatePostulant, StateService, \
-    StateServiceRequest
+    LanguageLevel, Permission, Profession, Sector, StateUser, StateOffer, StatePostulant, StateService, \
+    StateServiceRequest, MercadoPagoConcept
 from database.models.place import Country, City, Province
 from resources.helpers import place_helper
 from resources.helpers.log_helper import LOGGER
@@ -18,7 +18,7 @@ MODEL_MAP = {
     'experience_level': ExperienceLevel,
     'language': Language,
     'language_level': LanguageLevel,
-    'offer_pack': OfferPack,
+    'mercado_pago_concept': MercadoPagoConcept,
     'permission': Permission,
     'profession': Profession,
     'sector': Sector,
