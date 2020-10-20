@@ -1,6 +1,6 @@
 [
   {
-    "id": "SINGLE",
+    "id": "OFFER_SINGLE",
     "common_name": "Publicaciones individuales",
     "item_template": {
       "id": "SINGLE",
@@ -12,7 +12,7 @@
     "offers_quantity": 1
   },
   {
-    "id": "THREE_PACK",
+    "id": "OFFER_THREE_PACK",
     "common_name": "Pack 3 publicaciones",
     "item_template": {
       "id": "THREE_PACK",
@@ -24,7 +24,7 @@
     "offers_quantity": 3
   },
   {
-    "id": "FIVE_PACK",
+    "id": "OFFER_FIVE_PACK",
     "common_name": "Pack 5 publicaciones",
     "item_template": {
       "id": "FIVE_PACK",
@@ -36,7 +36,7 @@
     "offers_quantity": 5
   },
   {
-    "id": "TEN_PACK",
+    "id": "OFFER_TEN_PACK",
     "common_name": "Pack 10 publicaciones",
     "item_template": {
       "id": "TEN_PACK",
@@ -48,7 +48,7 @@
     "offers_quantity": 10
   },
   {
-    "id": "TWENTY_PACK",
+    "id": "OFFER_TWENTY_PACK",
     "common_name": "Pack 20 publicaciones",
     "item_template": {
       "id": "TWENTY_PACK",
@@ -60,7 +60,7 @@
     "offers_quantity": 20
   },
   {
-    "id": "FIFTY_PACK",
+    "id": "OFFER_FIFTY_PACK",
     "common_name": "Pack 50 publicaciones",
     "item_template": {
       "id": "FIFTY_PACK",
@@ -72,7 +72,7 @@
     "offers_quantity": 50
   },
   {
-    "id": "ONE_HUNDRED_PACK",
+    "id": "OFFER_ONE_HUNDRED_PACK",
     "common_name": "Pack 100 publicaciones",
     "item_template": {
       "id": "ONE_HUNDRED_PACK",
@@ -82,5 +82,16 @@
       "unit_price": 7500
     },
     "offers_quantity": 100
+  },
+  {
+    "id": "SERVICE",
+    "common_name": "Servicio destacado",
+    "item_template": {
+      "id": "SERVICE",
+      "title": "Servicio destacado",
+      "quantity": 1,
+      "currency_id": "AR",
+      "unit_price": 200
+    }
   }
 ]

@@ -1,13 +1,17 @@
+from datetime import datetime
+from datetime import datetime
+from threading import Thread
+
 import mercadopago
 import requests
 from flask import request
 from flask_restful import Resource, abort
 from mongoengine import DoesNotExist
 
-from database.models.parametric_docs import OfferPack
-from database.models.payment import Payment
+from database.models.mercadopago import Payment
+from database.models.parametric_docs import MercadoPagoConcept
 from database.models.user import EnterpriseUser
-from resources.helpers import user_helper, password_helper, enterprise_helper
+from resources.helpers import user_helper, enterprise_helper
 from resources.utils.decorators import authentication_required, validate_user_exists, \
     validate_headers
 from resources.utils.exceptions import SaveException
@@ -21,12 +25,28 @@ class OfferPackApi(Resource):
         offer_packs = []
         if _id:
             try:
-                offer_packs = [OfferPack.objects.get(id=_id)]
+                offer_packs = [MercadoPagoConcept.objects.get(id=_id)]
             except DoesNotExist:
                 abort(400, message='Offer pack {} does not exist'.format(_id))
         else:
-            offer_packs = [offer_pack for offer_pack in OfferPack.objects]
+            offer_packs = [offer_pack for offer_pack in
+                           MercadoPagoConcept.objects(id__contains='OFFER').order_by('+offers_quantity')]
         return offer_packs
+
+
+class PreferredServiceApi(Resource):
+
+    def get(self, _id=None):
+        preferred_services = []
+        if _id:
+            try:
+                preferred_services = [MercadoPagoConcept.objects.get(id=_id)]
+            except DoesNotExist:
+                abort(400, message='Preferred service {} does not exist'.format(_id))
+        else:
+            preferred_services = [preferred_service for preferred_service in
+                                  MercadoPagoConcept.objects(id__contains='SERVICE')]
+        return preferred_services
 
 
 class MercadoPagoApi(Resource):
@@ -36,20 +56,21 @@ class MercadoPagoApi(Resource):
 
     def post(self):
         body = request.get_json()
-        offer_pack = body.get('offer_pack')
-        if not offer_pack:
-            abort(400, message='offer_pack value required')
+        concept_id = body.get('concept_id')
+        if not concept_id:
+            abort(400, message='concept_id value required')
         try:
-            offer_pack_obj = OfferPack.objects.get(id=offer_pack)
+            concept_obj = MercadoPagoConcept.objects.get(id=concept_id)
         except DoesNotExist:
-            abort(400, message='offer_pack {} does not exist'.format(offer_pack))
+            abort(400, message='Concept {} does not exist'.format(concept_id))
         mp = mercadopago.MP(ProjectVars.get_project_var('MP_CLIENT_ID'),
                             ProjectVars.get_project_var('MP_CLIENT_SECRET'))
-        offer_pack_item = offer_pack_obj.item_template
-        offer_pack_item['quantity'] = body.get('quantity') if body.get('quantity') else 1
+        concept_item = concept_obj.item_template
+        external_reference = '{}-{}'.format(concept_obj.id, user_helper.get_user_from_jwt(keys='user_account'))
         preference = {
-            'items': [offer_pack_item],
-            'external_reference': password_helper.get_random_alphanumeric_string(length=24)
+            'items': [concept_item],
+            'external_reference': external_reference,
+            'notification_url': ProjectVars.get_project_var('MP_NOTIFICATION_URL')
         }
         email = request.args.get('payer')
         if email:
@@ -59,21 +80,15 @@ class MercadoPagoApi(Resource):
         preference_result = mp.create_preference(preference)
         if preference_result.get('status') != 201:
             raise SaveException('Unable to get preference id')
-        new_payment = {
-            'external_reference': preference_result.get('response').get('external_reference'),
-            'user': user_helper.get_user_from_jwt(),
-            'offer_pack': offer_pack_obj.id,
-            'quantity': offer_pack_item.get('quantity'),
-            'price': offer_pack_item.get('unit_price') * offer_pack_item.get('quantity'),
-            'preference_id': preference_result.get('response').get('id')
-        }
-        Payment(**new_payment).save()
         return Message.ok(preference_result)
 
 
 class MPNotificationsApi(Resource):
 
     def post(self):
+        params = request.args
+        if params.get('topic') != 'payment':
+            return Message.created()
         body = request.get_json()
         notification_url = body.get('resource')
         if not notification_url:
@@ -82,16 +97,55 @@ class MPNotificationsApi(Resource):
                                 params={'access_token': ProjectVars.get_project_var('MP_ACCESS_TOKEN')})
         if response.status_code != 200:
             raise SaveException('Error getting notification')
-        notification = response.json()
-        external_reference = notification.get('collection').get('external_reference')
-        payment = Payment.objects.get(external_reference=external_reference)
-        payment.update(payment_status='approved')
-        user = payment.user
-        if isinstance(user, EnterpriseUser):
+
+        def process():
+            notification = response.json().get('collection')
+            external_reference = notification.get('external_reference').split('-')
+            concept_id = external_reference[0]
+            user_account = external_reference[1]
+            kwargs = {
+                'payment_id': notification.get('id'),
+                'user': user_account,
+                'concept_id': concept_id,
+                'reason': notification.get('reason'),
+                'amount': notification.get('total_paid_amount'),
+                'status': notification.get('status')
+            }
+            process_payment(**kwargs)
+        Thread(target=process).start()
+        return Message.created()
+
+
+def process_payment(payment_id, user, concept_id, reason, amount, status):
+    user = user_helper.get_user(user_account=user)
+    payment_exists = bool(Payment.objects(payment_id=payment_id).count())
+    if payment_exists:
+        payment = Payment.objects.get(payment_id=payment_id)
+        new_status = {
+            'payment_date': datetime.today(),
+            'payment_status': status
+        }
+        payment.update(**new_status)
+        payment.status_history.create(**new_status)
+        payment.save()
+    else:
+        payment = {
+            'payment_id': payment_id,
+            'user': user,
+            'concept_id': concept_id,
+            'reason': reason,
+            'price': amount,
+            'payment_status': status,
+            'status_history': [
+                {'status': status}
+            ]
+        }
+        Payment(**payment).save()
+    if status == 'approved':
+        if 'OFFER' in concept_id and isinstance(user, EnterpriseUser):
             enterprise = enterprise_helper.get_enterprise(user_account=user.id)
-            offer_pack = OfferPack.objects.get(id=payment.offer_pack)
-            offers_to_add = offer_pack.offers_quantity * payment.quantity
+            offer_pack = MercadoPagoConcept.objects.get(id=concept_id)
+            offers_to_add = offer_pack.offers_quantity
             enterprise.update(available_offers=enterprise.available_offers + offers_to_add)
         else:
             pass
-        return Message.created()
