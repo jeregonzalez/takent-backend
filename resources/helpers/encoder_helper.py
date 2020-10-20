@@ -11,6 +11,7 @@ from database.models.enterprise import Enterprise
 from database.models.offer import Offer, Postulant
 from database.models.service import Service, ServiceRequest
 from database.models.user import User, CommonUser
+from resources.helpers import user_helper
 
 
 class CustomEncoder(json.JSONEncoder):
@@ -82,6 +83,13 @@ class EncodeStrategyOffer(EncodeStrategy):
             response['enterprise'] = self.obj.enterprise.to_mongo()
             if self.obj.enterprise.address:
                 response['enterprise']['address'] = self.obj.enterprise.address.format_response()
+        user_info = user_helper.get_user_from_jwt(['user_account', 'user_type'])
+        if user_info.get('user_type') == 'common':
+            if self.obj.postulants and any(postulant.postulant.id == user_info.get('user_account')
+                                           for postulant in self.obj.postulants):
+                response['postulated'] = True
+            else:
+                response['postulated'] = False
         return response
 
 
