@@ -10,6 +10,7 @@ from mongoengine import DoesNotExist
 
 from database.models.mercadopago import Payment
 from database.models.parametric_docs import MercadoPagoConcept
+from database.models.service import Service
 from database.models.user import EnterpriseUser
 from resources.helpers import user_helper, enterprise_helper
 from resources.utils.decorators import authentication_required, validate_user_exists, \
@@ -63,10 +64,17 @@ class MercadoPagoApi(Resource):
             concept_obj = MercadoPagoConcept.objects.get(id=concept_id)
         except DoesNotExist:
             abort(400, message='Concept {} does not exist'.format(concept_id))
+        if 'OFFER' in concept_id:
+            external_reference = '{}-{}'.format(concept_obj.id, user_helper.get_user_from_jwt(keys='user_account'))
+        else:
+            service_id = body.get('service_id')
+            if not service_id:
+                abort(400, message='service_id required')
+            external_reference = '{}-{}-{}'.format(service_id, concept_obj.id,
+                                                   user_helper.get_user_from_jwt(keys='user_account'))
         mp = mercadopago.MP(ProjectVars.get_project_var('MP_CLIENT_ID'),
                             ProjectVars.get_project_var('MP_CLIENT_SECRET'))
         concept_item = concept_obj.item_template
-        external_reference = '{}-{}'.format(concept_obj.id, user_helper.get_user_from_jwt(keys='user_account'))
         preference = {
             'items': [concept_item],
             'external_reference': external_reference,
@@ -101,22 +109,29 @@ class MPNotificationsApi(Resource):
         def process():
             notification = response.json().get('collection')
             external_reference = notification.get('external_reference').split('-')
-            concept_id = external_reference[0]
-            user_account = external_reference[1]
+            if len(external_reference) == 2:
+                service_id = None
+                concept_id = external_reference[0]
+                user_account = external_reference[1]
+            else:
+                service_id = external_reference[0]
+                concept_id = external_reference[1]
+                user_account = external_reference[2]
             kwargs = {
                 'payment_id': notification.get('id'),
                 'user': user_account,
                 'concept_id': concept_id,
                 'reason': notification.get('reason'),
                 'amount': notification.get('total_paid_amount'),
-                'status': notification.get('status')
+                'status': notification.get('status'),
+                'service_id': service_id
             }
             process_payment(**kwargs)
         Thread(target=process).start()
         return Message.created()
 
 
-def process_payment(payment_id, user, concept_id, reason, amount, status):
+def process_payment(payment_id, user, concept_id, reason, amount, status, service_id=None):
     user = user_helper.get_user(user_account=user)
     payment_exists = bool(Payment.objects(payment_id=payment_id).count())
     if payment_exists:
@@ -148,4 +163,5 @@ def process_payment(payment_id, user, concept_id, reason, amount, status):
             offers_to_add = offer_pack.offers_quantity
             enterprise.update(available_offers=enterprise.available_offers + offers_to_add)
         else:
-            pass
+            service = Service.objects.get(id=service_id)
+            service.update(preference=True)

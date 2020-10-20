@@ -49,7 +49,7 @@ class ServiceApi(Resource):
                 images_obj.append(new_image)
             if images_obj:
                 new_service.update(images=images_obj)
-        return Message.created()
+        return {'_id': new_service.id}, 201
 
     def put(self, service_id=None):
         service = Service.objects.get(id=service_id)
