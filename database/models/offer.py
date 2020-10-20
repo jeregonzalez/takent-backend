@@ -1,16 +1,35 @@
 from datetime import datetime
 
 from database.db import db
+from resources.helpers import user_helper
 from .common import Address, Image
 from .enterprise import Enterprise
 from .parametric_docs import StateOffer, StatePostulant
 from .user import CommonUser, EnterpriseUser
 
 
+class StatePostulantHistory(db.EmbeddedDocument):
+    date = db.DateTimeField(default=lambda: datetime.today())
+    state = db.StringField()
+    user = db.StringField()
+
+
 class Postulant(db.Document):
     postulation_date = db.DateTimeField(default=lambda: datetime.today())
     postulant = db.ReferenceField(CommonUser)
     state = db.ReferenceField(StatePostulant, default=lambda: StatePostulant.objects.get(name='pending'))
+    states_history = db.EmbeddedDocumentListField(StatePostulantHistory)
+
+    def save(self, *args, **kwargs):
+        self.states_history.create(state=self.state.name, user=user_helper.get_user_from_jwt(keys='user_account'))
+        return super(Postulant, self).save(*args, **kwargs)
+
+    def update(self, *args, **kwargs):
+        state = kwargs.get('state')
+        if state:
+            kwargs['push__states_history'] = StatePostulantHistory(state=state.name,
+                                                                   user=user_helper.get_user_from_jwt(keys='user_account'))
+        return super(Postulant, self).update(*args, **kwargs)
 
 
 class OfferLanguage(db.EmbeddedDocument):
@@ -21,6 +40,7 @@ class OfferLanguage(db.EmbeddedDocument):
 class StateOfferHistory(db.EmbeddedDocument):
     date = db.DateTimeField(default=lambda: datetime.today())
     state = db.StringField()
+    user = db.StringField()
 
 
 class Offer(db.Document):
@@ -41,11 +61,12 @@ class Offer(db.Document):
     states_history = db.EmbeddedDocumentListField(StateOfferHistory)
 
     def save(self, *args, **kwargs):
-        self.states_history.create(state=self.state.name)
+        self.states_history.create(state=self.state.name, user=user_helper.get_user_from_jwt(keys='user_account'))
         return super(Offer, self).save(*args, **kwargs)
 
     def update(self, *args, **kwargs):
         state = kwargs.get('state')
         if state:
-            kwargs['push__states_history'] = StateOfferHistory(state=state.name)
+            kwargs['push__states_history'] = StateOfferHistory(state=state.name,
+                                                               user=user_helper.get_user_from_jwt(keys='user_account'))
         return super(Offer, self).update(*args, **kwargs)
