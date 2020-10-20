@@ -1,7 +1,7 @@
 from threading import Thread
 
 from flask import request
-from flask_restful import Resource
+from flask_restful import Resource, abort
 from mongoengine import FieldDoesNotExist, ValidationError, DoesNotExist
 
 from database.models.offer import Offer, Postulant
@@ -60,6 +60,8 @@ class PostulateApi(Resource):
 
     def post(self, id_offer=None):
         offer = Offer.objects.get(id=id_offer)
+        if any(postulant.postulant == user_helper.get_user_from_jwt() for postulant in offer.postulants):
+            abort(400, message='Already postulated')
         postulant_info = {
             'postulant': user_helper.get_user_from_jwt()
         }
