@@ -15,7 +15,7 @@ class Enterprise(db.Document):
     images = db.ListField(db.ReferenceField(Image))
     description = db.StringField()
     web_page = db.StringField()
-    available_offers = db.IntField(default=10)
+    available_offers = db.IntField(default=3)
     address = db.EmbeddedDocumentField(Address)
     admin_user = db.ReferenceField(EnterpriseUser, required=True)
     member_users = db.ListField(db.ReferenceField(EnterpriseUser))
