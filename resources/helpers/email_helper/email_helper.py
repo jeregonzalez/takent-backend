@@ -30,7 +30,7 @@ IMAGES = {
     'email_delete_admin': {
         'button_be_admin': 'button_be_admin.jpeg'
     },
-    'email_contact': {
+    'email_contacted': {
         'button_take': 'button_contact.jpeg'
     }
 }
@@ -39,18 +39,18 @@ EMAILS_MAP = {
     'email_activation': 'email_activation.html',
     'email_change_password': 'email_change_password.html',
     'email_delete_admin': 'email_delete_admin.html',
-    'email_contact': 'email_contact.html',
-    'email_selected': 'email_selected.html',
-    'email_discard': 'email_discard.html'
+    'email_contacted': 'email_contacted.html',
+    'email_preselected': 'email_preselected.html',
+    'email_discarded': 'email_discarded.html'
 }
 
 SUBJECTS = {
     'email_activation': 'Activación de cuenta - Takent',
     'email_change_password': 'Cambio de clave de acceso - Takent',
     'email_delete_admin': 'Asignación de nuevo admin - Takent',
-    'email_contact': 'Hola {}, la empresa {} quiere contactarse con vos',
-    'email_selected': 'Respuesta a la postulación',
-    'email_discard': 'Respuesta a la postulación'
+    'email_contacted': 'Hola {}, la empresa {} quiere contactarse con vos',
+    'email_preselected': 'Respuesta a la postulación',
+    'email_discarded': 'Respuesta a la postulación'
 }
 
 
@@ -96,11 +96,12 @@ class Email(ABC):
                 image = MIMEImage(file.read())
             image.add_header('Content-ID', '<{}>'.format(key))
             self.root_message.attach(image)
-        for key, value in IMAGES.get(self.email_type).items():
-            with open('{}/images/{}'.format(current_dir, value), 'rb') as file:
-                image = MIMEImage(file.read())
-            image.add_header('Content-ID', '<{}>'.format(key))
-            self.root_message.attach(image)
+        if IMAGES.get(self.email_type):
+            for key, value in IMAGES.get(self.email_type).items():
+                with open('{}/images/{}'.format(current_dir, value), 'rb') as file:
+                    image = MIMEImage(file.read())
+                image.add_header('Content-ID', '<{}>'.format(key))
+                self.root_message.attach(image)
 
     def send_email(self):
         """
@@ -161,14 +162,15 @@ class EmailAdmin(Email):
         self.user_name = user_name
 
 
-class EmailContact(Email):
-    def __init__(self, destination_email, enterprise_name, user_name, email_contact, comment=None):
+class EmailContacted(Email):
+    def __init__(self, destination_email, enterprise_name, user_name, email_contact, offer_name, comment=None):
         super().__init__(destination_email)
-        self.email_type = 'email_contact'
+        self.email_type = 'email_contacted'
         self.enterprise_name = enterprise_name
         self.user_name = user_name
-        self.comment = comment
         self.email_contact = email_contact
+        self.offer_name = offer_name
+        self.comment = comment
 
     def _init_email(self):
         self.root_message['Subject'] = SUBJECTS.get(self.email_type).format(self.user_name, self.enterprise_name)
@@ -185,57 +187,41 @@ class EmailContact(Email):
         body_message = body_message.replace('$(user_name)', self.user_name)
         body_message = body_message.replace('$(enterprise)', self.enterprise_name)
         body_message = body_message.replace('$(email_contact)', self.email_contact)
+        body_message = body_message.replace('$(offer_name)', self.offer_name)
         self.alternative_message.attach(MIMEText(body_message, 'html'))
 
 
-class EmailSelected(Email):
-    def __init__(self, destination_email, user_name=None, enterprise_name=None):
+class EmailPreselected(Email):
+    def __init__(self, destination_email, enterprise_name, user_name, offer_name):
         super().__init__(destination_email=destination_email)
-        self.email_type = 'email_selected'
-        self.user_name = user_name
+        self.email_type = 'email_preselected'
         self.enterprise_name = enterprise_name
-
-    def _set_images(self):
-        """
-        Método que carga las imagenes al documento como documentos anexados
-        """
-        current_dir = os.path.dirname(os.path.realpath(__file__))
-        for key, value in COMMON_IMAGES.items():
-            with open('{}/images/{}'.format(current_dir, value), 'rb') as file:
-                image = MIMEImage(file.read())
-            image.add_header('Content-ID', '<{}>'.format(key))
-            self.root_message.attach(image)
+        self.user_name = user_name
+        self.offer_name = offer_name
 
     def _set_body(self):
         current_dir = os.path.dirname(os.path.realpath(__file__))
         with open('{}/html/{}'.format(current_dir, EMAILS_MAP.get(self.email_type))) as html_file:
             body_message = html_file.read()
-
         body_message = body_message.replace('$(user_name)', self.user_name)
         body_message = body_message.replace('$(enterprise)', self.enterprise_name)
+        body_message = body_message.replace('$(offer_name)', self.offer_name)
         self.alternative_message.attach(MIMEText(body_message, 'html'))
 
 
-class EmailDiscard(Email):
-    def __init__(self, destination_email, user_name=None):
+class EmailDiscarded(Email):
+    def __init__(self, destination_email, enterprise_name, user_name, offer_name):
         super().__init__(destination_email=destination_email)
-        self.email_type = 'email_discard'
+        self.enterprise_name = enterprise_name
+        self.email_type = 'email_discarded'
         self.user_name = user_name
-
-    def _set_images(self):
-        """
-        Método que carga las imagenes al documento como documentos anexados
-        """
-        current_dir = os.path.dirname(os.path.realpath(__file__))
-        for key, value in COMMON_IMAGES.items():
-            with open('{}/images/{}'.format(current_dir, value), 'rb') as file:
-                image = MIMEImage(file.read())
-            image.add_header('Content-ID', '<{}>'.format(key))
-            self.root_message.attach(image)
+        self.offer_name = offer_name
 
     def _set_body(self):
         current_dir = os.path.dirname(os.path.realpath(__file__))
         with open('{}/html/{}'.format(current_dir, EMAILS_MAP.get(self.email_type))) as html_file:
             body_message = html_file.read()
+        body_message = body_message.replace('$(enterprise_name)', self.enterprise_name)
         body_message = body_message.replace('$(user_name)', self.user_name)
+        body_message = body_message.replace('$(offer_name)', self.offer_name)
         self.alternative_message.attach(MIMEText(body_message, 'html'))
