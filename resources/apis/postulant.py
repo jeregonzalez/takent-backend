@@ -7,7 +7,7 @@ from mongoengine import FieldDoesNotExist, ValidationError, DoesNotExist
 from database.models.offer import Offer, Postulant
 from database.models.parametric_docs import StatePostulant
 from resources.helpers import user_helper, enterprise_helper
-from resources.helpers.email_helper.email_helper import EmailContact
+from resources.helpers.email_helper.email_helper import EmailContacted, EmailPreselected, EmailDiscarded
 from resources.helpers.design_patterns.state.postulant import PostulantStateManager
 from resources.utils.decorators import validate_headers, authentication_required, validate_user_exists, \
     validate_offer_exists, validate_user_is_enterprise, validate_user_is_common, validate_postulant_exists
@@ -75,7 +75,6 @@ class PostulateApi(Resource):
 
 
 class StatePostulantApi(Resource):
-
     ACTION_STATE_MAP = {
         'pre_select': 'pre_selected',
         'contact': 'contacted',
@@ -92,6 +91,7 @@ class StatePostulantApi(Resource):
         if not state or state not in [state.name for state in StatePostulant.objects]:
             raise SaveException('State {} not exists'.format(state))
         body = request.get_json()
+        offer = Offer.objects.get(id=id_offer)
         postulant = Postulant.objects.get(id=id_postulant)
         enterprise = enterprise_helper.get_enterprise()
         state_manager = PostulantStateManager(postulant, enterprise)
@@ -99,9 +99,22 @@ class StatePostulantApi(Resource):
             state_manager.change(state=state)
         except Exception as e:
             raise SaveException(e)
-        Thread(target=lambda: EmailContact(destination_email=postulant.postulant.id,
-                                           enterprise_name=enterprise.fantasy_name,
-                                           user_name=postulant.postulant.name,
-                                           email_contact=enterprise.contact_email,
-                                           comment=body.get('comment')).send_email()).start()
+        if action == 'pre_select':
+            target = lambda: EmailPreselected(destination_email=postulant.postulant.id,
+                                              enterprise_name=enterprise.fantasy_name,
+                                              user_name=postulant.postulant.name,
+                                              offer_name=offer.position).send_email()
+        elif action == 'contact':
+            target = lambda: EmailContacted(destination_email=postulant.postulant.id,
+                                            enterprise_name=enterprise.fantasy_name,
+                                            user_name=postulant.postulant.name,
+                                            email_contact=enterprise.contact_email,
+                                            comment=body.get('comment'),
+                                            offer_name=offer.position).send_email()
+        else:
+            target = lambda: EmailDiscarded(destination_email=postulant.postulant.id,
+                                            enterprise_name=enterprise.fantasy_name,
+                                            user_name=postulant.postulant.name,
+                                            offer_name=offer.position).send_email()
+        Thread(target=target).start()
         return Message.created()
