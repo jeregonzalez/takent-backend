@@ -11,11 +11,6 @@ class ServiceRequestState(object):
 
 class Pending(ServiceRequestState):
     name = 'pending'
-    allowed = ['in_course', 'completed']
-
-
-class InCourse(ServiceRequestState):
-    name = 'in_course'
     allowed = ['completed']
 
 
@@ -27,7 +22,6 @@ class Completed(ServiceRequestState):
 class ServiceRequestStateManager(object):
     STATE_DICT = {
         'pending': Pending,
-        'in_course': InCourse,
         'completed': Completed,
     }
 
