@@ -42,7 +42,7 @@ class Service(db.Document):
     title = db.StringField()
     sector = db.StringField()
     cost = db.FloatField()
-    preference = db.BooleanField()
+    preference = db.BooleanField(default=False)
     images = db.ListField(db.ReferenceField(Image))
     description = db.StringField()
     address = db.EmbeddedDocumentField(Address)
