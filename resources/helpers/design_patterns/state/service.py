@@ -11,16 +11,16 @@ class ServiceState(object):
 
 class Active(ServiceState):
     name = 'active'
-    allowed = ['inactive', 'deleted']
+    allowed = ['inactive', 'finished']
 
 
 class Inactive(ServiceState):
     name = 'inactive'
-    allowed = ['active', 'deleted']
+    allowed = ['active', 'finished']
 
 
-class Deleted(ServiceState):
-    name = 'deleted'
+class Finished(ServiceState):
+    name = 'finished'
     allowed = []
 
 
@@ -28,7 +28,7 @@ class ServiceStateManager(object):
     STATE_DICT = {
         'active': Active,
         'inactive': Inactive,
-        'deleted': Deleted
+        'finished': Finished
     }
 
     def __init__(self, state):
