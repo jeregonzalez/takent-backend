@@ -11,7 +11,7 @@ class ServiceRequestState(object):
 
 class Pending(ServiceRequestState):
     name = 'pending'
-    allowed = ['completed']
+    allowed = ['completed', 'canceled']
 
 
 class Completed(ServiceRequestState):
@@ -19,10 +19,16 @@ class Completed(ServiceRequestState):
     allowed = []
 
 
+class Canceled(ServiceRequestState):
+    name = 'canceled'
+    allowed = []
+
+
 class ServiceRequestStateManager(object):
     STATE_DICT = {
         'pending': Pending,
         'completed': Completed,
+        'canceled': Canceled
     }
 
     def __init__(self, state):
