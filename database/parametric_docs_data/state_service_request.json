@@ -4,5 +4,8 @@
   },
   {
     "name": "completed"
+  },
+  {
+    "name": "canceled"
   }
 ]
