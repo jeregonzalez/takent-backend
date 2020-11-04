@@ -146,6 +146,12 @@ class EncodeStrategyService(EncodeStrategy):
         }
         if self.obj.address:
             response['address'] = self.obj.address.format_response()
+        user_account = user_helper.get_user_from_jwt('user_account')
+        if self.obj.service_requests and any(service_request.user.id == user_account
+                                             for service_request in self.obj.service_requests):
+            response['requested'] = True
+        else:
+            response['requested'] = False
         return response
 
 

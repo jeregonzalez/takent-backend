@@ -1,13 +1,14 @@
 from flask import request
 from flask_restful import Resource, abort
-from mongoengine import FieldDoesNotExist, ValidationError, DoesNotExist, InvalidQueryError
+from mongoengine import FieldDoesNotExist, ValidationError, InvalidQueryError
 
 from database.models.common import Image
 from database.models.parametric_docs import StateService
 from database.models.service import Service
 from resources.helpers import service_helper, user_helper
 from resources.helpers.design_patterns.state.service import ServiceStateManager
-from resources.utils.decorators import validate_headers, authentication_required, validate_user_exists, \
+from resources.utils.decorators import validate_headers, authentication_required, \
+    validate_user_exists, \
     validate_service_exists, validate_user_is_common
 from resources.utils.exceptions import GetException, SaveException, UpdateException
 from resources.utils.messages import Message
