@@ -2,8 +2,9 @@ import random
 
 from dateutil import parser
 from flask import request
-from mongoengine import ObjectIdField, ReferenceField, ListField, EmbeddedDocumentListField, StringField, DateTimeField, \
-    InvalidQueryError, LookUpError, FloatField
+from mongoengine import ObjectIdField, ReferenceField, ListField, EmbeddedDocumentListField, \
+    StringField, DateTimeField, \
+    InvalidQueryError, LookUpError, FloatField, BooleanField
 
 from database.models.place import Country, City
 from database.models.service import Service
@@ -86,6 +87,9 @@ def filter_services(filters):
                 query_param.append(('{}__gte'.format(key), start_date))
             if end_date:
                 query_param.append(('{}__lte'.format(key), end_date))
+        elif type(field_type) == BooleanField:
+            values = True if values[0] == 'true' else False
+            query_param.append(('{}'.format(key), values))
         elif key.startswith('address'):
             keys = key.split('.')
             if keys[1] == 'province':
