@@ -102,8 +102,7 @@ class ProfilePhotoEnterpriseApi(Resource):
 
 class EnterpriseImagesApi(Resource):
     method_decorators = {
-        'get': [validate_enterprise_exists, validate_user_is_enterprise, validate_user_exists, authentication_required,
-                validate_headers],
+        'get': [validate_user_exists, authentication_required, validate_headers],
         'post': [validate_enterprise_exists, validate_user_is_enterprise, validate_user_exists, authentication_required,
                  validate_headers],
         'put': [validate_enterprise_exists, validate_user_is_enterprise, validate_user_exists, authentication_required,
@@ -113,9 +112,20 @@ class EnterpriseImagesApi(Resource):
     }
 
     def get(self):
-        user = user_helper.get_user_from_jwt(keys='user_account')
-        enterprise = enterprise_helper.get_enterprise(user_account=user)
-        print(enterprise.images)
+        id_enterprise = request.args.get('id')
+        if id_enterprise:
+            try:
+                enterprise = Enterprise.objects.get(id=id_enterprise)
+            except DoesNotExist as e:
+                raise GetException(e)
+        else:
+            if get_jwt_identity().get('user_type') != 'enterprise':
+                abort(400, message='User must be enterprise')
+            if not enterprise_helper.enterprise_exists(user_account=get_jwt_identity().get('user_account')):
+                abort(400, message='User {} does not have an enterprise associated'
+                      .format(get_jwt_identity().get('user_account')))
+            user = user_helper.get_user_from_jwt(keys='user_account')
+            enterprise = enterprise_helper.get_enterprise(user_account=user)
         return [image.base64 for image in enterprise.images if image.base64]
 
     def post(self):
