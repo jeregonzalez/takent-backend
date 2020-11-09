@@ -134,8 +134,8 @@ class EmailActivation(Email):
         current_dir = os.path.dirname(os.path.realpath(__file__))
         with open('{}/html/{}'.format(current_dir, EMAILS_MAP.get(self.email_type))) as html_file:
             body_message = html_file.read()
-        url_activation = '{}/api/v1/user/activate?ticket={}'.format(ProjectVars.get_project_var('FRONTEND_URL'),
-                                                                    self.ticket_hash)
+        url_activation = '{}/userActivated?ticket={}'.format(ProjectVars.get_project_var('FRONTEND_URL'),
+                                                             self.ticket_hash)
         body_message = body_message.replace('$(url_activation)', url_activation)
         self.alternative_message.attach(MIMEText(body_message, 'html'))
 

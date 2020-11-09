@@ -191,7 +191,7 @@ class ActivateAccountApi(Resource):
         user = user_helper.get_user(user_type=ticket.user_type, user_account=ticket.account)
         user.activate()
         ticket.delete()
-        return {'message': 'Account {} activated'.format(user.account)}, 200
+        return {'user': user.account}, 200
 
 
 class UserAttributesListApi(Resource):
