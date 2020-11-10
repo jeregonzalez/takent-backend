@@ -125,8 +125,10 @@ def filter_services(filters):
         elif sort == 'random':
             def get_services():
                 list_offers = [offer for offer in Service.objects(**mongo_query_params)]
-                random.shuffle(list_offers)
-                return list_offers
+                preferenced_services = [offer for offer in list_offers if offer.preference]
+                not_preferenced_services = [offer for offer in list_offers if not offer.preference]
+                random.shuffle(not_preferenced_services)
+                return preferenced_services + not_preferenced_services
         else:
             get_services = lambda: Service.objects(**mongo_query_params).order_by('-preference', '+publication_date')
     else:
