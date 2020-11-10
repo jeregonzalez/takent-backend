@@ -103,18 +103,18 @@ class StatePostulantApi(Resource):
             target = lambda: EmailPreselected(destination_email=postulant.postulant.id,
                                               enterprise_name=enterprise.fantasy_name,
                                               user_name=postulant.postulant.name,
-                                              offer_name=offer.position).send_email()
+                                              offer_name=offer.title).send_email()
         elif action == 'contact':
             target = lambda: EmailContacted(destination_email=postulant.postulant.id,
                                             enterprise_name=enterprise.fantasy_name,
                                             user_name=postulant.postulant.name,
                                             email_contact=enterprise.contact_email,
                                             comment=body.get('comment'),
-                                            offer_name=offer.position).send_email()
+                                            offer_name=offer.title).send_email()
         else:
             target = lambda: EmailDiscarded(destination_email=postulant.postulant.id,
                                             enterprise_name=enterprise.fantasy_name,
                                             user_name=postulant.postulant.name,
-                                            offer_name=offer.position).send_email()
+                                            offer_name=offer.title).send_email()
         Thread(target=target).start()
         return Message.created()
