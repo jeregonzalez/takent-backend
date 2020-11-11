@@ -127,6 +127,7 @@ def filter_services(filters):
                 list_offers = [offer for offer in Service.objects(**mongo_query_params)]
                 preferenced_services = [offer for offer in list_offers if offer.preference]
                 not_preferenced_services = [offer for offer in list_offers if not offer.preference]
+                random.shuffle(preferenced_services)
                 random.shuffle(not_preferenced_services)
                 return preferenced_services + not_preferenced_services
         else:
