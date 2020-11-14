@@ -1,5 +1,6 @@
 # IDEs
 /.idea
+/.vscode
 
 # Caches
 *.pyc
@@ -8,3 +9,11 @@
 # Builds
 build
 dist
+
+# Logs
+/logs
+/nohup.out
+/logfile.log
+
+# Data files
+/temp_data

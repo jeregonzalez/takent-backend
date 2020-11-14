@@ -1,0 +1,67 @@
+import re
+
+from flask_jwt_extended import get_jwt_identity
+from flask_restful import abort
+
+from database.models.user import CommonUser, EnterpriseUser
+from resources.consts.consts import JwtKey
+
+USER_TYPES = {
+    'common': CommonUser,
+    'enterprise': EnterpriseUser
+}
+
+
+def user_exists(user_account, user_type=None):
+    if not user_type:
+        user_type = ['common', 'enterprise']
+    if isinstance(user_type, str):
+        user_type = [user_type]
+    exist = any(USER_TYPES[user_type].objects(account=user_account).count() for user_type in user_type)
+    return exist
+
+
+def users_exist(user_accounts, user_type=None):
+    if not user_type:
+        user_type = ['common', 'enterprise']
+    if isinstance(user_type, str):
+        user_type = [user_type]
+    existing_accounts = []
+    for user_account in user_accounts:
+        if any(USER_TYPES[user_type].objects(account=user_account).count() for user_type in user_type):
+            existing_accounts.append(user_account)
+    if existing_accounts:
+        return True, existing_accounts
+    else:
+        return False, []
+
+
+def get_user(user_account, user_type=None):
+    if not user_type:
+        user_type = 'common' if USER_TYPES['common'].objects(account=user_account).count() else 'enterprise'
+    return USER_TYPES[user_type].objects.get(account=user_account)
+
+
+def get_user_from_jwt(keys=None):
+    user_data = get_jwt_identity()
+    if keys:
+        if isinstance(keys, str):
+            return user_data.get(keys)
+        return {key: user_data.get(key) for key in keys}
+    return USER_TYPES[user_data.get(JwtKey.USER_TYPE)].objects.get(account=user_data.get(JwtKey.USER_ACCOUNT))
+
+
+def validate_password(password=None):
+    if password:
+        result = re.search("^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,15}$", password)
+
+        if not result:
+            abort(400, message='Password is invalid')
+
+
+def get_member_user(user_account=None):
+    if user_account:
+        user = get_user(user_account=user_account, user_type='enterprise')
+    else:
+        user = get_user_from_jwt()
+    return user

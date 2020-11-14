@@ -1,0 +1,65 @@
+version: 1
+disable_existing_loggers: false
+
+formatters:
+  standard_format:
+    format: '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+    datefmt: '%d-%m-%Y %H:%M:%S'
+  debug_format:
+    format: "%(levelname)s <PID %(process)d:%(processName)s> %(name)s.%(funcName)s(): %(message)s"
+    datefmt: '%d-%m-%Y %H:%M:%S'
+  requests_format:
+    format: '%(asctime)s - %(message)s'
+    datefmt: '%d-%m-%Y %H:%M:%S'
+
+handlers:
+  console:
+    class: logging.StreamHandler
+    level: DEBUG
+    formatter: standard_format
+    stream: ext://flask.logging.wsgi_errors_stream
+
+  werkzeug_file_info_handler:
+    class: logging.FileHandler
+    level: INFO
+    formatter: standard_format
+    filename: logs/werkzeug.log
+    mode: w
+    encoding: utf-8
+
+  file_debug_handler:
+    class: logging.FileHandler
+    level: DEBUG
+    formatter: debug_format
+    filename: logs/debug.log
+    mode: w
+    encoding: utf-8
+
+  requests_info_handler:
+    class: logging.FileHandler
+    level: INFO
+    formatter: requests_format
+    filename: logs/requests.log
+    mode: w
+    encoding: utf-8
+
+root:
+  level: DEBUG
+  handlers: [console]
+  propagate: yes
+
+loggers:
+  werkzeug:
+    level: NOTSET
+    handlers: [console, werkzeug_file_info_handler, file_debug_handler]
+    propagate: no
+
+  app:
+    level: NOTSET
+    handlers: [file_debug_handler]
+    propagate: no
+
+  requests:
+    level: NOTSET
+    handlers: [requests_info_handler]
+    propagate: no
