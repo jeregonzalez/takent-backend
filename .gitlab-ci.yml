@@ -1,6 +1,6 @@
 workflow:
   rules:
-    - if: '$CI_COMMIT_BRANCH == "develop"'
+    - if: '$CI_COMMIT_BRANCH == "prueba"'
 
 build:
   stage: build
@@ -13,3 +13,12 @@ build:
     - echo "{\"auths\":{\"$CI_REGISTRY\":{\"username\":\"$CI_REGISTRY_USER\",\"password\":\"$CI_REGISTRY_PASSWORD\"}}}" > /kaniko/.docker/config.json
     - /kaniko/executor --context $CI_PROJECT_DIR --dockerfile $CI_PROJECT_DIR/Dockerfile.prod --destination $CI_REGISTRY_IMAGE:$CI_COMMIT_BRANCH
   environment: push-to-docker-hub
+
+deploy:
+  stage: deploy
+  script:
+    - apt-get update -qq
+    - 'which ssh-agent || ( apt-get install -qq openssh-client )'
+    - eval $(ssh-agent -s)
+    - echo $DEPLOY_SERVER_PRIVATE_KEY | base64 -d > server-private-key.pem
+    - ssh -o StrictHostKeyChecking=no -i server-private-key.pem $DEPLOY_SERVER_USER@$DEPLOY_SERVER_DOMAIN "cd $DEPLOY_SERVER_REPO_PATH && git checkout master && git pull && docker-compose -f $DOCKER_COMPOSE_FILE pull && docker-compose -f $DOCKER_COMPOSE_FILE up -d"
