@@ -2,6 +2,12 @@ workflow:
   rules:
     - if: '$CI_COMMIT_BRANCH == "develop"'
 
+before_script:
+  - apt install git-crypt
+  - echo $CI_GIT_CRYPT_KEY | base64 --decode > ~/decription-key
+  - cd $CI_PROJECT_DIR
+  - git-crypt unlock ~/decription-key
+
 build:
   stage: build
   image: 
