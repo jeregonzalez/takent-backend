@@ -2,6 +2,14 @@ workflow:
   rules:
     - if: '$CI_COMMIT_BRANCH == "develop"'
 
+decrypt_repository:
+  stage: .pre
+  image: xueshanf/docker-git-crypt
+  script:
+    - echo $CI_GIT_CRYPT_KEY | base64 --decode > $CI_PROJECT_DIR/decrypt-key
+    - cd $CI_PROJECT_DIR
+    - git-crypt unlock decrypt-key
+
 before_script:
   - apt install git-crypt
   - echo $CI_GIT_CRYPT_KEY | base64 --decode > ~/decription-key
