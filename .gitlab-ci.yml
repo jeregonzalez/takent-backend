@@ -1,6 +1,6 @@
 workflow:
   rules:
-    - if: '$CI_COMMIT_BRANCH == "prueba"'
+    - if: '$CI_COMMIT_BRANCH == "develop"'
 
 build:
   stage: build
@@ -20,5 +20,5 @@ deploy:
     - apt-get update -qq
     - 'which ssh-agent || ( apt-get install -qq openssh-client )'
     - eval $(ssh-agent -s)
-    - echo $DEPLOY_SERVER_PRIVATE_KEY | base64 -d > server-private-key.pem
+    - echo "$DEPLOY_SERVER_PRIVATE_KEY" | base64 -d > server-private-key.pem
     - ssh -o StrictHostKeyChecking=no -i server-private-key.pem $DEPLOY_SERVER_USER@$DEPLOY_SERVER_DOMAIN "cd $DEPLOY_SERVER_REPO_PATH && git checkout master && git pull && docker-compose -f $DOCKER_COMPOSE_FILE pull && docker-compose -f $DOCKER_COMPOSE_FILE up -d"
