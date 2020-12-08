@@ -10,21 +10,20 @@ from resources.helpers import user_helper, auth_helper, enterprise_helper
 from resources.helpers.email_helper.email_helper import EmailActivation
 from resources.utils.decorators import validate_headers, authentication_required, validate_user_password, \
     validate_user_exists, validate_user_not_exists, validate_user_is_enterprise, validate_member_user_exists, \
-    validate_permission_is_admin
+    validate_permission_is_admin, validate_enterprise_exists
 from resources.utils.exceptions import SaveException, UpdateException
 from resources.utils.messages import Message
 
 
 class MemberUserApi(Resource):
-
     method_decorators = {
-        'get': [validate_member_user_exists, validate_user_is_enterprise, validate_user_exists, authentication_required,
+        'get': [validate_member_user_exists, validate_enterprise_exists, validate_user_is_enterprise, validate_user_exists, authentication_required,
                 validate_headers],
-        'post': [validate_user_not_exists, validate_user_password, validate_permission_is_admin,
+        'post': [validate_enterprise_exists, validate_user_not_exists, validate_user_password, validate_permission_is_admin,
                  validate_user_is_enterprise, validate_user_exists, authentication_required, validate_headers],
-        'put': [validate_member_user_exists, validate_user_is_enterprise, validate_user_exists, validate_user_password,
+        'put': [validate_member_user_exists, validate_enterprise_exists, validate_user_is_enterprise, validate_user_exists, validate_user_password,
                 authentication_required, validate_headers],
-        'delete': [validate_member_user_exists, validate_user_is_enterprise, validate_user_exists,
+        'delete': [validate_member_user_exists, validate_enterprise_exists, validate_user_is_enterprise, validate_user_exists,
                    authentication_required, validate_headers]
     }
 
@@ -62,3 +61,14 @@ class MemberUserApi(Resource):
         enterprise.update(pull__member_users=user)
         user.delete()
         return Message.deleted()
+
+
+class MemberUsersByEnterprise(Resource):
+    method_decorators = {
+        'get': [validate_enterprise_exists, validate_user_is_enterprise, validate_user_exists, authentication_required,
+                validate_headers]
+    }
+
+    def get(self):
+        enterprise = enterprise_helper.get_enterprise()
+        return Message.ok([user for user in enterprise.member_users])
