@@ -134,8 +134,8 @@ class EnterpriseImagesApi(Resource):
             abort(400, message='No images sent')
         user = user_helper.get_user_from_jwt(keys='user_account')
         enterprise = enterprise_helper.get_enterprise(user_account=user)
-        if enterprise.images:
-            enterprise.images.delete()
+        for image in enterprise.images:
+            image.delete()
         images_obj = []
         for image in images:
             new_image = Image(base64=image).save()
