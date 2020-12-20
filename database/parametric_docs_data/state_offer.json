@@ -10,5 +10,11 @@
   },
   {
     "name": "deleted"
+  },
+  {
+    "name": "programmed"
+  },
+  {
+    "name": "draft"
   }
 ]
