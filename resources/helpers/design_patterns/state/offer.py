@@ -29,12 +29,24 @@ class Deleted(OfferState):
     allowed = []
 
 
+class Programmed(OfferState):
+    name = 'programmed'
+    allowed = ['active', 'deleted']
+
+
+class Draft(OfferState):
+    name = 'draft'
+    allowed = ['active', 'deleted', 'programmed']
+
+
 class OfferStateManager(object):
     STATE_DICT = {
         'active': Active,
         'in_selection': InSelection,
         'finished': Finished,
-        'deleted': Deleted
+        'deleted': Deleted,
+        'programmed': Programmed,
+        'draft': Draft
     }
 
     def __init__(self, state):
