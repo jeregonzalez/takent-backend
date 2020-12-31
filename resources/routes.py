@@ -12,8 +12,9 @@ from resources.apis.sector import SectorApi
 from resources.apis.profession import ProfessionApi
 from resources.apis.service import ServiceApi, ServiceImagesApi
 from resources.apis.service_request import ServiceRequestApi, NewServiceRequestApi
-from resources.apis.user import ImageApi, CurriculumApi, UserApi, PasswordRecoverApi, ChangePasswordApi, \
-    UserExistsValidationApi, ActivateAccountApi, UserAttributesListApi
+from resources.apis.user import ImageApi, CurriculumApi, UserApi, PasswordRecoverApi, \
+    ChangePasswordApi, \
+    UserExistsValidationApi, ActivateAccountApi, UserAttributesListApi, RecoverAccountApi
 from resources.apis.offer import OfferApi, OfferImagesApi
 from resources.apis.user_and_enterprise import UserAndEnterpriseApi
 
@@ -78,3 +79,5 @@ def initialize_routes(api):
                      '/api/v1/service/<service_id>/request/<service_request_id>')
     # Request service
     api.add_resource(NewServiceRequestApi, '/api/v1/request_service/<service_id>')
+    # Account recovery
+    api.add_resource(RecoverAccountApi, '/api/v1/recover_account')
