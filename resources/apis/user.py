@@ -6,10 +6,11 @@ from mongoengine import FieldDoesNotExist, ValidationError, DoesNotExist
 
 from database.models.common import Image
 from database.models.common_user import UserCurriculumVitae
-from database.models.parametric_docs import StateUser, StateService
+from database.models.offer import Offer
+from database.models.parametric_docs import StateUser, StateService, StateOffer
 from database.models.service import Service
 from database.models.user import ActivationTicket, CommonUser, RecoveryTicket
-from resources.helpers import password_helper, user_helper, auth_helper
+from resources.helpers import password_helper, user_helper, auth_helper, enterprise_helper
 from resources.helpers.email_helper.email_helper import EmailActivation, \
     EmailChangePassword, EmailRecovery
 from resources.helpers.log_helper import LOGGER
@@ -60,11 +61,15 @@ class UserApi(Resource):
             finished = StateService.objects.get(name='finished')
             services = Service.objects(publication_user=user, state=StateService.objects.get(name='active'))
             for service in services:
-                LOGGER.info(service)
                 service.update(state=finished)
-        else:
-            # TODO agregar logica para usuario empresa
-            pass
+        elif user.permission.name == 'admin':
+            enterprise = enterprise_helper.get_enterprise(user_account=user.account)
+            finished = StateOffer.objects.get(name='finished')
+            offers = Offer.objects(enterprise=enterprise)
+            for offer in offers:
+                offer.update(state=finished)
+            for member_user in enterprise.member_users:
+                member_user.update(state=StateUser.objects.get(name='deleted'))
         return Message.deleted()
 
 
