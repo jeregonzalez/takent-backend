@@ -2,6 +2,7 @@ import re
 
 from flask_jwt_extended import get_jwt_identity
 from flask_restful import abort
+from mongoengine import DoesNotExist
 
 from database.models.user import CommonUser, EnterpriseUser
 from resources.consts.consts import JwtKey
@@ -36,10 +37,16 @@ def users_exist(user_accounts, user_type=None):
         return False, []
 
 
-def get_user(user_account, user_type=None):
+def get_user(user_account, user_type=None, fail_ok=False):
     if not user_type:
         user_type = 'common' if USER_TYPES['common'].objects(account=user_account).count() else 'enterprise'
-    return USER_TYPES[user_type].objects.get(account=user_account)
+    user = None
+    try:
+        user = USER_TYPES[user_type].objects.get(account=user_account)
+    except DoesNotExist as e:
+        if not fail_ok:
+            raise e
+    return user
 
 
 def get_user_from_jwt(keys=None):
@@ -60,8 +67,4 @@ def validate_password(password=None):
 
 
 def get_member_user(user_account=None):
-    if user_account:
-        user = get_user(user_account=user_account, user_type='enterprise')
-    else:
-        user = get_user_from_jwt()
-    return user
+    return get_user(user_account=user_account, user_type='enterprise') if user_account else get_user_from_jwt()

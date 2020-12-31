@@ -24,6 +24,9 @@ IMAGES = {
     'email_activation': {
         'button_activation': 'button_activation.jpeg'
     },
+    'email_recovery': {
+        'button_activation': 'button_activation.jpeg'
+    },
     'email_change_password': {
         'button_change_password': 'button_change_password.jpeg'
     },
@@ -37,6 +40,7 @@ IMAGES = {
 
 EMAILS_MAP = {
     'email_activation': 'email_activation.html',
+    'email_recovery': 'email_recovery.html',
     'email_change_password': 'email_change_password.html',
     'email_delete_admin': 'email_delete_admin.html',
     'email_contacted': 'email_contacted.html',
@@ -46,6 +50,7 @@ EMAILS_MAP = {
 
 SUBJECTS = {
     'email_activation': 'Activación de cuenta - Takent',
+    'email_recovery': 'Recuperación de cuenta - Takent',
     'email_change_password': 'Cambio de clave de acceso - Takent',
     'email_delete_admin': 'Asignación de nuevo admin - Takent',
     'email_contacted': 'Hola {}, la empresa {} quiere contactarse con vos',
@@ -137,6 +142,22 @@ class EmailActivation(Email):
         url_activation = '{}/userActivated?ticket={}'.format(ProjectVars.get_project_var('FRONTEND_URL'),
                                                              self.ticket_hash)
         body_message = body_message.replace('$(url_activation)', url_activation)
+        self.alternative_message.attach(MIMEText(body_message, 'html'))
+
+
+class EmailRecovery(Email):
+    def __init__(self, destination_email, ticket_hash):
+        super().__init__(destination_email)
+        self.email_type = 'email_recovery'
+        self.ticket_hash = ticket_hash
+
+    def _set_body(self):
+        current_dir = os.path.dirname(os.path.realpath(__file__))
+        with open('{}/html/{}'.format(current_dir, EMAILS_MAP.get(self.email_type))) as html_file:
+            body_message = html_file.read()
+        url_recovery = '{}/userRecover?ticket={}'.format(ProjectVars.get_project_var('FRONTEND_URL'),
+                                                         self.ticket_hash)
+        body_message = body_message.replace('$(url_recovery)', url_recovery)
         self.alternative_message.attach(MIMEText(body_message, 'html'))
 
 
