@@ -33,7 +33,10 @@ class AuthenticationApi(Resource):
             if not authorized:
                 abort(401, message='Account or password invalid')
             if user.state.name in ['inactive', 'deleted']:
-                abort(400, message='User {} is not active'.format(user_account), state=user.state.name)
+                kwargs = {'message': 'User {} is not active'.format(user_account)}
+                if not hasattr(user, 'permission') or user.permission.name != 'member':
+                    kwargs['state'] = user.state.name
+                abort(400, **kwargs)
         expires = datetime.timedelta(hours=4)
         user_type = 'common' if isinstance(user, CommonUser) else 'enterprise'
         identity = {'user_type': user_type, 'user_account': user.account}
