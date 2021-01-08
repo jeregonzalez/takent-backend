@@ -56,6 +56,9 @@ def _get(api):
     logging.info('GET {}'.format(url))
     dataframe = pd.read_csv(url)
     dataframe = dataframe.rename(columns=api_options.get('columns_map'))
+    # Workaround for duplicated city
+    if api == 'cities':
+        dataframe = dataframe.drop(dataframe[dataframe.code == 14014010003].index)
     if not os.path.exists(FILE_BASE_PATH):
         os.makedirs(FILE_BASE_PATH)
     dataframe.to_csv(file_path, index=False)
