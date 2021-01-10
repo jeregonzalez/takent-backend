@@ -1,3 +1,4 @@
+from resources.apis.enterprise_statistics import StatisticsApi
 from resources.apis.member_user import MemberUserApi, MemberUsersByEnterprise
 from resources.apis.education import EducationLevelApi
 from resources.apis.enterprise import EnterpriseApi, ProfilePhotoEnterpriseApi, EnterpriseImagesApi
@@ -81,3 +82,5 @@ def initialize_routes(api):
     api.add_resource(NewServiceRequestApi, '/api/v1/request_service/<service_id>')
     # Account recovery
     api.add_resource(RecoverAccountApi, '/api/v1/recover_account')
+    # Statistics
+    api.add_resource(StatisticsApi, '/api/v1/enterprise/statistic/<statistic_name>')

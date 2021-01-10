@@ -2,7 +2,6 @@ from mongoengine import NULLIFY
 
 from database.db import db
 from database.models.common import Address, Image
-from database.models.parametric_docs import StateOffer
 from database.models.user import EnterpriseUser
 
 
