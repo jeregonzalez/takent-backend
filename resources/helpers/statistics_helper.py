@@ -18,10 +18,10 @@ def get_offers_per_month(months=12):
     offers_per_month = []
     for i in range(1, months + 1):
         date = min_date + relativedelta(months=i)
-        offers_per_month.append({'month': date.strftime('%m/%Y'), 'quantity': 0})
+        offers_per_month.append({'month': date.strftime('%m/%y'), 'quantity': 0})
 
     for offer in offers:
-        publication_month = offer.publication_date.strftime('%m/%Y')
+        publication_month = offer.publication_date.strftime('%m/%y')
         [stat for stat in offers_per_month if stat.get('month') == publication_month][0]['quantity'] += 1
 
     return list(offers_per_month)
@@ -59,7 +59,7 @@ def get_postulants_age(min=18, max=65, interval_length=10):
     for offer in offers:
         postulant_ages.extend([__get_age(postulant.postulant.birth_date) for postulant in offer.postulants])
 
-    age_ranges = {'{}-{}'.format(i, i + interval_length - 1): (i, i + interval_length - 1)
+    age_ranges = {'{}-{}'.format(i, i + interval_length - 1) if i + interval_length < max else '+{}'.format(i - 1): (i, i + interval_length - 1)
                   for i in range(min, max, interval_length)}
 
     result = [{'age': age_range, 'quantity': 0} for age_range in age_ranges.keys()]
@@ -89,12 +89,12 @@ def get_postulants_by_state_by_month(months=6):
     result = []
     for i in range(1, months + 1):
         date = min_date + relativedelta(months=i)
-        stat = {**{'month': date.strftime('%m/%Y')}, **{state: 0 for state in postulant_states}}
+        stat = {**{'month': date.strftime('%m/%y')}, **{state: 0 for state in postulant_states}}
         result.append(stat)
 
     for offer in offers:
         for postulant in offer.postulants:
-            publication_month = offer.publication_date.strftime('%m/%Y')
+            publication_month = offer.publication_date.strftime('%m/%y')
             [stat for stat in result if stat.get('month') == publication_month][0][postulant.state.name] += 1
 
     return result
