@@ -3199,6 +3199,156 @@
 					]
 				},
 				{
+					"name": "Statistics",
+					"item": [
+						{
+							"name": "Offers per month",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{user_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{host}}/enterprise/statistic/offers_per_month",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"enterprise",
+										"statistic",
+										"offers_per_month"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Most popular offers",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{user_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{host}}/enterprise/statistic/most_popular_offers",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"enterprise",
+										"statistic",
+										"most_popular_offers"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Offers by state",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{user_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{host}}/enterprise/statistic/offers_by_state",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"enterprise",
+										"statistic",
+										"offers_by_state"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Postulants by age",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{user_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{host}}/enterprise/statistic/postulants_by_age",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"enterprise",
+										"statistic",
+										"postulants_by_age"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Postulants by month and state",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{user_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{host}}/enterprise/statistic/postulants_by_month_and_state",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"enterprise",
+										"statistic",
+										"postulants_by_month_and_state"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
 					"name": "Enterprise",
 					"request": {
 						"auth": {
