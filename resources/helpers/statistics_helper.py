@@ -12,7 +12,7 @@ def get_offers_per_month(months=12):
 
     min_date = datetime.now().replace(day=1, hour=0, minute=0, second=0, microsecond=0) - \
                relativedelta(months=months)
-    offers = Offer.objects(enterprise=enterprise, state__nin=['deleted', 'programmed'],
+    offers = Offer.objects(enterprise=enterprise, state__nin=['deleted', 'programmed', 'draft'],
                            publication_date__gte=min_date)
 
     offers_per_month = []
@@ -27,7 +27,7 @@ def get_offers_per_month(months=12):
     return list(offers_per_month)
 
 
-def get_offers_with_greater_postulants_amount(quantity=10):
+def get_offers_with_greater_postulants_amount(quantity=5):
     enterprise = enterprise_helper.get_enterprise()
 
     offers = Offer.objects(enterprise=enterprise)
@@ -35,6 +35,16 @@ def get_offers_with_greater_postulants_amount(quantity=10):
     result = [{'title': offer.title, 'postulants': len(offer.postulants)} for offer in offers]
     result.sort(key=lambda offer: offer.get('postulants'), reverse=True)
     result = result[:quantity]
+
+    existing_titles = []
+    for item in result:
+        for existing_title in existing_titles:
+            if existing_title[0] == item.get('title'):
+                existing_title[1] += 1
+                item['title'] += ' (%s)' % existing_title[1]
+                break
+        else:
+            existing_titles.append([item.get('title'), 0])
 
     return result
 
