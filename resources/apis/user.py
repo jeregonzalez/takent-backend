@@ -6,13 +6,16 @@ from mongoengine import FieldDoesNotExist, ValidationError, DoesNotExist
 
 from database.models.common import Image
 from database.models.common_user import UserCurriculumVitae
-from database.models.user import ActivationTicket, CommonUser
-from resources.helpers import password_helper, user_helper, auth_helper
+from database.models.offer import Offer
+from database.models.parametric_docs import StateUser, StateService, StateOffer
+from database.models.service import Service
+from database.models.user import ActivationTicket, CommonUser, RecoveryTicket
+from resources.helpers import password_helper, user_helper, auth_helper, enterprise_helper
 from resources.helpers.email_helper.email_helper import EmailActivation, \
-    EmailChangePassword
+    EmailChangePassword, EmailRecovery
+from resources.helpers.log_helper import LOGGER
 from resources.utils.decorators import validate_headers, authentication_required, \
-    validate_user_is_common, \
-    validate_user_exists, validate_user_not_exists, validate_user_password
+    validate_user_is_common, validate_user_exists, validate_user_not_exists, validate_user_password
 from resources.utils.exceptions import MissingRequiredFieldsException, \
     SchemaValidationErrorException, SaveException, UpdateException, GetException
 from resources.utils.messages import Message
@@ -53,7 +56,20 @@ class UserApi(Resource):
 
     def delete(self, user_type=None):
         user = user_helper.get_user_from_jwt()
-        user.delete()
+        user.update(state=StateUser.objects.get(name='deleted'))
+        if isinstance(user, CommonUser):
+            finished = StateService.objects.get(name='finished')
+            services = Service.objects(publication_user=user, state=StateService.objects.get(name='active'))
+            for service in services:
+                service.update(state=finished)
+        elif user.permission.name == 'admin':
+            enterprise = enterprise_helper.get_enterprise(user_account=user.account)
+            finished = StateOffer.objects.get(name='finished')
+            offers = Offer.objects(enterprise=enterprise)
+            for offer in offers:
+                offer.update(state=finished)
+            for member_user in enterprise.member_users:
+                member_user.update(state=StateUser.objects.get(name='deleted'))
         return Message.deleted()
 
 
@@ -269,3 +285,31 @@ class UserAttributesListApi(Resource):
         delete_condition = {'pull__{}__id'.format(attribute_name): _id}
         user.update(**delete_condition)
         return Message.deleted()
+
+
+class RecoverAccountApi(Resource):
+
+    def post(self):
+        account = request.get_json().get('account')
+        if not account:
+            abort(400, message='Account required')
+        user = user_helper.get_user(user_account=account, fail_ok=True)
+        if not user or user.state.name != 'deleted':
+            abort(400, message='Account {} is not deleted'.format(account))
+        user_type = 'common' if isinstance(user, CommonUser) else 'enterprise'
+        recovery_ticket = RecoveryTicket(account=account, user_type=user_type).save()
+        Thread(target=lambda: EmailRecovery(destination_email=account,
+                                            ticket_hash=recovery_ticket.id).send_email()).start()
+        return Message.ok()
+
+    def get(self):
+        recovery_ticket = request.args.get('ticket')
+        if not recovery_ticket:
+            abort(400, message='Ticket required')
+        if not RecoveryTicket.objects(id=recovery_ticket).count():
+            abort(400, message='Ticket {} not exists'.format(recovery_ticket))
+        ticket = RecoveryTicket.objects.get(id=recovery_ticket)
+        user = user_helper.get_user(user_type=ticket.user_type, user_account=ticket.account)
+        user.update(state=StateUser.objects.get(name='active'))
+        ticket.delete()
+        return {'user': user.account}, 200

@@ -4,5 +4,8 @@
   },
   {
     "name": "inactive"
+  },
+  {
+    "name": "deleted"
   }
 ]

@@ -56,3 +56,8 @@ class EnterpriseUser(User):
 class ActivationTicket(db.Document):
     account = db.EmailField(required=True)
     user_type = db.StringField(required=True)
+
+
+class RecoveryTicket(db.Document):
+    account = db.EmailField(required=True)
+    user_type = db.StringField(required=True)

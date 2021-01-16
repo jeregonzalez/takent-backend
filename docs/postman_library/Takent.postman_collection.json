@@ -33,8 +33,7 @@
 					},
 					"response": []
 				}
-			],
-			"protocolProfileBehavior": {}
+			]
 		},
 		{
 			"name": "Parametric Data",
@@ -118,9 +117,7 @@
 							},
 							"response": []
 						}
-					],
-					"protocolProfileBehavior": {},
-					"_postman_isSubFolder": true
+					]
 				},
 				{
 					"name": "Language",
@@ -245,8 +242,7 @@
 					},
 					"response": []
 				}
-			],
-			"protocolProfileBehavior": {}
+			]
 		},
 		{
 			"name": "Authentication",
@@ -257,7 +253,6 @@
 						{
 							"listen": "test",
 							"script": {
-								"id": "7bad97d0-7229-4734-b84a-ff2445d2d4a6",
 								"exec": [
 									"pm.environment.set(\"user_token\", pm.response.json().token);"
 								],
@@ -270,7 +265,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"account\": \"jereegonzalez2@gmail.com\",\n    \"password\": \"Password123\"\n}",
+							"raw": "{\n    \"account\": \"jereegonzalez@gmail.com\",\n    \"password\": \"Password123\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -289,8 +284,7 @@
 					},
 					"response": []
 				}
-			],
-			"protocolProfileBehavior": {}
+			]
 		},
 		{
 			"name": "Common user",
@@ -464,9 +458,7 @@
 							},
 							"response": []
 						}
-					],
-					"protocolProfileBehavior": {},
-					"_postman_isSubFolder": true
+					]
 				},
 				{
 					"name": "Experience",
@@ -637,9 +629,7 @@
 							},
 							"response": []
 						}
-					],
-					"protocolProfileBehavior": {},
-					"_postman_isSubFolder": true
+					]
 				},
 				{
 					"name": "Skill",
@@ -810,9 +800,7 @@
 							},
 							"response": []
 						}
-					],
-					"protocolProfileBehavior": {},
-					"_postman_isSubFolder": true
+					]
 				},
 				{
 					"name": "Language",
@@ -983,9 +971,7 @@
 							},
 							"response": []
 						}
-					],
-					"protocolProfileBehavior": {},
-					"_postman_isSubFolder": true
+					]
 				},
 				{
 					"name": "Postulation",
@@ -1018,9 +1004,7 @@
 							},
 							"response": []
 						}
-					],
-					"protocolProfileBehavior": {},
-					"_postman_isSubFolder": true
+					]
 				},
 				{
 					"name": "Request Service",
@@ -1053,9 +1037,7 @@
 							},
 							"response": []
 						}
-					],
-					"protocolProfileBehavior": {},
-					"_postman_isSubFolder": true
+					]
 				},
 				{
 					"name": "Common User",
@@ -1453,8 +1435,7 @@
 					},
 					"response": []
 				}
-			],
-			"protocolProfileBehavior": {}
+			]
 		},
 		{
 			"name": "Enterprise user",
@@ -1654,8 +1635,7 @@
 					},
 					"response": []
 				}
-			],
-			"protocolProfileBehavior": {}
+			]
 		},
 		{
 			"name": "Member User",
@@ -1789,8 +1769,7 @@
 					},
 					"response": []
 				}
-			],
-			"protocolProfileBehavior": {}
+			]
 		},
 		{
 			"name": "User",
@@ -1887,9 +1866,57 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "Send recovery account request",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"account\": \"jereegonzalez@gmail.com\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/recover_account",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"recover_account"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Recover account",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/recover_account?ticket=5fee0260d997d8a75560a463",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"recover_account"
+							],
+							"query": [
+								{
+									"key": "ticket",
+									"value": "5fee0260d997d8a75560a463"
+								}
+							]
+						}
+					},
+					"response": []
 				}
-			],
-			"protocolProfileBehavior": {}
+			]
 		},
 		{
 			"name": "Offer",
@@ -2000,9 +2027,7 @@
 							},
 							"response": []
 						}
-					],
-					"protocolProfileBehavior": {},
-					"_postman_isSubFolder": true
+					]
 				},
 				{
 					"name": "Postulant",
@@ -2130,9 +2155,7 @@
 									},
 									"response": []
 								}
-							],
-							"protocolProfileBehavior": {},
-							"_postman_isSubFolder": true
+							]
 						},
 						{
 							"name": "All Postulants",
@@ -2262,9 +2285,7 @@
 							},
 							"response": []
 						}
-					],
-					"protocolProfileBehavior": {},
-					"_postman_isSubFolder": true
+					]
 				},
 				{
 					"name": "Offer by id",
@@ -2484,7 +2505,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"state\": \"in_selection\"\r\n}",
+							"raw": "{\r\n    \"state\": \"programmed\",\r\n    \"publication_date\": \"2020-12-20\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -2492,20 +2513,19 @@
 							}
 						},
 						"url": {
-							"raw": "{{host}}/offer/5f7cf6b555acc720f9e41fc3",
+							"raw": "{{host}}/offer/5fdfda1b049160986ba2e67c",
 							"host": [
 								"{{host}}"
 							],
 							"path": [
 								"offer",
-								"5f7cf6b555acc720f9e41fc3"
+								"5fdfda1b049160986ba2e67c"
 							]
 						}
 					},
 					"response": []
 				}
-			],
-			"protocolProfileBehavior": {}
+			]
 		},
 		{
 			"name": "Service",
@@ -2616,9 +2636,7 @@
 							},
 							"response": []
 						}
-					],
-					"protocolProfileBehavior": {},
-					"_postman_isSubFolder": true
+					]
 				},
 				{
 					"name": "Service Requests",
@@ -2751,9 +2769,7 @@
 							},
 							"response": []
 						}
-					],
-					"protocolProfileBehavior": {},
-					"_postman_isSubFolder": true
+					]
 				},
 				{
 					"name": "Service by id",
@@ -2981,8 +2997,7 @@
 					},
 					"response": []
 				}
-			],
-			"protocolProfileBehavior": {}
+			]
 		},
 		{
 			"name": "Enterprise",
@@ -3083,9 +3098,7 @@
 							},
 							"response": []
 						}
-					],
-					"protocolProfileBehavior": {},
-					"_postman_isSubFolder": true
+					]
 				},
 				{
 					"name": "Images",
@@ -3183,9 +3196,157 @@
 							},
 							"response": []
 						}
-					],
-					"protocolProfileBehavior": {},
-					"_postman_isSubFolder": true
+					]
+				},
+				{
+					"name": "Statistics",
+					"item": [
+						{
+							"name": "Offers per month",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{user_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{host}}/enterprise/statistic/offers_per_month",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"enterprise",
+										"statistic",
+										"offers_per_month"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Most popular offers",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{user_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{host}}/enterprise/statistic/most_popular_offers",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"enterprise",
+										"statistic",
+										"most_popular_offers"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Offers by state",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{user_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{host}}/enterprise/statistic/offers_by_state",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"enterprise",
+										"statistic",
+										"offers_by_state"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Postulants by age",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{user_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{host}}/enterprise/statistic/postulants_by_age",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"enterprise",
+										"statistic",
+										"postulants_by_age"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Postulants by month and state",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{user_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{host}}/enterprise/statistic/postulants_by_month_and_state",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"enterprise",
+										"statistic",
+										"postulants_by_month_and_state"
+									]
+								}
+							},
+							"response": []
+						}
+					]
 				},
 				{
 					"name": "Enterprise",
@@ -3313,8 +3474,7 @@
 					},
 					"response": []
 				}
-			],
-			"protocolProfileBehavior": {}
+			]
 		},
 		{
 			"name": "Admin user and enterprise",
@@ -3345,8 +3505,7 @@
 					},
 					"response": []
 				}
-			],
-			"protocolProfileBehavior": {}
+			]
 		},
 		{
 			"name": "Mercado Pago",
@@ -3487,9 +3646,7 @@
 					},
 					"response": []
 				}
-			],
-			"protocolProfileBehavior": {}
+			]
 		}
-	],
-	"protocolProfileBehavior": {}
+	]
 }
