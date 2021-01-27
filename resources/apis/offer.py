@@ -77,6 +77,9 @@ class OfferApi(Resource):
             body['state'] = StateOffer.objects.get(name=state_manager.state.name)
         try:
             offer.update(**body)
+            if offer.state.name == 'draft' and body.get('state') and body.get('state').name == 'active':
+                enterprise = enterprise_helper.get_enterprise()
+                enterprise.update(available_offers=enterprise.available_offers - 1)
         except (InvalidQueryError, ValidationError) as e:
             raise UpdateException(e)
         return Message.updated()
