@@ -1,5 +1,5 @@
 from resources.apis.enterprise_statistics import StatisticsApi
-from resources.apis.member_user import MemberUserApi, MemberUsersByEnterprise
+from resources.apis.member_user import MemberUserApi, UsersByEnterprise
 from resources.apis.education import EducationLevelApi
 from resources.apis.enterprise import EnterpriseApi, ProfilePhotoEnterpriseApi, EnterpriseImagesApi
 from resources.apis.authentication import AuthenticationApi
@@ -45,7 +45,7 @@ def initialize_routes(api):
     api.add_resource(UserAttributesListApi, '/api/v1/user/common/<attribute_name>/<_id>',
                      '/api/v1/user/common/<attribute_name>')
     api.add_resource(MemberUserApi, '/api/v1/member_user', '/api/v1/member_user/<account>')
-    api.add_resource(MemberUsersByEnterprise, '/api/v1/members')
+    api.add_resource(UsersByEnterprise, '/api/v1/enterprise/users')
     # Password
     api.add_resource(PasswordRecoverApi, '/api/v1/user/common/recover_password',
                      '/api/v1/user/enterprise/recover_password')
