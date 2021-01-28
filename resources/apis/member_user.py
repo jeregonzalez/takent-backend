@@ -63,7 +63,7 @@ class MemberUserApi(Resource):
         return Message.deleted()
 
 
-class MemberUsersByEnterprise(Resource):
+class UsersByEnterprise(Resource):
     method_decorators = {
         'get': [validate_enterprise_exists, validate_user_is_enterprise, validate_user_exists, authentication_required,
                 validate_headers]
@@ -71,4 +71,5 @@ class MemberUsersByEnterprise(Resource):
 
     def get(self):
         enterprise = enterprise_helper.get_enterprise()
-        return Message.ok([user for user in enterprise.member_users])
+        return sorted(enterprise.member_users + [enterprise.admin_user], key=lambda x: x.id)
+
