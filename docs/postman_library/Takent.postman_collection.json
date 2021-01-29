@@ -1003,6 +1003,35 @@
 								}
 							},
 							"response": []
+						},
+						{
+							"name": "My postulations",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{user_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{host}}/user/common/postulations",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"user",
+										"common",
+										"postulations"
+									]
+								}
+							},
+							"response": []
 						}
 					]
 				},
