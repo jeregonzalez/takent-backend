@@ -9,6 +9,7 @@ from resources.apis.mercadopago import MercadoPagoApi, OfferPackApi, MPNotificat
 from resources.apis.development import MongoApi
 from resources.apis.place import CountriesApi, ProvincesApi, CitiesApi
 from resources.apis.postulant import PostulantApi, PostulateApi, StatePostulantApi
+from resources.apis.postulation import PostulationApi
 from resources.apis.sector import SectorApi
 from resources.apis.profession import ProfessionApi
 from resources.apis.service import ServiceApi, ServiceImagesApi
@@ -84,3 +85,5 @@ def initialize_routes(api):
     api.add_resource(RecoverAccountApi, '/api/v1/recover_account')
     # Statistics
     api.add_resource(StatisticsApi, '/api/v1/enterprise/statistic/<statistic_name>')
+    # Postulations
+    api.add_resource(PostulationApi, '/api/v1/user/common/postulations')
