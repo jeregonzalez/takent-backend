@@ -18,6 +18,7 @@ class PostulationApi(Resource):
             offer = Offer.objects.get(postulants=postulation)
             result.append({
                 'title': offer.title,
+                'description': offer.description,
                 'position': offer.position,
                 'enterprise': offer.enterprise.fantasy_name,
                 'address': offer.enterprise.address.format_response(),
