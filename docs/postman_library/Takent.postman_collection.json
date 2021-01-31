@@ -2797,6 +2797,34 @@
 								}
 							},
 							"response": []
+						},
+						{
+							"name": "My service requests",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{user_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{host}}/common/service_requests",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"common",
+										"service_requests"
+									]
+								}
+							},
+							"response": []
 						}
 					]
 				},
