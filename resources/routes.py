@@ -13,7 +13,8 @@ from resources.apis.postulation import PostulationApi
 from resources.apis.sector import SectorApi
 from resources.apis.profession import ProfessionApi
 from resources.apis.service import ServiceApi, ServiceImagesApi
-from resources.apis.service_request import ServiceRequestApi, NewServiceRequestApi
+from resources.apis.service_request import ServiceRequestApi, NewServiceRequestApi, \
+    MyServiceRequestsApi
 from resources.apis.user import ImageApi, CurriculumApi, UserApi, PasswordRecoverApi, \
     ChangePasswordApi, \
     UserExistsValidationApi, ActivateAccountApi, UserAttributesListApi, RecoverAccountApi
@@ -87,3 +88,5 @@ def initialize_routes(api):
     api.add_resource(StatisticsApi, '/api/v1/enterprise/statistic/<statistic_name>')
     # Postulations
     api.add_resource(PostulationApi, '/api/v1/user/common/postulations')
+    # Service requests
+    api.add_resource(MyServiceRequestsApi, '/api/v1/common/service_requests')

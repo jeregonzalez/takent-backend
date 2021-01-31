@@ -75,3 +75,25 @@ class NewServiceRequestApi(Resource):
         except (FieldDoesNotExist, ValidationError) as e:
             raise SaveException(e)
         return Message.created()
+
+
+class MyServiceRequestsApi(Resource):
+
+    method_decorators = [validate_user_is_common, validate_user_exists, authentication_required, validate_headers]
+
+    def get(self):
+        user = user_helper.get_user_from_jwt()
+        service_requests = ServiceRequest.objects(user=user, score=None)
+        result = []
+        for service_request in service_requests:
+            service = Service.objects.get(service_requests=service_request)
+            result.append({
+                'request_date': service_request.request_date,
+                'title': service.title,
+                'description': service.description,
+                'state': service_request.state.name,
+                'score': service_request.score,
+                'publication_user': service.publication_user.id,
+                'cost': service.cost
+            })
+        return result
