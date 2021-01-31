@@ -1,3 +1,4 @@
+from resources.apis.common_user import AssessmentStatisticsApi
 from resources.apis.enterprise_statistics import StatisticsApi
 from resources.apis.member_user import MemberUserApi, UsersByEnterprise
 from resources.apis.education import EducationLevelApi
@@ -90,3 +91,5 @@ def initialize_routes(api):
     api.add_resource(PostulationApi, '/api/v1/user/common/postulations')
     # Service requests
     api.add_resource(MyServiceRequestsApi, '/api/v1/common/service_requests')
+    # Common user average assessments
+    api.add_resource(AssessmentStatisticsApi, '/api/v1/user/common/assessment_statistics/<account>')
