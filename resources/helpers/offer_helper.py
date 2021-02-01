@@ -1,8 +1,9 @@
 import random
 
 from dateutil import parser
-from mongoengine import ReferenceField, EmbeddedDocumentListField, StringField, DateTimeField, ObjectIdField, \
-    ListField, InvalidQueryError, LookUpError
+from mongoengine import ReferenceField, EmbeddedDocumentListField, StringField, DateTimeField, \
+    ObjectIdField, \
+    ListField, InvalidQueryError, LookUpError, BooleanField
 
 from database.models.common import City
 from database.models.offer import Offer
@@ -72,6 +73,9 @@ def filter_offers(filters):
                 query_param.append(('{}__gte'.format(key), start_date))
             if end_date:
                 query_param.append(('{}__lte'.format(key), end_date))
+        elif type(field_type) == BooleanField:
+            values = True if values[0] in ('true', 'True') else False
+            query_param.append(('{}'.format(key), values))
         elif key.startswith('language'):
             keys = '__'.join(key.split('.'))
             if 'certificate' in keys:
