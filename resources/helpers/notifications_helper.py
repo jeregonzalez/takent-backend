@@ -34,6 +34,17 @@ class RequestedServiceNotification(Notification):
         self.description = self.description.format(service_name)
 
 
+class RequestAssessmentNotification(Notification):
+
+    type = 'request_assessment'
+    title = 'Valoración de servicio obtenido'
+    description = 'Calificá el servicio "{}" que recibiste recientemente'
+
+    def __init__(self, user, service_name):
+        super().__init__(user)
+        self.description = self.description.format(service_name)
+
+
 class SuggestPreferredServiceNotification(Notification):
 
     type = 'suggest_preferred_service'
@@ -73,6 +84,28 @@ class StatePostulationChangedNotification(Notification):
         self.description = self.description.format(offer_name, self.STATE_MAP[state_name])
 
 
+class SuggestInfoCompletionNotification(Notification):
+
+    type = 'suggest_info_completion'
+    title = 'Datos personales'
+    description = 'Te sugerimos completar tus datos (personales, académicos, laborales, idiomas, aptitudes, CV) ' \
+                  'para tener una mayor visibilidad!'
+
+    def __init__(self, user):
+        super().__init__(user)
+
+
+class OffersNearingToFinishNotification(Notification):
+
+    type = 'offers_nearing_to_finish'
+    title = 'Oferta a finalizar'
+    description = 'Tu publicación "{}" está próxima a finalizar!'
+
+    def __init__(self, user, offer_name):
+        super().__init__(user)
+        self.description = self.description.format(offer_name)
+
+
 class SuggestRegisterNewMemberNotification(Notification):
 
     type = 'suggest_register_new_member'
@@ -82,3 +115,20 @@ class SuggestRegisterNewMemberNotification(Notification):
 
     def __init__(self, user):
         super().__init__(user)
+
+
+class SuggestPublishNewOfferNotification(Notification):
+
+    type = 'suggest_publish_new_offer'
+    title = 'Sugerencia: publicá una oferta'
+    description = 'Hace mucho no publicás una oferta, aprovechá el momento y publicá una nueva!'
+
+    def __init__(self, user):
+        super().__init__(user)
+
+
+class SuggestOfferNotification(Notification):
+
+    type = 'suggest_offer'
+    title = 'Búsqueda recomendada'
+    description = 'foo'

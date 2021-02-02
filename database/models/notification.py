@@ -12,7 +12,8 @@ NOTIFICATION_TYPES = [
     'suggest_info_completion',
     'offers_nearing_to_finish',
     'suggest_register_new_member',
-    'suggest_publish_new_offer'
+    'suggest_publish_new_offer',
+    'suggest_offer'
 ]
 
 
