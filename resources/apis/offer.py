@@ -7,6 +7,7 @@ from database.models.offer import Offer
 from database.models.parametric_docs import StateOffer
 from resources.helpers import user_helper, offer_helper, enterprise_helper
 from resources.helpers.design_patterns.state.offer import OfferStateManager
+from resources.helpers.notifications_helper import FewAvailablePublicationsNotification
 from resources.utils.decorators import authentication_required, validate_user_exists, validate_headers, \
     validate_offer_exists
 from resources.utils.exceptions import SaveException, UpdateException, GetException
@@ -39,9 +40,11 @@ class OfferApi(Resource):
         return offers
 
     def post(self):
+        user = user_helper.get_user_from_jwt()
+        enterprise = enterprise_helper.get_enterprise()
         body = request.get_json()
-        body['publication_user'] = user_helper.get_user_from_jwt()
-        body['enterprise'] = enterprise_helper.get_enterprise()
+        body['publication_user'] = user
+        body['enterprise'] = enterprise
         if body.get('state') != 'draft' and body.get('enterprise').available_offers == 0:
             raise SaveException('No available offers')
         images = body.get('images')
@@ -58,8 +61,14 @@ class OfferApi(Resource):
                 images_obj.append(new_image)
             if images_obj:
                 new_offer.update(images=images_obj)
+
         if new_offer.state.name != 'draft':
-            body.get('enterprise').update(available_offers=body.get('enterprise').available_offers - 1)
+            enterprise.update(available_offers=enterprise.available_offers - 1)
+
+        if enterprise.available_offers <= 1:
+            users = [enterprise.admin_user] + enterprise.member_users
+            FewAvailablePublicationsNotification(user=users).save()
+
         return Message.created()
 
     def put(self, id_offer=None):

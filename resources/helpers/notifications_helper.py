@@ -14,10 +14,13 @@ class Notification(ABC):
         self.user = user
 
     def save(self):
-        notification.Notification(user=self.user,
-                                  type=self.type,
-                                  title=self.title,
-                                  description=self.description).save()
+        if not isinstance(self.user, list):
+            self.user = [self.user]
+        for user in self.user:
+            notification.Notification(user=user,
+                                      type=self.type,
+                                      title=self.title,
+                                      description=self.description).save()
 
 
 class RequestedServiceNotification(Notification):
@@ -31,7 +34,7 @@ class RequestedServiceNotification(Notification):
         self.description = self.description.format(service_name)
 
 
-class SuggestPreferredService(Notification):
+class SuggestPreferredServiceNotification(Notification):
 
     type = 'suggest_preferred_service'
     title = 'Sugerencia: hacé tu servicio preferencial'
@@ -40,3 +43,13 @@ class SuggestPreferredService(Notification):
     def __init__(self, user, service_name):
         super().__init__(user)
         self.description = self.description.format(service_name)
+
+
+class FewAvailablePublicationsNotification(Notification):
+
+    type = 'few_available_publications'
+    title = 'Publicaciones disponibles'
+    description = 'Tenés pocas ofertas disponibles! Comprá más aprovechando nuestras promociones!'
+
+    def __init__(self, user):
+        super().__init__(user)
