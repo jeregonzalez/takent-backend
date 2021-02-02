@@ -9,11 +9,12 @@ from database.models.common_user import UserCurriculumVitae
 from database.models.offer import Offer
 from database.models.parametric_docs import StateUser, StateService, StateOffer
 from database.models.service import Service
-from database.models.user import ActivationTicket, CommonUser, RecoveryTicket
+from database.models.user import ActivationTicket, CommonUser, RecoveryTicket, EnterpriseUser
 from resources.helpers import password_helper, user_helper, auth_helper, enterprise_helper
 from resources.helpers.email_helper.email_helper import EmailActivation, \
     EmailChangePassword, EmailRecovery
 from resources.helpers.log_helper import LOGGER
+from resources.helpers.notifications_helper import SuggestRegisterNewMemberNotification
 from resources.utils.decorators import validate_headers, authentication_required, \
     validate_user_is_common, validate_user_exists, validate_user_not_exists, validate_user_password
 from resources.utils.exceptions import MissingRequiredFieldsException, \
@@ -207,6 +208,10 @@ class ActivateAccountApi(Resource):
         user = user_helper.get_user(user_type=ticket.user_type, user_account=ticket.account)
         user.activate()
         ticket.delete()
+
+        if isinstance(user, EnterpriseUser):
+            SuggestRegisterNewMemberNotification(user=user).save()
+
         return {'user': user.account}, 200
 
 

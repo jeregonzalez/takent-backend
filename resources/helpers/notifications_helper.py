@@ -71,3 +71,14 @@ class StatePostulationChangedNotification(Notification):
     def __init__(self, user, offer_name, state_name):
         super().__init__(user)
         self.description = self.description.format(offer_name, self.STATE_MAP[state_name])
+
+
+class SuggestRegisterNewMemberNotification(Notification):
+
+    type = 'suggest_register_new_member'
+    title = 'Sugerencia: registrá colaboradores'
+    description = 'Tenés la posibilidad de registrar colaboradores para que te ayuden en tu trabajo diario. ' \
+                  'No esperés más!'
+
+    def __init__(self, user):
+        super().__init__(user)

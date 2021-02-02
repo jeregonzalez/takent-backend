@@ -122,6 +122,6 @@ class StatePostulantApi(Resource):
         if postulant.state.name in ('pre_selected', 'contacted'):
             StatePostulationChangedNotification(user=postulant.postulant,
                                                 offer_name=offer.title,
-                                                state_name=postulant.state.name)
+                                                state_name=postulant.state.name).save()
 
         return Message.created()
