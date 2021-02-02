@@ -9,6 +9,7 @@ from database.models.parametric_docs import StatePostulant
 from resources.helpers import user_helper, enterprise_helper
 from resources.helpers.email_helper.email_helper import EmailContacted, EmailPreselected, EmailDiscarded
 from resources.helpers.design_patterns.state.postulant import PostulantStateManager
+from resources.helpers.notifications_helper import StatePostulationChangedNotification
 from resources.utils.decorators import validate_headers, authentication_required, validate_user_exists, \
     validate_offer_exists, validate_user_is_enterprise, validate_user_is_common, validate_postulant_exists
 from resources.utils.exceptions import SaveException, \
@@ -117,4 +118,10 @@ class StatePostulantApi(Resource):
                                             user_name=postulant.postulant.name,
                                             offer_name=offer.title).send_email()
         Thread(target=target).start()
+
+        if postulant.state.name in ('pre_selected', 'contacted'):
+            StatePostulationChangedNotification(user=postulant.postulant,
+                                                offer_name=offer.title,
+                                                state_name=postulant.state.name)
+
         return Message.created()

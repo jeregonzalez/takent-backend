@@ -53,3 +53,21 @@ class FewAvailablePublicationsNotification(Notification):
 
     def __init__(self, user):
         super().__init__(user)
+
+
+class StatePostulationChangedNotification(Notification):
+
+    type = 'state_postulation_changed'
+    title = 'Cambio de estado de postulación'
+    description = 'Tu postulación a la oferta "{}" cambió al estado "{}"'
+
+    STATE_MAP = {
+        'pending': 'Pendiente',
+        'pre_selected': 'Preseleccionado',
+        'contacted': 'Contactado',
+        'discarded': 'Descartado'
+    }
+
+    def __init__(self, user, offer_name, state_name):
+        super().__init__(user)
+        self.description = self.description.format(offer_name, self.STATE_MAP[state_name])
