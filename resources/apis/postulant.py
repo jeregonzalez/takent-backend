@@ -38,9 +38,14 @@ class PostulantApi(Resource):
     def put(self, id_offer=None, id_postulant=None):
         body = request.get_json()
         try:
-            if body.get('state'):
-                body['state'] = StatePostulant.objects.get(name=body['state'])
+            state = body.get('state')
+            if state:
+                body['state'] = StatePostulant.objects.get(name=state)
             Postulant.objects.get(id=id_postulant).update(**body)
+            if state in ('pre_selected', 'contacted'):
+                StatePostulationChangedNotification(user=Postulant.objects.get(id=id_postulant).postulant,
+                                                    offer_name=Offer.objects.get(id=id_offer).title,
+                                                    state_name=state).save()
         except (DoesNotExist, FieldDoesNotExist, ValidationError) as e:
             raise UpdateException(e)
         return Message.updated()
@@ -119,9 +124,9 @@ class StatePostulantApi(Resource):
                                             offer_name=offer.title).send_email()
         Thread(target=target).start()
 
-        if postulant.state.name in ('pre_selected', 'contacted'):
+        if state in ('pre_selected', 'contacted'):
             StatePostulationChangedNotification(user=postulant.postulant,
                                                 offer_name=offer.title,
-                                                state_name=postulant.state.name).save()
+                                                state_name=state).save()
 
         return Message.created()

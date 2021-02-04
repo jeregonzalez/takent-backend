@@ -7,6 +7,7 @@ from database.models.offer import Offer
 from database.models.parametric_docs import StateOffer
 from resources.helpers import user_helper, offer_helper, enterprise_helper
 from resources.helpers.design_patterns.state.offer import OfferStateManager
+from resources.helpers.log_helper import LOGGER
 from resources.helpers.notifications_helper import FewAvailablePublicationsNotification
 from resources.utils.decorators import authentication_required, validate_user_exists, validate_headers, \
     validate_offer_exists
@@ -63,11 +64,11 @@ class OfferApi(Resource):
                 new_offer.update(images=images_obj)
 
         if new_offer.state.name != 'draft':
-            enterprise.update(available_offers=enterprise.available_offers - 1)
-
-        if enterprise.available_offers <= 1:
-            users = [enterprise.admin_user] + enterprise.member_users
-            FewAvailablePublicationsNotification(user=users).save()
+            available_offers = enterprise.available_offers - 1
+            enterprise.update(available_offers=available_offers)
+            if available_offers <= 1:
+                users = [enterprise.admin_user] + enterprise.member_users
+                FewAvailablePublicationsNotification(user=users).save()
 
         return Message.created()
 

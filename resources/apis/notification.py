@@ -23,9 +23,14 @@ class NotificationApi(Resource):
             except DoesNotExist as e:
                 raise GetException(e)
 
-        notifications = Notification.objects(user=user).order_by('date')[:15]
+        notifications = Notification.objects(user=user).order_by('-date')[:15]
 
         return notifications
+
+    def post(self):
+        user = user_helper.get_user_from_jwt()
+        Notification.objects(user=user).update(viewed=True)
+        return Message.created()
 
     def put(self, _id=None):
         user = user_helper.get_user_from_jwt()
