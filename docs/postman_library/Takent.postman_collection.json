@@ -1069,6 +1069,41 @@
 					]
 				},
 				{
+					"name": "Assessment",
+					"item": [
+						{
+							"name": "Get assessment statistics",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{user_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{host}}/user/common/assessment_statistics/jereegonzalez@gmail.com",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"user",
+										"common",
+										"assessment_statistics",
+										"jereegonzalez@gmail.com"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
 					"name": "Common User",
 					"protocolProfileBehavior": {
 						"disabledSystemHeaders": {}
@@ -3698,6 +3733,144 @@
 									"key": "access_token",
 									"value": "APP_USR-8710455338243142-100100-664517efc6d85e6f150d4cd9b5a96f3d-653415207"
 								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Notifications",
+			"item": [
+				{
+					"name": "Notifications",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{user_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/user/notifications",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"user",
+								"notifications"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "See Notifications",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{user_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/user/notifications",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"user",
+								"notifications"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Tasks",
+			"item": [
+				{
+					"name": "Generate notifications",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/task/generate_notifications",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"task",
+								"generate_notifications"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Expire offers",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/task/expire_offers",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"task",
+								"expire_offers"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Publish programmed offers",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/task/publish_programmed_offers",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"task",
+								"publish_programmed_offers"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Expire services",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/task/expire_services",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"task",
+								"expire_services"
 							]
 						}
 					},
