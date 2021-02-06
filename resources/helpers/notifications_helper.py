@@ -88,11 +88,19 @@ class SuggestInfoCompletionNotification(Notification):
 
     type = 'suggest_info_completion'
     title = 'Datos personales'
-    description = 'Te sugerimos completar tus datos (personales, académicos, laborales, idiomas, aptitudes, CV) ' \
-                  'para tener una mayor visibilidad!'
+    description = 'Te sugerimos completar tus datos ({}) para tener una mayor visibilidad!'
 
-    def __init__(self, user):
+    INFO_MAP = {
+        'education': 'académicos',
+        'experience': 'laborales',
+        'skill': 'aptitudes',
+        'curriculum': 'CV',
+        'language': 'idiomas'
+    }
+
+    def __init__(self, user, missing_info):
         super().__init__(user)
+        self.description = self.description.format(', '.join([self.INFO_MAP.get(item) for item in missing_info]))
 
 
 class OffersNearingToFinishNotification(Notification):

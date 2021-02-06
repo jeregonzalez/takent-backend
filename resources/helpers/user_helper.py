@@ -51,6 +51,8 @@ def get_user(user_account, user_type=None, fail_ok=False):
 
 def get_user_from_jwt(keys=None):
     user_data = get_jwt_identity()
+    if not user_data:
+        return None
     if keys:
         if isinstance(keys, str):
             return user_data.get(keys)

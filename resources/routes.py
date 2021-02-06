@@ -17,6 +17,7 @@ from resources.apis.profession import ProfessionApi
 from resources.apis.service import ServiceApi, ServiceImagesApi
 from resources.apis.service_request import ServiceRequestApi, NewServiceRequestApi, \
     MyServiceRequestsApi
+from resources.apis.task import GenerateNotificationsApi, ExpireOffersApi, ExpireServicesApi, PublishProgrammedOffersApi
 from resources.apis.user import ImageApi, CurriculumApi, UserApi, PasswordRecoverApi, \
     ChangePasswordApi, \
     UserExistsValidationApi, ActivateAccountApi, UserAttributesListApi, RecoverAccountApi
@@ -96,3 +97,8 @@ def initialize_routes(api):
     api.add_resource(AssessmentStatisticsApi, '/api/v1/user/common/assessment_statistics/<account>')
     # Notifications
     api.add_resource(NotificationApi, '/api/v1/user/notifications', '/api/v1/user/notifications/<_id>')
+    # Tasks
+    api.add_resource(GenerateNotificationsApi, '/api/v1/task/generate_notifications')
+    api.add_resource(ExpireOffersApi, '/api/v1/task/expire_offers')
+    api.add_resource(ExpireServicesApi, '/api/v1/task/expire_services')
+    api.add_resource(PublishProgrammedOffersApi, '/api/v1/task/publish_programmed_offers')
