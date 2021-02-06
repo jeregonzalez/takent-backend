@@ -6,6 +6,7 @@ from database.models.parametric_docs import StateServiceRequest
 from database.models.service import Service, ServiceRequest
 from resources.helpers import user_helper
 from resources.helpers.design_patterns.state.service_request import ServiceRequestStateManager
+from resources.helpers.notifications_helper import RequestedServiceNotification
 from resources.utils.decorators import validate_headers, authentication_required, validate_user_exists, \
     validate_user_is_common, validate_service_exists, validate_service_request_exists
 from resources.utils.exceptions import UpdateException, SaveException
@@ -74,6 +75,9 @@ class NewServiceRequestApi(Resource):
             service.update(push__service_requests=service_request)
         except (FieldDoesNotExist, ValidationError) as e:
             raise SaveException(e)
+
+        RequestedServiceNotification(user=service.publication_user, service_name=service.title).save()
+
         return Message.created()
 
 
