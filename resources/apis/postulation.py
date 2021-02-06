@@ -12,7 +12,7 @@ class PostulationApi(Resource):
 
     def get(self):
         user = user_helper.get_user_from_jwt()
-        postulations = Postulant.objects(postulant=user)
+        postulations = Postulant.objects(postulant=user).order_by('-postulation_date')
         result = []
         for postulation in postulations:
             offer = Offer.objects.get(postulants=postulation)
