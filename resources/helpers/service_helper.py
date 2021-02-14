@@ -133,7 +133,7 @@ def filter_services(filters):
         else:
             get_services = lambda: Service.objects(**mongo_query_params).order_by('+publication_date')
     else:
-        get_services = lambda: Service.objects(**mongo_query_params).order_by('+publication_date')
+        get_services = lambda: Service.objects(**mongo_query_params).order_by('-preference', '-publication_date')
     try:
         services = get_services()
     except (InvalidQueryError, LookUpError) as e:
