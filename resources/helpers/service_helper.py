@@ -121,7 +121,7 @@ def filter_services(filters):
     if sort:
         sort = sort[0][1]
         if sort == 'desc':
-            get_services = lambda: Service.objects(**mongo_query_params).order_by('-preference', '-publication_date')
+            get_services = lambda: Service.objects(**mongo_query_params).order_by('-publication_date')
         elif sort == 'random':
             def get_services():
                 list_offers = [offer for offer in Service.objects(**mongo_query_params)]
@@ -131,9 +131,9 @@ def filter_services(filters):
                 random.shuffle(not_preferenced_services)
                 return preferenced_services + not_preferenced_services
         else:
-            get_services = lambda: Service.objects(**mongo_query_params).order_by('-preference', '+publication_date')
+            get_services = lambda: Service.objects(**mongo_query_params).order_by('+publication_date')
     else:
-        get_services = lambda: Service.objects(**mongo_query_params).order_by('-preference', '+publication_date')
+        get_services = lambda: Service.objects(**mongo_query_params).order_by('+publication_date')
     try:
         services = get_services()
     except (InvalidQueryError, LookUpError) as e:
