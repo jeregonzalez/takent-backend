@@ -92,6 +92,7 @@ class MyServiceRequestsApi(Resource):
         for service_request in service_requests:
             service = Service.objects.get(service_requests=service_request)
             result.append({
+                '_id': service_request.id,
                 'request_date': service_request.request_date,
                 'state': service_request.state.name,
                 'score': service_request.score,
