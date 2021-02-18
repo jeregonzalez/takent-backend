@@ -209,7 +209,7 @@ class ActivateAccountApi(Resource):
         user.activate()
         ticket.delete()
 
-        if isinstance(user, EnterpriseUser):
+        if isinstance(user, EnterpriseUser) and user.permission.name == 'admin':
             SuggestRegisterNewMemberNotification(user=user).save()
 
         return {'user': user.account}, 200
