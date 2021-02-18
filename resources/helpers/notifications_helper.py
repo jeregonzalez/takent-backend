@@ -60,7 +60,7 @@ class FewAvailablePublicationsNotification(Notification):
 
     type = 'few_available_publications'
     title = 'Publicaciones disponibles'
-    description = 'Tenés pocas ofertas disponibles! Comprá más aprovechando nuestras promociones!'
+    description = 'Tenés pocas publicaciones disponibles! Comprá más aprovechando nuestras promociones!'
 
     def __init__(self, user):
         super().__init__(user)
