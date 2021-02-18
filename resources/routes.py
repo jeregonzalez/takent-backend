@@ -20,7 +20,7 @@ from resources.apis.service_request import ServiceRequestApi, NewServiceRequestA
 from resources.apis.task import GenerateNotificationsApi, ExpireOffersApi, ExpireServicesApi, PublishProgrammedOffersApi
 from resources.apis.user import ImageApi, CurriculumApi, UserApi, PasswordRecoverApi, \
     ChangePasswordApi, \
-    UserExistsValidationApi, ActivateAccountApi, UserAttributesListApi, RecoverAccountApi
+    UserExistsValidationApi, ActivateAccountApi, UserAttributesListApi, RecoverAccountApi, DoAdminApi
 from resources.apis.offer import OfferApi, OfferImagesApi
 from resources.apis.user_and_enterprise import UserAndEnterpriseApi
 
@@ -51,6 +51,7 @@ def initialize_routes(api):
                      '/api/v1/user/common/<attribute_name>')
     api.add_resource(MemberUserApi, '/api/v1/member_user', '/api/v1/member_user/<account>')
     api.add_resource(UsersByEnterprise, '/api/v1/enterprise/users')
+    api.add_resource(DoAdminApi, '/api/v1/user/enterprise/do_admin')
     # Password
     api.add_resource(PasswordRecoverApi, '/api/v1/user/common/recover_password',
                      '/api/v1/user/enterprise/recover_password')
