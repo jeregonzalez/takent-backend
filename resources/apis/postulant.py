@@ -42,7 +42,7 @@ class PostulantApi(Resource):
             if state:
                 body['state'] = StatePostulant.objects.get(name=state)
             Postulant.objects.get(id=id_postulant).update(**body)
-            if state in ('pre_selected', 'contacted'):
+            if state in ('pre_selected', 'contacted', 'discarded'):
                 StatePostulationChangedNotification(user=Postulant.objects.get(id=id_postulant).postulant,
                                                     offer_name=Offer.objects.get(id=id_offer).title,
                                                     state_name=state).save()
@@ -124,7 +124,7 @@ class StatePostulantApi(Resource):
                                             offer_name=offer.title).send_email()
         Thread(target=target).start()
 
-        if state in ('pre_selected', 'contacted'):
+        if state in ('pre_selected', 'contacted', 'discarded'):
             StatePostulationChangedNotification(user=postulant.postulant,
                                                 offer_name=offer.title,
                                                 state_name=state).save()
