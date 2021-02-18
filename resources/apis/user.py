@@ -70,7 +70,9 @@ class UserApi(Resource):
             for offer in offers:
                 offer.update(state=finished)
             for member_user in enterprise.member_users:
-                member_user.update(state=StateUser.objects.get(name='deleted'))
+                member_user.delete()
+        elif user.permission.name == 'member':
+            user.delete()
         return Message.deleted()
 
 
