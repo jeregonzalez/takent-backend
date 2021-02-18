@@ -60,7 +60,7 @@ class FewAvailablePublicationsNotification(Notification):
 
     type = 'few_available_publications'
     title = 'Publicaciones disponibles'
-    description = 'Tenés pocas ofertas disponibles! Comprá más aprovechando nuestras promociones!'
+    description = 'Tenés pocas publicaciones disponibles! Comprá más aprovechando nuestras promociones!'
 
     def __init__(self, user):
         super().__init__(user)
@@ -79,9 +79,13 @@ class StatePostulationChangedNotification(Notification):
         'discarded': 'Descartado'
     }
 
+    DESCRIPTION_DISCARDED = 'No has sido seleccionado para la oferta "{}". ' \
+                            'No te desanimes, todavía quedan muchas oportunidades para vos!'
+
     def __init__(self, user, offer_name, state_name):
         super().__init__(user)
-        self.description = self.description.format(offer_name, self.STATE_MAP[state_name])
+        self.description = self.description.format(offer_name, self.STATE_MAP[state_name]) \
+            if state_name != 'discarded' else self.DESCRIPTION_DISCARDED.format(offer_name)
 
 
 class SuggestInfoCompletionNotification(Notification):
