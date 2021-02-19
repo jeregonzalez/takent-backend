@@ -6,7 +6,7 @@ from mongoengine import FieldDoesNotExist, ValidationError, DoesNotExist
 
 from database.models.offer import Offer, Postulant
 from database.models.parametric_docs import StatePostulant
-from resources.helpers import user_helper, enterprise_helper
+from resources.helpers import user_helper, enterprise_helper, notifications_config_helper
 from resources.helpers.email_helper.email_helper import EmailContacted, EmailPreselected, EmailDiscarded
 from resources.helpers.design_patterns.state.postulant import PostulantStateManager
 from resources.helpers.notifications_helper import StatePostulationChangedNotification
@@ -42,7 +42,8 @@ class PostulantApi(Resource):
             if state:
                 body['state'] = StatePostulant.objects.get(name=state)
             Postulant.objects.get(id=id_postulant).update(**body)
-            if state in ('pre_selected', 'contacted', 'discarded'):
+            if state in ('pre_selected', 'contacted', 'discarded') and notifications_config_helper\
+                    .is_notification_active(Postulant.objects.get(id=id_postulant).postulant, 'state_postulation_changed'):
                 StatePostulationChangedNotification(user=Postulant.objects.get(id=id_postulant).postulant,
                                                     offer_name=Offer.objects.get(id=id_offer).title,
                                                     state_name=state).save()
@@ -124,7 +125,8 @@ class StatePostulantApi(Resource):
                                             offer_name=offer.title).send_email()
         Thread(target=target).start()
 
-        if state in ('pre_selected', 'contacted', 'discarded'):
+        if state in ('pre_selected', 'contacted', 'discarded') and notifications_config_helper \
+                .is_notification_active(postulant.postulant, 'state_postulation_changed'):
             StatePostulationChangedNotification(user=postulant.postulant,
                                                 offer_name=offer.title,
                                                 state_name=state).save()
