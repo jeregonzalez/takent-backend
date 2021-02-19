@@ -88,7 +88,7 @@ class MyServiceRequestsApi(Resource):
 
     def get(self):
         user = user_helper.get_user_from_jwt()
-        service_requests = ServiceRequest.objects(user=user, score=None)
+        service_requests = ServiceRequest.objects(user=user)
         result = []
         for service_request in service_requests:
             service = Service.objects.get(service_requests=service_request)
