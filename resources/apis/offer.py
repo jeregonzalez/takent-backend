@@ -5,7 +5,7 @@ from mongoengine import FieldDoesNotExist, ValidationError, InvalidQueryError, D
 from database.models.common import Image
 from database.models.offer import Offer
 from database.models.parametric_docs import StateOffer
-from resources.helpers import user_helper, offer_helper, enterprise_helper
+from resources.helpers import user_helper, offer_helper, enterprise_helper, notifications_config_helper
 from resources.helpers.design_patterns.state.offer import OfferStateManager
 from resources.helpers.log_helper import LOGGER
 from resources.helpers.notifications_helper import FewAvailablePublicationsNotification
@@ -68,7 +68,10 @@ class OfferApi(Resource):
             enterprise.update(available_offers=available_offers)
             if available_offers <= 1:
                 users = [enterprise.admin_user] + enterprise.member_users
-                FewAvailablePublicationsNotification(user=users).save()
+                users = [user for user in users if notifications_config_helper.is_notification_active(
+                    user, 'few_available_publications')]
+                if users:
+                    FewAvailablePublicationsNotification(user=users).save()
 
         return Message.created()
 

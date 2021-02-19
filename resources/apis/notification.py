@@ -2,7 +2,9 @@ from flask import request
 from flask_restful import Resource
 from mongoengine import DoesNotExist, InvalidQueryError, ValidationError
 
-from database.models.notification import Notification
+from database.models.notification import Notification, NotificationsConfigurationCommonUser, \
+    NotificationsConfigurationEnterpriseUser
+from database.models.user import CommonUser
 from resources.helpers import user_helper
 from resources.utils.decorators import validate_headers, authentication_required, \
     validate_user_exists
@@ -40,5 +42,32 @@ class NotificationApi(Resource):
             body = request.get_json()
             Notification.objects.get(id=_id).update(**body)
         except (InvalidQueryError, ValidationError) as e:
+            raise UpdateException(e)
+        return Message.updated()
+
+
+class NotificationsConfigurationApi(Resource):
+
+    method_decorators = [validate_user_exists, authentication_required, validate_headers]
+
+    def get(self):
+        user = user_helper.get_user_from_jwt()
+        notification_model = NotificationsConfigurationCommonUser if isinstance(user, CommonUser) \
+            else NotificationsConfigurationEnterpriseUser
+
+        if not notification_model.objects(user=user).count():
+            notification_model(user=user).save()
+
+        notification_config = notification_model.objects.get(user=user)
+        return notification_config
+
+    def put(self):
+        user = user_helper.get_user_from_jwt()
+        notification_model = NotificationsConfigurationCommonUser if isinstance(user, CommonUser) \
+            else NotificationsConfigurationEnterpriseUser
+        try:
+            body = request.get_json()
+            notification_model.objects.get(user=user).update(**body)
+        except (InvalidQueryError, ValidationError, DoesNotExist) as e:
             raise UpdateException(e)
         return Message.updated()

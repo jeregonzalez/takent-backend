@@ -10,7 +10,7 @@ from database.models.offer import Offer
 from database.models.parametric_docs import StateUser, StateService, StateOffer, Permission
 from database.models.service import Service
 from database.models.user import ActivationTicket, CommonUser, RecoveryTicket, EnterpriseUser
-from resources.helpers import password_helper, user_helper, auth_helper, enterprise_helper
+from resources.helpers import password_helper, user_helper, auth_helper, enterprise_helper, notifications_config_helper
 from resources.helpers.email_helper.email_helper import EmailActivation, \
     EmailChangePassword, EmailRecovery
 from resources.helpers.notifications_helper import SuggestRegisterNewMemberNotification
@@ -211,7 +211,8 @@ class ActivateAccountApi(Resource):
         user.activate()
         ticket.delete()
 
-        if isinstance(user, EnterpriseUser) and user.permission.name == 'admin':
+        if isinstance(user, EnterpriseUser) and user.permission.name == 'admin' and \
+                notifications_config_helper.is_notification_active(user, 'suggest_register_new_member'):
             SuggestRegisterNewMemberNotification(user=user).save()
 
         return {'user': user.account}, 200

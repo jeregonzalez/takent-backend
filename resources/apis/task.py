@@ -7,7 +7,7 @@ from database.models.offer import Offer
 from database.models.parametric_docs import StateOffer, StateService
 from database.models.service import Service
 from database.models.user import CommonUser, EnterpriseUser
-from resources.helpers import enterprise_helper
+from resources.helpers import enterprise_helper, notifications_config_helper
 from resources.helpers.notifications_helper import SuggestInfoCompletionNotification, OffersNearingToFinishNotification, \
     SuggestPublishNewOfferNotification
 from resources.utils.messages import Message
@@ -20,6 +20,9 @@ class GenerateNotificationsApi(Resource):
     def get(self):
         # Suggest information completion
         for user in CommonUser.objects(state='active'):
+            if not notifications_config_helper.is_notification_active(user, 'suggest_info_completion'):
+                continue
+
             last_notification = Notification.objects(user=user, type='suggest_info_completion').order_by('-date').first()
             if last_notification and abs((last_notification.date - datetime.today()).days) < NOTIFICATION_DAYS_WINDOW:
                 continue
@@ -38,6 +41,9 @@ class GenerateNotificationsApi(Resource):
 
         # Offer nearing to finish
         for user in EnterpriseUser.objects(state='active'):
+            if not notifications_config_helper.is_notification_active(user, 'offers_nearing_to_finish'):
+                continue
+
             last_notification = Notification.objects(user=user, type='offers_nearing_to_finish').order_by('-date').first()
             if last_notification and abs((last_notification.date - datetime.today()).days) < NOTIFICATION_DAYS_WINDOW:
                 continue
@@ -50,6 +56,9 @@ class GenerateNotificationsApi(Resource):
 
         # Suggest publish new offer
         for user in EnterpriseUser.objects(state='active'):
+            if not notifications_config_helper.is_notification_active(user, 'suggest_publish_new_offer'):
+                continue
+
             last_notification = Notification.objects(user=user, type='suggest_publish_new_offer').order_by('-date').first()
             if last_notification and abs((last_notification.date - datetime.today()).days) < NOTIFICATION_DAYS_WINDOW:
                 continue

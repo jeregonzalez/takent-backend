@@ -261,6 +261,16 @@
 						}
 					],
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{user_token}}",
+									"type": "string"
+								}
+							]
+						},
 						"method": "POST",
 						"header": [],
 						"body": {
@@ -1054,13 +1064,13 @@
 								"method": "POST",
 								"header": [],
 								"url": {
-									"raw": "{{host}}/request_service/5f8eeab0a9b356efabe9d1f0",
+									"raw": "{{host}}/request_service/5f7f90d0cca79db2ec99d40a",
 									"host": [
 										"{{host}}"
 									],
 									"path": [
 										"request_service",
-										"5f8eeab0a9b356efabe9d1f0"
+										"5f7f90d0cca79db2ec99d40a"
 									]
 								}
 							},
@@ -1242,7 +1252,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{host}}/user/common/profile_photo?user_id=jereegonzalez@gmail.com",
+							"raw": "{{host}}/user/common/profile_photo",
 							"host": [
 								"{{host}}"
 							],
@@ -1250,12 +1260,6 @@
 								"user",
 								"common",
 								"profile_photo"
-							],
-							"query": [
-								{
-									"key": "user_id",
-									"value": "jereegonzalez@gmail.com"
-								}
 							]
 						}
 					},
@@ -2100,46 +2104,6 @@
 							"name": "Change State",
 							"item": [
 								{
-									"name": "Pre select postulant",
-									"request": {
-										"auth": {
-											"type": "bearer",
-											"bearer": [
-												{
-													"key": "token",
-													"value": "{{user_token}}",
-													"type": "string"
-												}
-											]
-										},
-										"method": "POST",
-										"header": [],
-										"body": {
-											"mode": "raw",
-											"raw": "{\n    \"comment\": \"Pinchi tragasable\"\n}",
-											"options": {
-												"raw": {
-													"language": "json"
-												}
-											}
-										},
-										"url": {
-											"raw": "{{host}}/offer/5f89ca13749bb1f7ea898df4/postulant/5f89ca66749bb1f7ea898dfd/pre_select",
-											"host": [
-												"{{host}}"
-											],
-											"path": [
-												"offer",
-												"5f89ca13749bb1f7ea898df4",
-												"postulant",
-												"5f89ca66749bb1f7ea898dfd",
-												"pre_select"
-											]
-										}
-									},
-									"response": []
-								},
-								{
 									"name": "Contact postulant",
 									"request": {
 										"auth": {
@@ -2174,6 +2138,46 @@
 												"postulant",
 												"5f8105bba53829401c32ffd7",
 												"contact"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Pre select postulant",
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "{{user_token}}",
+													"type": "string"
+												}
+											]
+										},
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"comment\": \"Pinchi tragasable\"\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{host}}/offer/5f89ca13749bb1f7ea898df4/postulant/5f89ca66749bb1f7ea898dfd/pre_select",
+											"host": [
+												"{{host}}"
+											],
+											"path": [
+												"offer",
+												"5f89ca13749bb1f7ea898df4",
+												"postulant",
+												"5f89ca66749bb1f7ea898dfd",
+												"pre_select"
 											]
 										}
 									},
@@ -2721,13 +2725,13 @@
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": "{{host}}/service/5f8eeab0a9b356efabe9d1f0/request",
+									"raw": "{{host}}/service/5f83b0fa1aa8402a2a51e48e/request",
 									"host": [
 										"{{host}}"
 									],
 									"path": [
 										"service",
-										"5f8eeab0a9b356efabe9d1f0",
+										"5f83b0fa1aa8402a2a51e48e",
 										"request"
 									]
 								}
@@ -2781,7 +2785,7 @@
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n    \"state\": \"in_course\"\n}",
+									"raw": "{\n    \"state\": \"contacted\"\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -2789,15 +2793,15 @@
 									}
 								},
 								"url": {
-									"raw": "{{host}}/service/5f8eeab0a9b356efabe9d1f0/request/5f8ef716a8b70b84e050f4d4",
+									"raw": "{{host}}/service/5f7f90d0cca79db2ec99d40a/request/5f7f925ed7f42e0bd6d8e159",
 									"host": [
 										"{{host}}"
 									],
 									"path": [
 										"service",
-										"5f8eeab0a9b356efabe9d1f0",
+										"5f7f90d0cca79db2ec99d40a",
 										"request",
-										"5f8ef716a8b70b84e050f4d4"
+										"5f7f925ed7f42e0bd6d8e159"
 									]
 								}
 							},
@@ -2879,13 +2883,13 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{host}}/service/5f8eeab0a9b356efabe9d1f0",
+							"raw": "{{host}}/service/5f83b00498d7feed0a22e032",
 							"host": [
 								"{{host}}"
 							],
 							"path": [
 								"service",
-								"5f8eeab0a9b356efabe9d1f0"
+								"5f83b00498d7feed0a22e032"
 							]
 						}
 					},
@@ -2965,22 +2969,6 @@
 								{
 									"key": "address.province",
 									"value": "La Rioja",
-									"disabled": true
-								},
-								{
-									"key": "exclude_mine",
-									"value": "true",
-									"description": "excluir mis servicios",
-									"disabled": true
-								},
-								{
-									"key": "only_mine",
-									"value": "true",
-									"disabled": true
-								},
-								{
-									"key": "cost",
-									"value": "100,300",
 									"disabled": true
 								}
 							]
@@ -3077,13 +3065,13 @@
 							}
 						},
 						"url": {
-							"raw": "{{host}}/service/5f8ef4edc14674c5e9196b23",
+							"raw": "{{host}}/service/5f83b00498d7feed0a22e032",
 							"host": [
 								"{{host}}"
 							],
 							"path": [
 								"service",
-								"5f8ef4edc14674c5e9196b23"
+								"5f83b00498d7feed0a22e032"
 							]
 						}
 					},
@@ -3565,6 +3553,44 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "Do admin",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{user_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"account\": \"jereegonzalez2@gmail.com\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/user/enterprise/do_admin",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"user",
+								"enterprise",
+								"do_admin"
+							]
+						}
+					},
+					"response": []
 				}
 			]
 		},
@@ -3657,23 +3683,6 @@
 					"response": []
 				},
 				{
-					"name": "Preferred Service",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{host}}/preferred_service",
-							"host": [
-								"{{host}}"
-							],
-							"path": [
-								"preferred_service"
-							]
-						}
-					},
-					"response": []
-				},
-				{
 					"name": "Notification",
 					"request": {
 						"method": "POST",
@@ -3716,7 +3725,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "https://api.mercadolibre.com/collections/notifications/12007457502?access_token=APP_USR-8710455338243142-100100-664517efc6d85e6f150d4cd9b5a96f3d-653415207",
+							"raw": "https://api.mercadolibre.com/collections/notifications/10616608420?access_token=APP_USR-8710455338243142-101721-b182e01cb94c9663b462c91ba96522a6-653415207",
 							"protocol": "https",
 							"host": [
 								"api",
@@ -3726,13 +3735,30 @@
 							"path": [
 								"collections",
 								"notifications",
-								"12007457502"
+								"10616608420"
 							],
 							"query": [
 								{
 									"key": "access_token",
-									"value": "APP_USR-8710455338243142-100100-664517efc6d85e6f150d4cd9b5a96f3d-653415207"
+									"value": "APP_USR-8710455338243142-101721-b182e01cb94c9663b462c91ba96522a6-653415207"
 								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Preferred Service",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/preferred_service",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"preferred_service"
 							]
 						}
 					},
@@ -3794,6 +3820,71 @@
 							"path": [
 								"user",
 								"notifications"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Notifications configuration",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{user_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/user/notifications_configuration",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"user",
+								"notifications_configuration"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Notifications configuration",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{user_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"state_postulation_changed\": false\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/user/notifications_configuration",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"user",
+								"notifications_configuration"
 							]
 						}
 					},

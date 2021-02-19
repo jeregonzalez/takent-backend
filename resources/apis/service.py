@@ -5,7 +5,7 @@ from mongoengine import FieldDoesNotExist, ValidationError, InvalidQueryError
 from database.models.common import Image
 from database.models.parametric_docs import StateService
 from database.models.service import Service
-from resources.helpers import service_helper, user_helper
+from resources.helpers import service_helper, user_helper, notifications_config_helper
 from resources.helpers.design_patterns.state.service import ServiceStateManager
 from resources.helpers.notifications_helper import SuggestPreferredServiceNotification
 from resources.utils.decorators import validate_headers, authentication_required, \
@@ -53,7 +53,8 @@ class ServiceApi(Resource):
             if images_obj:
                 new_service.update(images=images_obj)
 
-        if new_service.state.name == 'active':
+        if new_service.state.name == 'active' and notifications_config_helper.is_notification_active(
+                user=user, notification_type='suggest_preferred_service'):
             SuggestPreferredServiceNotification(user=user, service_name=new_service.title).save()
 
         return {'_id': new_service.id}, 201

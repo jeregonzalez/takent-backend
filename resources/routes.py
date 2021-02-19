@@ -8,7 +8,7 @@ from resources.apis.enterprise_type import EnterpriseTypeApi
 from resources.apis.language import LanguageApi, LanguageLevelApi
 from resources.apis.mercadopago import MercadoPagoApi, OfferPackApi, MPNotificationsApi, PreferredServiceApi
 from resources.apis.development import MongoApi
-from resources.apis.notification import NotificationApi
+from resources.apis.notification import NotificationApi, NotificationsConfigurationApi
 from resources.apis.place import CountriesApi, ProvincesApi, CitiesApi
 from resources.apis.postulant import PostulantApi, PostulateApi, StatePostulantApi
 from resources.apis.postulation import PostulationApi
@@ -98,6 +98,7 @@ def initialize_routes(api):
     api.add_resource(AssessmentStatisticsApi, '/api/v1/user/common/assessment_statistics/<account>')
     # Notifications
     api.add_resource(NotificationApi, '/api/v1/user/notifications', '/api/v1/user/notifications/<_id>')
+    api.add_resource(NotificationsConfigurationApi, '/api/v1/user/notifications_configuration')
     # Tasks
     api.add_resource(GenerateNotificationsApi, '/api/v1/task/generate_notifications')
     api.add_resource(ExpireOffersApi, '/api/v1/task/expire_offers')
