@@ -70,3 +70,16 @@ def validate_password(password=None):
 
 def get_member_user(user_account=None):
     return get_user(user_account=user_account, user_type='enterprise') if user_account else get_user_from_jwt()
+
+
+def calculate_average_score(user):
+    from database.models.service import Service
+    services = Service.objects(publication_user=user)
+    total_score = 0
+    score_count = 0
+    for service in services:
+        for service_request in service.service_requests:
+            if service_request.score:
+                total_score += service_request.score
+                score_count += 1
+    return total_score/score_count if score_count else 0
