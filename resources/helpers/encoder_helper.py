@@ -154,12 +154,18 @@ class EncodeStrategyService(EncodeStrategy):
             response['requested'] = False
         response['service_requests_pending'] = 0
         response['service_requests_completed'] = 0
+        total_score = 0
+        score_count = 0
         if self.obj.service_requests:
             for service_request in self.obj.service_requests:
                 if service_request.state.name == 'pending':
                     response['service_requests_pending'] += 1
                 elif service_request.state.name == 'completed':
                     response['service_requests_completed'] += 1
+                if service_request.score:
+                    total_score += service_request.score
+                    score_count += 1
+        response['score'] = total_score / score_count if total_score and score_count else 0
         return response
 
 
