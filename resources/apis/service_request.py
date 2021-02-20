@@ -83,7 +83,7 @@ class NewServiceRequestApi(Resource):
         except (FieldDoesNotExist, ValidationError) as e:
             raise SaveException(e)
 
-        if notifications_config_helper.is_notification_active(user_info.get('user'), 'requested_service'):
+        if notifications_config_helper.is_notification_active(service.publication_user, 'requested_service'):
             RequestedServiceNotification(user=service.publication_user, service_name=service.title).save()
 
         return Message.created()
