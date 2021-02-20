@@ -6,7 +6,7 @@ from database.models.parametric_docs import StateServiceRequest
 from database.models.service import Service, ServiceRequest
 from resources.helpers import user_helper, notifications_config_helper
 from resources.helpers.design_patterns.state.service_request import ServiceRequestStateManager
-from resources.helpers.notifications_helper import RequestedServiceNotification
+from resources.helpers.notifications_helper import RequestedServiceNotification, RequestAssessmentNotification
 from resources.utils.decorators import validate_headers, authentication_required, validate_user_exists, \
     validate_user_is_common, validate_service_exists, validate_service_request_exists
 from resources.utils.exceptions import UpdateException, SaveException
@@ -48,6 +48,13 @@ class ServiceRequestApi(Resource):
             ServiceRequest.objects.get(id=service_request_id).update(**body)
         except (DoesNotExist, FieldDoesNotExist, ValidationError) as e:
             raise UpdateException(e)
+
+        if body.get('state').name == 'completed' and notifications_config_helper.is_notification_active(
+                user=service_request.user, notification_type='request_assessment'):
+            RequestAssessmentNotification(
+                user=service_request.user, service_name=Service.objects.get(service_requests=service_request).title
+            ).save()
+
         return Message.updated()
 
     def delete(self, service_id=None, service_request_id=None):
