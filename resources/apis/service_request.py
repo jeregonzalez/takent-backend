@@ -49,7 +49,7 @@ class ServiceRequestApi(Resource):
         except (DoesNotExist, FieldDoesNotExist, ValidationError) as e:
             raise UpdateException(e)
 
-        if body.get('state').name == 'completed' and notifications_config_helper.is_notification_active(
+        if body.get('state') and body.get('state').name == 'completed' and notifications_config_helper.is_notification_active(
                 user=service_request.user, notification_type='request_assessment'):
             RequestAssessmentNotification(
                 user=service_request.user, service_name=Service.objects.get(service_requests=service_request).title
