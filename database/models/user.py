@@ -14,7 +14,6 @@ class User(db.Document):
     surname = db.StringField(required=True)
     birth_date = db.DateTimeField()
     phone = db.IntField()
-    preferred_services = db.ListField(db.StringField())
     state = db.ReferenceField(StateUser, default=lambda: StateUser.objects.get(name='inactive'))
 
     meta = {
@@ -47,6 +46,7 @@ class CommonUser(User):
     experience = db.EmbeddedDocumentListField(UserExperience)
     skill = db.EmbeddedDocumentListField(UserSkill)
     language = db.EmbeddedDocumentListField(UserLanguage)
+    preferred_services = db.ListField(db.StringField())
 
 
 class EnterpriseUser(User):
