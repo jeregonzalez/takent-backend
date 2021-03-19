@@ -160,7 +160,9 @@ class EncodeStrategyService(EncodeStrategy):
                     response['service_requests_pending'] += 1
                 elif service_request.state.name == 'completed':
                     response['service_requests_completed'] += 1
-        response['score'] = user_helper.calculate_average_score(user=self.obj.publication_user)
+        average_score, score_count = user_helper.calculate_average_score(user=self.obj.publication_user)
+        response['score'] = average_score
+        response['score_count'] = score_count
         return response
 
 
