@@ -82,4 +82,4 @@ def calculate_average_score(user):
             if service_request.score:
                 total_score += service_request.score
                 score_count += 1
-    return total_score/score_count if score_count else 0
+    return total_score/score_count if score_count else 0, score_count
