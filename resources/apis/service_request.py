@@ -107,4 +107,5 @@ class MyServiceRequestsApi(Resource):
                 'states_history': service_request.states_history,
                 'service': service
             })
+        result.reverse()
         return result
