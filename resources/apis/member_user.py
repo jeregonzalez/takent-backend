@@ -71,5 +71,5 @@ class UsersByEnterprise(Resource):
 
     def get(self):
         enterprise = enterprise_helper.get_enterprise()
-        return sorted(enterprise.member_users + [enterprise.admin_user], key=lambda x: x.id)
+        return [enterprise.admin_user] + sorted(enterprise.member_users, key=lambda x: x.id)
 
