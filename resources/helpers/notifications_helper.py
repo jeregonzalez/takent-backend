@@ -9,9 +9,11 @@ class Notification(ABC):
     type = None
     title = None
     description = None
+    entity = None
 
-    def __init__(self, user):
+    def __init__(self, user, entity=''):
         self.user = user
+        self.entity = entity if type(entity) == str else str(entity)
 
     def save(self):
         if not isinstance(self.user, list):
@@ -20,7 +22,8 @@ class Notification(ABC):
             notification.Notification(user=user,
                                       type=self.type,
                                       title=self.title,
-                                      description=self.description).save()
+                                      description=self.description,
+                                      entity=self.entity).save()
 
 
 class RequestedServiceNotification(Notification):
@@ -29,8 +32,8 @@ class RequestedServiceNotification(Notification):
     title = 'Nueva solicitud de servicio'
     description = 'Recibiste una nueva solicitud para el servicio "{}"'
 
-    def __init__(self, user, service_name):
-        super().__init__(user)
+    def __init__(self, entity, user, service_name):
+        super().__init__(user, entity)
         self.description = self.description.format(service_name)
 
 
@@ -40,8 +43,8 @@ class RequestAssessmentNotification(Notification):
     title = 'Valoración de servicio obtenido'
     description = 'Calificá el servicio "{}" que recibiste recientemente'
 
-    def __init__(self, user, service_name):
-        super().__init__(user)
+    def __init__(self, entity, user, service_name):
+        super().__init__(user, entity)
         self.description = self.description.format(service_name)
 
 
@@ -51,8 +54,8 @@ class SuggestPreferredServiceNotification(Notification):
     title = 'Sugerencia: hacé tu servicio preferencial'
     description = 'Acabás de publicar el servicio llamado "{}", hacelo preferencial para obtener más visibilidad!'
 
-    def __init__(self, user, service_name):
-        super().__init__(user)
+    def __init__(self, entity, user, service_name):
+        super().__init__(user, entity)
         self.description = self.description.format(service_name)
 
 
@@ -82,8 +85,8 @@ class StatePostulationChangedNotification(Notification):
     DESCRIPTION_DISCARDED = 'No has sido seleccionado para la oferta "{}". ' \
                             'No te desanimes, todavía quedan muchas oportunidades para vos!'
 
-    def __init__(self, user, offer_name, state_name):
-        super().__init__(user)
+    def __init__(self, entity, user, offer_name, state_name):
+        super().__init__(user, entity)
         self.description = self.description.format(offer_name, self.STATE_MAP[state_name]) \
             if state_name != 'discarded' else self.DESCRIPTION_DISCARDED.format(offer_name)
 
@@ -113,8 +116,8 @@ class OffersNearingToFinishNotification(Notification):
     title = 'Oferta a finalizar'
     description = 'Tu publicación "{}" está próxima a finalizar!'
 
-    def __init__(self, user, offer_name):
-        super().__init__(user)
+    def __init__(self, entity, user, offer_name):
+        super().__init__(user, entity)
         self.description = self.description.format(offer_name)
 
 

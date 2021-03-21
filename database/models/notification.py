@@ -24,6 +24,7 @@ class Notification(db.Document):
     title = db.StringField()
     description = db.StringField()
     viewed = db.BooleanField(default=False)
+    entity = db.StringField()
 
 
 class NotificationsConfiguration(db.Document):
