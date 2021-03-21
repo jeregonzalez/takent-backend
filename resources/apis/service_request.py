@@ -52,7 +52,9 @@ class ServiceRequestApi(Resource):
         if body.get('state') and body.get('state').name == 'completed' and notifications_config_helper.is_notification_active(
                 user=service_request.user, notification_type='request_assessment'):
             RequestAssessmentNotification(
-                user=service_request.user, service_name=Service.objects.get(service_requests=service_request).title
+                entity=service_request.id,
+                user=service_request.user,
+                service_name=Service.objects.get(service_requests=service_request).title
             ).save()
 
         return Message.updated()
@@ -84,7 +86,9 @@ class NewServiceRequestApi(Resource):
             raise SaveException(e)
 
         if notifications_config_helper.is_notification_active(service.publication_user, 'requested_service'):
-            RequestedServiceNotification(user=service.publication_user, service_name=service.title).save()
+            RequestedServiceNotification(entity=service.id,
+                                         user=service.publication_user,
+                                         service_name=service.title).save()
 
         return Message.created()
 

@@ -52,7 +52,7 @@ class GenerateNotificationsApi(Resource):
 
             for offer in Offer.objects(enterprise=enterprise, state='active'):
                 if abs((offer.publication_date - datetime.today()).days) >= 23:
-                    OffersNearingToFinishNotification(user=user, offer_name=offer.title).save()
+                    OffersNearingToFinishNotification(entity=offer.id, user=user, offer_name=offer.title).save()
 
         # Suggest publish new offer
         for user in EnterpriseUser.objects(state='active'):

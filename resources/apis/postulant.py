@@ -44,7 +44,8 @@ class PostulantApi(Resource):
             Postulant.objects.get(id=id_postulant).update(**body)
             if state in ('pre_selected', 'contacted', 'discarded') and notifications_config_helper\
                     .is_notification_active(Postulant.objects.get(id=id_postulant).postulant, 'state_postulation_changed'):
-                StatePostulationChangedNotification(user=Postulant.objects.get(id=id_postulant).postulant,
+                StatePostulationChangedNotification(entity=id_postulant,
+                                                    user=Postulant.objects.get(id=id_postulant).postulant,
                                                     offer_name=Offer.objects.get(id=id_offer).title,
                                                     state_name=state).save()
         except (DoesNotExist, FieldDoesNotExist, ValidationError) as e:
@@ -127,7 +128,8 @@ class StatePostulantApi(Resource):
 
         if state in ('pre_selected', 'contacted', 'discarded') and notifications_config_helper \
                 .is_notification_active(postulant.postulant, 'state_postulation_changed'):
-            StatePostulationChangedNotification(user=postulant.postulant,
+            StatePostulationChangedNotification(entity=postulant.id,
+                                                user=postulant.postulant,
                                                 offer_name=offer.title,
                                                 state_name=state).save()
 

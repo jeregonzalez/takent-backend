@@ -55,7 +55,9 @@ class ServiceApi(Resource):
 
         if new_service.state.name == 'active' and notifications_config_helper.is_notification_active(
                 user=user, notification_type='suggest_preferred_service'):
-            SuggestPreferredServiceNotification(user=user, service_name=new_service.title).save()
+            SuggestPreferredServiceNotification(entity=new_service.id,
+                                                user=user,
+                                                service_name=new_service.title).save()
 
         return {'_id': new_service.id}, 201
 
