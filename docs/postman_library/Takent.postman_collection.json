@@ -3968,6 +3968,105 @@
 					"response": []
 				}
 			]
+		},
+		{
+			"name": "Geolocation",
+			"item": [
+				{
+					"name": "Geolocation offers",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{user_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/geolocation/offers?latitude=-31.456480&longitude=-64.227238&radius=5000&filter_by_preferred=False",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"geolocation",
+								"offers"
+							],
+							"query": [
+								{
+									"key": "latitude",
+									"value": "-31.456480"
+								},
+								{
+									"key": "longitude",
+									"value": "-64.227238"
+								},
+								{
+									"key": "radius",
+									"value": "5000",
+									"description": "in meters"
+								},
+								{
+									"key": "filter_by_preferred",
+									"value": "False"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Geolocation services",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{user_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/geolocation/services?latitude=-31.456480&longitude=-64.227238&radius=5000&filter_by_preferred=False",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"geolocation",
+								"services"
+							],
+							"query": [
+								{
+									"key": "latitude",
+									"value": "-31.456480"
+								},
+								{
+									"key": "longitude",
+									"value": "-64.227238"
+								},
+								{
+									"key": "radius",
+									"value": "5000"
+								},
+								{
+									"key": "filter_by_preferred",
+									"value": "False",
+									"description": "in meters"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
 		}
 	]
 }
