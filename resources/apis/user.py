@@ -7,15 +7,16 @@ from mongoengine import FieldDoesNotExist, ValidationError, DoesNotExist
 from database.models.common import Image
 from database.models.common_user import UserCurriculumVitae
 from database.models.offer import Offer
-from database.models.parametric_docs import StateUser, StateService, StateOffer
+from database.models.parametric_docs import StateUser, StateService, StateOffer, Permission
 from database.models.service import Service
-from database.models.user import ActivationTicket, CommonUser, RecoveryTicket
-from resources.helpers import password_helper, user_helper, auth_helper, enterprise_helper
+from database.models.user import ActivationTicket, CommonUser, RecoveryTicket, EnterpriseUser
+from resources.helpers import password_helper, user_helper, auth_helper, enterprise_helper, notifications_config_helper
 from resources.helpers.email_helper.email_helper import EmailActivation, \
     EmailChangePassword, EmailRecovery
-from resources.helpers.log_helper import LOGGER
+from resources.helpers.notifications_helper import SuggestRegisterNewMemberNotification
 from resources.utils.decorators import validate_headers, authentication_required, \
-    validate_user_is_common, validate_user_exists, validate_user_not_exists, validate_user_password
+    validate_user_is_common, validate_user_exists, validate_user_not_exists, validate_user_password, \
+    validate_user_is_enterprise, validate_permission_is_admin
 from resources.utils.exceptions import MissingRequiredFieldsException, \
     SchemaValidationErrorException, SaveException, UpdateException, GetException
 from resources.utils.messages import Message
@@ -69,7 +70,9 @@ class UserApi(Resource):
             for offer in offers:
                 offer.update(state=finished)
             for member_user in enterprise.member_users:
-                member_user.update(state=StateUser.objects.get(name='deleted'))
+                member_user.delete()
+        elif user.permission.name == 'member':
+            user.delete()
         return Message.deleted()
 
 
@@ -207,6 +210,11 @@ class ActivateAccountApi(Resource):
         user = user_helper.get_user(user_type=ticket.user_type, user_account=ticket.account)
         user.activate()
         ticket.delete()
+
+        if isinstance(user, EnterpriseUser) and user.permission.name == 'admin' and \
+                notifications_config_helper.is_notification_active(user, 'suggest_register_new_member'):
+            SuggestRegisterNewMemberNotification(user=user).save()
+
         return {'user': user.account}, 200
 
 
@@ -313,3 +321,29 @@ class RecoverAccountApi(Resource):
         user.update(state=StateUser.objects.get(name='active'))
         ticket.delete()
         return {'user': user.account}, 200
+
+
+class DoAdminApi(Resource):
+
+    method_decorators = {
+        'post': [validate_permission_is_admin, validate_user_is_enterprise, validate_user_exists,
+                 authentication_required, validate_headers]
+    }
+
+    def post(self):
+        enterprise = enterprise_helper.get_enterprise()
+        username = request.get_json().get('account')
+
+        if not [member_user for member_user in enterprise.member_users if member_user.account == username]:
+            abort(400, message='User {} does not exist in the list of member users'.format(username))
+
+        admin_user = enterprise.admin_user
+        target_user = EnterpriseUser.objects.get(account=username)
+
+        admin_user.update(permission=Permission.objects.get(name='member'))
+        target_user.update(permission=Permission.objects.get(name='admin'))
+
+        enterprise.update(push__member_users=enterprise.admin_user)
+        enterprise.update(admin_user=target_user)
+        enterprise.update(pull__member_users=target_user)
+        return Message.created()

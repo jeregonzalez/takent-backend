@@ -1,5 +1,6 @@
+from resources.apis.common_user import AssessmentStatisticsApi
 from resources.apis.enterprise_statistics import StatisticsApi
-from resources.apis.member_user import MemberUserApi, MemberUsersByEnterprise
+from resources.apis.member_user import MemberUserApi, UsersByEnterprise
 from resources.apis.education import EducationLevelApi
 from resources.apis.enterprise import EnterpriseApi, ProfilePhotoEnterpriseApi, EnterpriseImagesApi
 from resources.apis.authentication import AuthenticationApi
@@ -7,15 +8,19 @@ from resources.apis.enterprise_type import EnterpriseTypeApi
 from resources.apis.language import LanguageApi, LanguageLevelApi
 from resources.apis.mercadopago import MercadoPagoApi, OfferPackApi, MPNotificationsApi, PreferredServiceApi
 from resources.apis.development import MongoApi
+from resources.apis.notification import NotificationApi, NotificationsConfigurationApi
 from resources.apis.place import CountriesApi, ProvincesApi, CitiesApi
 from resources.apis.postulant import PostulantApi, PostulateApi, StatePostulantApi
+from resources.apis.postulation import PostulationApi
 from resources.apis.sector import SectorApi
 from resources.apis.profession import ProfessionApi
 from resources.apis.service import ServiceApi, ServiceImagesApi
-from resources.apis.service_request import ServiceRequestApi, NewServiceRequestApi
+from resources.apis.service_request import ServiceRequestApi, NewServiceRequestApi, \
+    MyServiceRequestsApi
+from resources.apis.task import GenerateNotificationsApi, ExpireOffersApi, ExpireServicesApi, PublishProgrammedOffersApi
 from resources.apis.user import ImageApi, CurriculumApi, UserApi, PasswordRecoverApi, \
     ChangePasswordApi, \
-    UserExistsValidationApi, ActivateAccountApi, UserAttributesListApi, RecoverAccountApi
+    UserExistsValidationApi, ActivateAccountApi, UserAttributesListApi, RecoverAccountApi, DoAdminApi
 from resources.apis.offer import OfferApi, OfferImagesApi
 from resources.apis.user_and_enterprise import UserAndEnterpriseApi
 
@@ -45,7 +50,8 @@ def initialize_routes(api):
     api.add_resource(UserAttributesListApi, '/api/v1/user/common/<attribute_name>/<_id>',
                      '/api/v1/user/common/<attribute_name>')
     api.add_resource(MemberUserApi, '/api/v1/member_user', '/api/v1/member_user/<account>')
-    api.add_resource(MemberUsersByEnterprise, '/api/v1/members')
+    api.add_resource(UsersByEnterprise, '/api/v1/enterprise/users')
+    api.add_resource(DoAdminApi, '/api/v1/user/enterprise/do_admin')
     # Password
     api.add_resource(PasswordRecoverApi, '/api/v1/user/common/recover_password',
                      '/api/v1/user/enterprise/recover_password')
@@ -84,3 +90,17 @@ def initialize_routes(api):
     api.add_resource(RecoverAccountApi, '/api/v1/recover_account')
     # Statistics
     api.add_resource(StatisticsApi, '/api/v1/enterprise/statistic/<statistic_name>')
+    # Postulations
+    api.add_resource(PostulationApi, '/api/v1/user/common/postulations')
+    # Service requests
+    api.add_resource(MyServiceRequestsApi, '/api/v1/common/service_requests')
+    # Common user average assessments
+    api.add_resource(AssessmentStatisticsApi, '/api/v1/user/common/assessment_statistics/<account>')
+    # Notifications
+    api.add_resource(NotificationApi, '/api/v1/user/notifications', '/api/v1/user/notifications/<_id>')
+    api.add_resource(NotificationsConfigurationApi, '/api/v1/user/notifications_configuration')
+    # Tasks
+    api.add_resource(GenerateNotificationsApi, '/api/v1/task/generate_notifications')
+    api.add_resource(ExpireOffersApi, '/api/v1/task/expire_offers')
+    api.add_resource(ExpireServicesApi, '/api/v1/task/expire_services')
+    api.add_resource(PublishProgrammedOffersApi, '/api/v1/task/publish_programmed_offers')

@@ -30,7 +30,7 @@ def get_offers_per_month(months=12):
 def get_offers_with_greater_postulants_amount(quantity=5):
     enterprise = enterprise_helper.get_enterprise()
 
-    offers = Offer.objects(enterprise=enterprise)
+    offers = Offer.objects(enterprise=enterprise, state__nin=['draft', 'programmed', 'deleted'])
 
     result = [{'title': offer.title, 'postulants': len(offer.postulants)} for offer in offers]
     result.sort(key=lambda offer: offer.get('postulants'), reverse=True)

@@ -5,8 +5,10 @@ from mongoengine import FieldDoesNotExist, ValidationError, InvalidQueryError, D
 from database.models.common import Image
 from database.models.offer import Offer
 from database.models.parametric_docs import StateOffer
-from resources.helpers import user_helper, offer_helper, enterprise_helper
+from resources.helpers import user_helper, offer_helper, enterprise_helper, notifications_config_helper
 from resources.helpers.design_patterns.state.offer import OfferStateManager
+from resources.helpers.log_helper import LOGGER
+from resources.helpers.notifications_helper import FewAvailablePublicationsNotification
 from resources.utils.decorators import authentication_required, validate_user_exists, validate_headers, \
     validate_offer_exists
 from resources.utils.exceptions import SaveException, UpdateException, GetException
@@ -39,9 +41,11 @@ class OfferApi(Resource):
         return offers
 
     def post(self):
+        user = user_helper.get_user_from_jwt()
+        enterprise = enterprise_helper.get_enterprise()
         body = request.get_json()
-        body['publication_user'] = user_helper.get_user_from_jwt()
-        body['enterprise'] = enterprise_helper.get_enterprise()
+        body['publication_user'] = user
+        body['enterprise'] = enterprise
         if body.get('state') != 'draft' and body.get('enterprise').available_offers == 0:
             raise SaveException('No available offers')
         images = body.get('images')
@@ -58,8 +62,17 @@ class OfferApi(Resource):
                 images_obj.append(new_image)
             if images_obj:
                 new_offer.update(images=images_obj)
+
         if new_offer.state.name != 'draft':
-            body.get('enterprise').update(available_offers=body.get('enterprise').available_offers - 1)
+            available_offers = enterprise.available_offers - 1
+            enterprise.update(available_offers=available_offers)
+            if available_offers <= 1:
+                users = [enterprise.admin_user] + enterprise.member_users
+                users = [user for user in users if notifications_config_helper.is_notification_active(
+                    user, 'few_available_publications')]
+                if users:
+                    FewAvailablePublicationsNotification(user=users).save()
+
         return Message.created()
 
     def put(self, id_offer=None):
@@ -77,6 +90,9 @@ class OfferApi(Resource):
             body['state'] = StateOffer.objects.get(name=state_manager.state.name)
         try:
             offer.update(**body)
+            if offer.state.name == 'draft' and body.get('state') and body.get('state').name == 'active':
+                enterprise = enterprise_helper.get_enterprise()
+                enterprise.update(available_offers=enterprise.available_offers - 1)
         except (InvalidQueryError, ValidationError) as e:
             raise UpdateException(e)
         return Message.updated()

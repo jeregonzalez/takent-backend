@@ -59,6 +59,7 @@ class Offer(db.Document):
     state = db.ReferenceField(StateOffer, default=lambda: StateOffer.objects.get(name='active'))
     enterprise = db.ReferenceField(Enterprise)
     states_history = db.EmbeddedDocumentListField(StateOfferHistory)
+    remote = db.BooleanField(default=False)
 
     def save(self, *args, **kwargs):
         self.states_history.create(state=self.state.name, user=user_helper.get_user_from_jwt(keys='user_account'))
@@ -67,6 +68,6 @@ class Offer(db.Document):
     def update(self, *args, **kwargs):
         state = kwargs.get('state')
         if state:
-            kwargs['push__states_history'] = StateOfferHistory(state=state.name,
-                                                               user=user_helper.get_user_from_jwt(keys='user_account'))
+            user = user_helper.get_user_from_jwt(keys='user_account') or 'bot'
+            kwargs['push__states_history'] = StateOfferHistory(state=state.name, user=user)
         return super(Offer, self).update(*args, **kwargs)

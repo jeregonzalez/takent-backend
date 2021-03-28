@@ -5,8 +5,9 @@ from mongoengine import FieldDoesNotExist, ValidationError, InvalidQueryError
 from database.models.common import Image
 from database.models.parametric_docs import StateService
 from database.models.service import Service
-from resources.helpers import service_helper, user_helper
+from resources.helpers import service_helper, user_helper, notifications_config_helper
 from resources.helpers.design_patterns.state.service import ServiceStateManager
+from resources.helpers.notifications_helper import SuggestPreferredServiceNotification
 from resources.utils.decorators import validate_headers, authentication_required, \
     validate_user_exists, \
     validate_service_exists, validate_user_is_common
@@ -34,8 +35,9 @@ class ServiceApi(Resource):
         return services
 
     def post(self):
+        user = user_helper.get_user_from_jwt()
         body = request.get_json()
-        body['publication_user'] = user_helper.get_user_from_jwt()
+        body['publication_user'] = user
         images = body.get('images')
         if images:
             del body['images']
@@ -50,6 +52,13 @@ class ServiceApi(Resource):
                 images_obj.append(new_image)
             if images_obj:
                 new_service.update(images=images_obj)
+
+        if new_service.state.name == 'active' and notifications_config_helper.is_notification_active(
+                user=user, notification_type='suggest_preferred_service'):
+            SuggestPreferredServiceNotification(entity=new_service.id,
+                                                user=user,
+                                                service_name=new_service.title).save()
+
         return {'_id': new_service.id}, 201
 
     def put(self, service_id=None):

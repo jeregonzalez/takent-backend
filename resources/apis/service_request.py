@@ -4,8 +4,9 @@ from mongoengine import DoesNotExist, FieldDoesNotExist, ValidationError
 
 from database.models.parametric_docs import StateServiceRequest
 from database.models.service import Service, ServiceRequest
-from resources.helpers import user_helper
+from resources.helpers import user_helper, notifications_config_helper
 from resources.helpers.design_patterns.state.service_request import ServiceRequestStateManager
+from resources.helpers.notifications_helper import RequestedServiceNotification, RequestAssessmentNotification
 from resources.utils.decorators import validate_headers, authentication_required, validate_user_exists, \
     validate_user_is_common, validate_service_exists, validate_service_request_exists
 from resources.utils.exceptions import UpdateException, SaveException
@@ -47,6 +48,15 @@ class ServiceRequestApi(Resource):
             ServiceRequest.objects.get(id=service_request_id).update(**body)
         except (DoesNotExist, FieldDoesNotExist, ValidationError) as e:
             raise UpdateException(e)
+
+        if body.get('state') and body.get('state').name == 'completed' and notifications_config_helper.is_notification_active(
+                user=service_request.user, notification_type='request_assessment'):
+            RequestAssessmentNotification(
+                entity=service_request.id,
+                user=service_request.user,
+                service_name=Service.objects.get(service_requests=service_request).title
+            ).save()
+
         return Message.updated()
 
     def delete(self, service_id=None, service_request_id=None):
@@ -74,4 +84,32 @@ class NewServiceRequestApi(Resource):
             service.update(push__service_requests=service_request)
         except (FieldDoesNotExist, ValidationError) as e:
             raise SaveException(e)
+
+        if notifications_config_helper.is_notification_active(service.publication_user, 'requested_service'):
+            RequestedServiceNotification(entity=service.id,
+                                         user=service.publication_user,
+                                         service_name=service.title).save()
+
         return Message.created()
+
+
+class MyServiceRequestsApi(Resource):
+
+    method_decorators = [validate_user_is_common, validate_user_exists, authentication_required, validate_headers]
+
+    def get(self):
+        user = user_helper.get_user_from_jwt()
+        service_requests = ServiceRequest.objects(user=user)
+        result = []
+        for service_request in service_requests:
+            service = Service.objects.get(service_requests=service_request)
+            result.append({
+                '_id': service_request.id,
+                'request_date': service_request.request_date,
+                'state': service_request.state.name,
+                'score': service_request.score,
+                'states_history': service_request.states_history,
+                'service': service
+            })
+        result.reverse()
+        return result

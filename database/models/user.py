@@ -46,6 +46,7 @@ class CommonUser(User):
     experience = db.EmbeddedDocumentListField(UserExperience)
     skill = db.EmbeddedDocumentListField(UserSkill)
     language = db.EmbeddedDocumentListField(UserLanguage)
+    preferred_services = db.ListField(db.StringField())
 
 
 class EnterpriseUser(User):
