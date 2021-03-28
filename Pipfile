@@ -18,6 +18,8 @@ pillow = "7.2.0"
 flask-cors = "3.0.9"
 mercadopago = "*"
 gunicorn = "*"
+marshmallow = "*"
+geopy = "*"
 
 [requires]
 python_version = "3.8"
