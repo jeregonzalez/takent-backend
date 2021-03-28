@@ -2399,7 +2399,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{host}}/offer?sort=random",
+							"raw": "{{host}}/offer?sort=random&location=-31.456480,-64.22723,30000",
 							"host": [
 								"{{host}}"
 							],
@@ -2486,6 +2486,11 @@
 								{
 									"key": "sort",
 									"value": "random"
+								},
+								{
+									"key": "location",
+									"value": "-31.456480,-64.22723,30000",
+									"description": "latitude, longitude, ratio (meters)"
 								}
 							]
 						}
@@ -2911,7 +2916,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{host}}/service",
+							"raw": "{{host}}/service?sort=random&location=-31.456480,-64.22723,30000&exclude_mine=true",
 							"host": [
 								"{{host}}"
 							],
@@ -2963,13 +2968,21 @@
 								{
 									"key": "sort",
 									"value": "random",
-									"description": "asc, desc, random",
-									"disabled": true
+									"description": "asc, desc, random"
 								},
 								{
 									"key": "address.province",
 									"value": "La Rioja",
 									"disabled": true
+								},
+								{
+									"key": "location",
+									"value": "-31.456480,-64.22723,30000",
+									"description": "latitude,longitude,ratio(meters)"
+								},
+								{
+									"key": "exclude_mine",
+									"value": "true"
 								}
 							]
 						}
@@ -3870,7 +3883,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"state_postulation_changed\": false\n}",
+							"raw": "{\n    \"near_offers\": false\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -3988,7 +4001,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{host}}/geolocation/offers?latitude=-31.456480&longitude=-64.227238&radius=5000&filter_by_preferred=False",
+							"raw": "{{host}}/geolocation/offers?latitude=-31.456480&longitude=-64.227238&radius=30000&filter_by_preferred=False",
 							"host": [
 								"{{host}}"
 							],
@@ -4007,7 +4020,7 @@
 								},
 								{
 									"key": "radius",
-									"value": "5000",
+									"value": "30000",
 									"description": "in meters"
 								},
 								{
@@ -4035,7 +4048,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{host}}/geolocation/services?latitude=-31.456480&longitude=-64.227238&radius=5000&filter_by_preferred=False",
+							"raw": "{{host}}/geolocation/services?latitude=-31.456480&longitude=-64.227238&radius=30000&filter_by_preferred=False",
 							"host": [
 								"{{host}}"
 							],
@@ -4054,7 +4067,7 @@
 								},
 								{
 									"key": "radius",
-									"value": "5000"
+									"value": "30000"
 								},
 								{
 									"key": "filter_by_preferred",
