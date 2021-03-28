@@ -8,10 +8,10 @@ from mongoengine import ObjectIdField, ReferenceField, ListField, EmbeddedDocume
 
 from database.models.place import Country, City
 from database.models.service import Service
-from resources.helpers import user_helper
+from resources.helpers import user_helper, geolocation_helper
 from resources.utils.exceptions import GetException
 
-FILTER_OPTIONS = ['strict', 'sort', 'exclude_mine', 'only_mine']
+FILTER_OPTIONS = ['strict', 'sort', 'exclude_mine', 'only_mine', 'location']
 
 
 def service_exists(_id=None):
@@ -111,6 +111,8 @@ def filter_services(filters):
                 kwargs = {'{}__in'.format('code' if is_int else 'name'): values}
                 city_codes = [city.code for city in City.objects(**kwargs)]
             query_param.append(('address__city__in', city_codes))
+        elif key == 'location':
+            query_param.append(('address__location__ne', None))
         mongo_query_params.extend(query_param)
     mongo_query_params = dict(mongo_query_params)
     if request.args.get('exclude_mine'):
@@ -138,4 +140,12 @@ def filter_services(filters):
         services = get_services()
     except (InvalidQueryError, LookUpError) as e:
         raise GetException(e)
+    location = [value for key, value in filters if key == 'location']
+    if location:
+        location = location[0]
+        latitude, longitude, ratio = location.split(',')
+        user_location = (latitude, longitude)
+        ratio = float(ratio)
+        services = [service for service in services if service.state.name == 'active' and
+                    geolocation_helper.is_near(user_location, (service.address.location.lat, service.address.location.lng), ratio)]
     return services

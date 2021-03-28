@@ -8,9 +8,10 @@ from mongoengine import ReferenceField, EmbeddedDocumentListField, StringField, 
 from database.models.common import City
 from database.models.offer import Offer
 from database.models.place import Country
+from resources.helpers import geolocation_helper
 from resources.utils.exceptions import GetException
 
-FILTER_OPTIONS = ['strict', 'sort']
+FILTER_OPTIONS = ['strict', 'sort', 'location']
 
 
 def offer_exists(_id=None):
@@ -101,6 +102,8 @@ def filter_offers(filters):
                 kwargs = {'{}__in'.format('code' if is_int else 'name'): values}
                 city_codes = [city.code for city in City.objects(**kwargs)]
             query_param.append(('address__city__in', city_codes))
+        elif key == 'location':
+            query_param.append(('address__location__ne', None))
         mongo_query_params.extend(query_param)
     mongo_query_params = dict(mongo_query_params)
     sort = [filter_sort for filter_sort in filters if filter_sort[0] == 'sort']
@@ -121,4 +124,11 @@ def filter_offers(filters):
         offers = get_offers()
     except (InvalidQueryError, LookUpError) as e:
         raise GetException(e)
+    location = [value for key, value in filters if key == 'location']
+    if location:
+        location = location[0]
+        latitude, longitude, ratio = location.split(',')
+        user_location = (latitude, longitude)
+        ratio = float(ratio)
+        offers = [offer for offer in offers if geolocation_helper.is_near(user_location, (offer.address.location.lat, offer.address.location.lng), ratio)]
     return offers
