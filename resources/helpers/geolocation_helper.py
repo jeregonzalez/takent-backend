@@ -8,6 +8,11 @@ from database.models.service import Service
 from database.models.user import CommonUser
 
 
+def is_near(location_1: tuple, location_2: tuple, meters: float) -> bool:
+    dist: float = distance.distance(location_1, location_2).meters
+    return dist <= meters
+
+
 def get_near_services(*args, **kwargs) -> List[Service]:
     return _get_near('services', *args, **kwargs)
 

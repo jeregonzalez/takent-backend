@@ -13,7 +13,9 @@ NOTIFICATION_TYPES = [
     'offers_nearing_to_finish',
     'suggest_register_new_member',
     'suggest_publish_new_offer',
-    'suggest_offer'
+    'suggest_offer',
+    'near_offers',
+    'near_services'
 ]
 
 
@@ -25,6 +27,7 @@ class Notification(db.Document):
     description = db.StringField()
     viewed = db.BooleanField(default=False)
     entity = db.StringField()
+    info = db.DictField()
 
 
 class NotificationsConfiguration(db.Document):
@@ -41,6 +44,8 @@ class NotificationsConfigurationCommonUser(NotificationsConfiguration):
     suggest_preferred_service = db.BooleanField(default=True)
     state_postulation_changed = db.BooleanField(default=True)
     suggest_info_completion = db.BooleanField(default=True)
+    near_offers = db.BooleanField(default=True)
+    near_services = db.BooleanField(default=True)
 
 
 class NotificationsConfigurationEnterpriseUser(NotificationsConfiguration):
