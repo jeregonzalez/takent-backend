@@ -2399,7 +2399,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{host}}/offer?sort=random&location=-31.456480,-64.22723,30000",
+							"raw": "{{host}}/offer?sort=random&location=-31.456480,-64.22723,5000&filter_by_preference=false",
 							"host": [
 								"{{host}}"
 							],
@@ -2489,8 +2489,12 @@
 								},
 								{
 									"key": "location",
-									"value": "-31.456480,-64.22723,30000",
+									"value": "-31.456480,-64.22723,5000",
 									"description": "latitude, longitude, ratio (meters)"
+								},
+								{
+									"key": "filter_by_preference",
+									"value": "false"
 								}
 							]
 						}
@@ -2983,6 +2987,11 @@
 								{
 									"key": "exclude_mine",
 									"value": "true"
+								},
+								{
+									"key": "filter_by_preference",
+									"value": "true",
+									"disabled": true
 								}
 							]
 						}
@@ -4001,7 +4010,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{host}}/geolocation/offers?latitude=-31.456480&longitude=-64.227238&radius=30000&filter_by_preferred=False",
+							"raw": "{{host}}/geolocation/offers?latitude=-31.456480&longitude=-64.227238&radius=5000&filter_by_preferred=False",
 							"host": [
 								"{{host}}"
 							],
@@ -4020,7 +4029,7 @@
 								},
 								{
 									"key": "radius",
-									"value": "30000",
+									"value": "5000",
 									"description": "in meters"
 								},
 								{

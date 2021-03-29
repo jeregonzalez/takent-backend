@@ -11,7 +11,7 @@ from database.models.service import Service
 from resources.helpers import user_helper, geolocation_helper
 from resources.utils.exceptions import GetException
 
-FILTER_OPTIONS = ['strict', 'sort', 'exclude_mine', 'only_mine', 'location']
+FILTER_OPTIONS = ['strict', 'sort', 'exclude_mine', 'only_mine', 'location', 'filter_by_preference']
 
 
 def service_exists(_id=None):
@@ -113,6 +113,8 @@ def filter_services(filters):
             query_param.append(('address__city__in', city_codes))
         elif key == 'location':
             query_param.append(('address__location__ne', None))
+            if request.args.get('filter_by_preference', 'false') == 'true':
+                query_param.append(('sector__in', user_helper.get_user_from_jwt().preferred_services))
         mongo_query_params.extend(query_param)
     mongo_query_params = dict(mongo_query_params)
     if request.args.get('exclude_mine'):

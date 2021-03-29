@@ -1,6 +1,7 @@
 import random
 
 from dateutil import parser
+from flask import request
 from mongoengine import ReferenceField, EmbeddedDocumentListField, StringField, DateTimeField, \
     ObjectIdField, \
     ListField, InvalidQueryError, LookUpError, BooleanField
@@ -8,10 +9,10 @@ from mongoengine import ReferenceField, EmbeddedDocumentListField, StringField, 
 from database.models.common import City
 from database.models.offer import Offer
 from database.models.place import Country
-from resources.helpers import geolocation_helper
+from resources.helpers import geolocation_helper, user_helper
 from resources.utils.exceptions import GetException
 
-FILTER_OPTIONS = ['strict', 'sort', 'location']
+FILTER_OPTIONS = ['strict', 'sort', 'location', 'filter_by_preference']
 
 
 def offer_exists(_id=None):
@@ -104,6 +105,8 @@ def filter_offers(filters):
             query_param.append(('address__city__in', city_codes))
         elif key == 'location':
             query_param.append(('address__location__ne', None))
+            if request.args.get('filter_by_preference', 'false') == 'true':
+                query_param.append(('sector__in', user_helper.get_user_from_jwt().preferred_services))
         mongo_query_params.extend(query_param)
     mongo_query_params = dict(mongo_query_params)
     sort = [filter_sort for filter_sort in filters if filter_sort[0] == 'sort']
