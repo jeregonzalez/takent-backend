@@ -4089,6 +4089,37 @@
 					"response": []
 				}
 			]
+		},
+		{
+			"name": "Feedback",
+			"item": [
+				{
+					"name": "Feedback",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"jereegonzalez@gmail.com\",\n    \"text\": \"Una aplicación del orto, la verdad no me sirvió ni para limpiarme el ojete\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/feedback",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"feedback"
+							]
+						}
+					},
+					"response": []
+				}
+			]
 		}
 	]
 }
