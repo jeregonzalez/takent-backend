@@ -5,6 +5,7 @@ from resources.apis.education import EducationLevelApi
 from resources.apis.enterprise import EnterpriseApi, ProfilePhotoEnterpriseApi, EnterpriseImagesApi
 from resources.apis.enterprise_statistics import StatisticsApi
 from resources.apis.enterprise_type import EnterpriseTypeApi
+from resources.apis.feedbacks import FeedbackApi
 from resources.apis.geolocation import GeolocationApi
 from resources.apis.language import LanguageApi, LanguageLevelApi
 from resources.apis.member_user import MemberUserApi, UsersByEnterprise
@@ -106,3 +107,5 @@ def initialize_routes(api):
     api.add_resource(PublishProgrammedOffersApi, '/api/v1/task/publish_programmed_offers')
     # Geolocation
     api.add_resource(GeolocationApi, '/api/v1/geolocation/<obj_type>')
+    # Feedback
+    api.add_resource(FeedbackApi, '/api/v1/feedback')
