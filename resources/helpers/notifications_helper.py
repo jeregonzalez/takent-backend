@@ -26,7 +26,7 @@ class Notification(ABC):
             'type': self.type,
             'title': self.title,
             'description': self.description,
-            'entity': self.entity,
+            'entity': self.entity if isinstance(self.entity, str) else str(self.entity),
             'info': self.info
         }
         attributes = {key: value for key, value in attributes.items() if value is not None}
