@@ -38,14 +38,19 @@ class NotificationsConfiguration(db.Document):
     }
 
 
+class NearNotification(db.EmbeddedDocument):
+    active = db.BooleanField(default=False)
+    radius = db.IntField(default=500)
+
+
 class NotificationsConfigurationCommonUser(NotificationsConfiguration):
     requested_service = db.BooleanField(default=True)
     request_assessment = db.BooleanField(default=True)
     suggest_preferred_service = db.BooleanField(default=True)
     state_postulation_changed = db.BooleanField(default=True)
     suggest_info_completion = db.BooleanField(default=True)
-    near_offers = db.BooleanField(default=False)
-    near_services = db.BooleanField(default=False)
+    near_offers = db.EmbeddedDocumentField(NearNotification, default=NearNotification())
+    near_services = db.EmbeddedDocumentField(NearNotification, default=NearNotification())
 
 
 class NotificationsConfigurationEnterpriseUser(NotificationsConfiguration):
