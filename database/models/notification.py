@@ -44,8 +44,8 @@ class NotificationsConfigurationCommonUser(NotificationsConfiguration):
     suggest_preferred_service = db.BooleanField(default=True)
     state_postulation_changed = db.BooleanField(default=True)
     suggest_info_completion = db.BooleanField(default=True)
-    near_offers = db.BooleanField(default=True)
-    near_services = db.BooleanField(default=True)
+    near_offers = db.BooleanField(default=False)
+    near_services = db.BooleanField(default=False)
 
 
 class NotificationsConfigurationEnterpriseUser(NotificationsConfiguration):
