@@ -40,7 +40,7 @@ class NotificationsConfiguration(db.Document):
 
 class NearNotification(db.EmbeddedDocument):
     active = db.BooleanField(default=False)
-    radius = db.IntField(default=500)
+    radius = db.IntField(default=300)
 
 
 class NotificationsConfigurationCommonUser(NotificationsConfiguration):
