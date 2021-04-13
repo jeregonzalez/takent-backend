@@ -139,9 +139,9 @@ def get_postulants_by_state_by_month(date_from=None, date_to=None):
 
     if not date_from:
         if date_to:
-            min_date = date_to - relativedelta(months=11)
+            min_date = date_to - relativedelta(months=5)
         else:
-            min_date = date.today() - relativedelta(months=11)
+            min_date = date.today() - relativedelta(months=5)
     else:
         min_date = date_from
     max_date = date_to or date.today()
