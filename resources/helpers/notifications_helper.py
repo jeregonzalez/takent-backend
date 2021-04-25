@@ -160,8 +160,9 @@ class SuggestOfferNotification(Notification):
 class NearOffersNotification(Notification):
 
     type = 'near_offers'
-    title = 'Ofertas cerca tuyo'
-    description = 'Tenés {} ofertas cerca!'
+    title = 'Ofertas cercanas a tu ubicación'
+    description = 'Se han publicado {} ofertas cercanas a tu ubicación, relacionadas a tus rubros preferidos. ' \
+                  'Hacé click para conocer cuáles son!'
 
     def __init__(self, user, info):
         self.description = self.description.format(info.get('quantity'))
