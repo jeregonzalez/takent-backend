@@ -1,5 +1,6 @@
 from datetime import datetime
 
+from flask_jwt_extended import jwt_required
 from flask_restful import Resource
 
 from database.models.notification import Notification
@@ -17,6 +18,7 @@ NOTIFICATION_DAYS_WINDOW = 5
 
 class GenerateNotificationsApi(Resource):
 
+    @jwt_required(optional=True)
     def get(self):
         # Suggest information completion
         for user in CommonUser.objects(state='active'):
@@ -75,6 +77,7 @@ class GenerateNotificationsApi(Resource):
 
 class ExpireOffersApi(Resource):
 
+    @jwt_required(optional=True)
     def get(self):
         for offer in Offer.objects(state='active'):
             if (datetime.today() - offer.publication_date).days > 30:
@@ -85,6 +88,7 @@ class ExpireOffersApi(Resource):
 
 class ExpireServicesApi(Resource):
 
+    @jwt_required(optional=True)
     def get(self):
         for service in Service.objects(state='active'):
             if (datetime.today() - service.publication_date).days > 30:
@@ -95,6 +99,7 @@ class ExpireServicesApi(Resource):
 
 class PublishProgrammedOffersApi(Resource):
 
+    @jwt_required(optional=True)
     def get(self):
         for offer in Offer.objects(state='programmed'):
             if (datetime.today() - offer.publication_date).days == 0:
