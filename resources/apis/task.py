@@ -80,7 +80,7 @@ class ExpireOffersApi(Resource):
     @jwt_required(optional=True)
     def get(self):
         for offer in Offer.objects(state='active'):
-            if (datetime.today() - offer.publication_date).days > 30:
+            if (datetime.today() - offer.publication_date).days > 29:
                 offer.update(state=StateOffer.objects.get(name='finished'))
 
         return Message.ok()
@@ -91,7 +91,7 @@ class ExpireServicesApi(Resource):
     @jwt_required(optional=True)
     def get(self):
         for service in Service.objects(state='active'):
-            if (datetime.today() - service.publication_date).days > 30:
+            if (datetime.today() - service.publication_date).days > 29:
                 service.update(state=StateService.objects.get(name='finished'))
 
         return Message.ok()
