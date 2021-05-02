@@ -68,6 +68,6 @@ class Offer(db.Document):
     def update(self, *args, **kwargs):
         state = kwargs.get('state')
         if state:
-            user = user_helper.get_user_from_jwt(keys='user_account') or 'bot'
+            user = user_helper.get_user_from_jwt(keys='user_account') or 'system'
             kwargs['push__states_history'] = StateOfferHistory(state=state.name, user=user)
         return super(Offer, self).update(*args, **kwargs)
