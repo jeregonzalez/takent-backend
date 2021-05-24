@@ -1,7 +1,7 @@
 from functools import wraps
 
 from flask import request
-from flask_jwt_extended import verify_jwt_in_request, get_jwt_identity
+from flask_jwt_extended import verify_jwt_in_request, get_jwt_identity, jwt_required
 from flask_restful import abort
 from jwt import ExpiredSignatureError
 
@@ -44,6 +44,7 @@ def authentication_required(func):
     return wrapper
 
 
+@jwt_required(optional=True)
 def validate_user_exists(func):
     @wraps(func)
     def wrapper(*args, **kwargs):
