@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, date
 
 from flask_jwt_extended import jwt_required
 from flask_restful import Resource
@@ -102,7 +102,7 @@ class PublishProgrammedOffersApi(Resource):
     @jwt_required(optional=True)
     def get(self):
         for offer in Offer.objects(state='programmed'):
-            if (datetime.today() - offer.publication_date).days == 0:
+            if (date.today() - offer.publication_date.date()).days >= 0:
                 offer.update(state=StateOffer.objects.get(name='active'))
 
         return Message.ok()
