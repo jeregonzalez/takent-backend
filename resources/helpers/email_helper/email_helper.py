@@ -14,7 +14,6 @@ SMTP_PORT = 587
 
 COMMON_IMAGES = {
     'logo_takent': 'logo_takent.png',
-    'icon_twitter': 'logo_twitter.png',
     'icon_facebook': 'logo_facebook.png',
     'icon_instagram': 'logo_instagram.png',
     'background_takent': 'background_takent.jpg'
@@ -27,9 +26,7 @@ IMAGES = {
     'email_recovery': {
         'button_activation': 'button_activation.jpeg'
     },
-    'email_change_password': {
-        'button_change_password': 'button_change_password.jpeg'
-    },
+    'email_change_password': {},
     'email_delete_admin': {
         'button_be_admin': 'button_be_admin.jpeg'
     },
