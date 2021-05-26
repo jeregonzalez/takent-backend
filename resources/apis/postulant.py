@@ -103,7 +103,7 @@ class StatePostulantApi(Resource):
         postulant = Postulant.objects.get(id=id_postulant)
         enterprise = enterprise_helper.get_enterprise()
         state_manager = PostulantStateManager(postulant, enterprise)
-        if not(action == 'contact' and postulant.state.name == 'discarded'):
+        if not(action == 'contact' and postulant.state.name in ('discarded', 'contacted')):
             try:
                 state_manager.change(state=state)
             except Exception as e:
@@ -129,7 +129,7 @@ class StatePostulantApi(Resource):
 
         if state in ('pre_selected', 'contacted', 'discarded') and notifications_config_helper \
                 .is_notification_active(postulant.postulant, 'state_postulation_changed') and \
-                not(action == 'contact' and postulant.state.name == 'discarded'):
+                not(action == 'contact' and postulant.state.name in ('discarded', 'contacted')):
             StatePostulationChangedNotification(entity=postulant.id,
                                                 user=postulant.postulant,
                                                 offer_name=offer.title,
