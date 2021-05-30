@@ -15,6 +15,7 @@ class User(db.Document):
     birth_date = db.DateTimeField()
     phone = db.IntField()
     state = db.ReferenceField(StateUser, default=lambda: StateUser.objects.get(name='inactive'))
+    auth = db.IntField(default=1)
 
     meta = {
         'abstract': True,
