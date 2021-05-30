@@ -15,8 +15,7 @@ SMTP_PORT = 587
 COMMON_IMAGES = {
     'logo_takent': 'logo_takent.png',
     'icon_facebook': 'logo_facebook.png',
-    'icon_instagram': 'logo_instagram.png',
-    'background_takent': 'background_takent.jpg'
+    'icon_instagram': 'logo_instagram.png'
 }
 
 IMAGES = {
