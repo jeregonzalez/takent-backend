@@ -1,7 +1,7 @@
 import datetime
 
 from flask import request
-from flask_jwt_extended import create_access_token, verify_jwt_in_request
+from flask_jwt_extended import create_access_token, verify_jwt_in_request, get_jwt_identity
 from flask_restful import Resource, abort
 from jwt import ExpiredSignatureError
 
@@ -21,6 +21,8 @@ class AuthenticationApi(Resource):
             except Exception:
                 raise UnauthorizedException
             user = user_helper.get_user_from_jwt()
+            if get_jwt_identity().get('auth') != user.auth:
+                raise UnauthorizedException
         else:
             user_account = body.get('account')
             user_password = body.get('password')
@@ -37,9 +39,9 @@ class AuthenticationApi(Resource):
                 if not hasattr(user, 'permission') or user.permission.name != 'member':
                     kwargs['state'] = user.state.name
                 abort(400, **kwargs)
-        expires = datetime.timedelta(hours=4)
+        expires = datetime.timedelta(minutes=5)
         user_type = 'common' if isinstance(user, CommonUser) else 'enterprise'
-        identity = {'user_type': user_type, 'user_account': user.account}
+        identity = {'user_type': user_type, 'user_account': user.account, 'auth': user.auth}
         if user_type == 'enterprise':
             identity['permission'] = user.permission.name
         access_token = create_access_token(identity=identity,
