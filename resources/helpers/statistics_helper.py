@@ -12,9 +12,9 @@ def get_offers_per_month(date_from=None, date_to=None):
 
     date_filters = {}
     if date_from:
-        date_filters['publication_date__gte'] = date_from
+        date_filters['publication_date__gte'] = datetime.combine(date_from, datetime.min.time())
     if date_to:
-        date_filters['publication_date__lte'] = date_to
+        date_filters['publication_date__lte'] = datetime.combine(date_to, datetime.max.time())
 
     offers = Offer.objects(
         enterprise=enterprise,
@@ -49,9 +49,9 @@ def get_offers_with_greater_postulants_amount(date_from=None, date_to=None, quan
 
     date_filters = {}
     if date_from:
-        date_filters['publication_date__gte'] = date_from
+        date_filters['publication_date__gte'] = datetime.combine(date_from, datetime.min.time())
     if date_to:
-        date_filters['publication_date__lte'] = date_to
+        date_filters['publication_date__lte'] = datetime.combine(date_to, datetime.max.time())
 
     offers = Offer.objects(enterprise=enterprise, state__nin=['draft', 'programmed', 'deleted'], **date_filters)
 
@@ -77,9 +77,9 @@ def get_offers_by_state(date_from=None, date_to=None):
 
     date_filters = {}
     if date_from:
-        date_filters['publication_date__gte'] = date_from
+        date_filters['publication_date__gte'] = datetime.combine(date_from, datetime.min.time())
     if date_to:
-        date_filters['publication_date__lte'] = date_to
+        date_filters['publication_date__lte'] = datetime.combine(date_to, datetime.max.time())
 
     offers = Offer.objects(enterprise=enterprise, state__ne='deleted', **date_filters)
 
@@ -95,9 +95,9 @@ def get_postulants_age(date_from=None, date_to=None, min=18, max=65, interval_le
 
     date_filters = {}
     if date_from:
-        date_filters['publication_date__gte'] = date_from
+        date_filters['publication_date__gte'] = datetime.combine(date_from, datetime.min.time())
     if date_to:
-        date_filters['publication_date__lte'] = date_to
+        date_filters['publication_date__lte'] = datetime.combine(date_to, datetime.max.time())
 
     offers = Offer.objects(enterprise=enterprise, state__ne='deleted', **date_filters)
     postulant_ages = []
@@ -130,9 +130,9 @@ def get_postulants_by_state_by_month(date_from=None, date_to=None):
 
     date_filters = {}
     if date_from:
-        date_filters['publication_date__gte'] = date_from
+        date_filters['publication_date__gte'] = datetime.combine(date_from, datetime.min.time())
     if date_to:
-        date_filters['publication_date__lte'] = date_to
+        date_filters['publication_date__lte'] = datetime.combine(date_to, datetime.max.time())
 
     offers = Offer.objects(
         enterprise=enterprise,
