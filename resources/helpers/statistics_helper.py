@@ -113,6 +113,8 @@ def get_postulants_age(date_from=None, date_to=None, min=18, max=65, interval_le
             if age_range[0] <= age <= age_range[1]:
                 [stat for stat in result if stat.get('age') == label][0]['quantity'] += 1
                 break
+        else:
+            [stat for stat in result if stat.get('age') == label][0]['quantity'] += 1
 
     return result
 
