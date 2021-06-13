@@ -1,5 +1,4 @@
 from datetime import datetime
-from datetime import datetime
 from threading import Thread
 
 import mercadopago
