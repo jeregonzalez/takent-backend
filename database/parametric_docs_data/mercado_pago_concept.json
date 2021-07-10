@@ -1,7 +1,7 @@
 [
   {
     "id": "OFFER_SINGLE",
-    "common_name": "Publicaciones individuales",
+    "common_name": "Publicación individual",
     "item_template": {
       "id": "SINGLE",
       "title": "Publicación",
