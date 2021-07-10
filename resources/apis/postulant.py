@@ -67,11 +67,14 @@ class PostulateApi(Resource):
     }
 
     def post(self, id_offer=None):
+        user = user_helper.get_user_from_jwt()
         offer = Offer.objects.get(id=id_offer)
-        if any(postulant.postulant == user_helper.get_user_from_jwt() for postulant in offer.postulants):
+        if offer.cv_required and not user.curriculum:
+            abort(400, message='curriculum required')
+        if any(postulant.postulant == user for postulant in offer.postulants):
             abort(400, message='Already postulated')
         postulant_info = {
-            'postulant': user_helper.get_user_from_jwt()
+            'postulant': user
         }
         try:
             postulant = Postulant(**postulant_info)

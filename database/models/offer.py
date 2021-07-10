@@ -60,6 +60,7 @@ class Offer(db.Document):
     enterprise = db.ReferenceField(Enterprise)
     states_history = db.EmbeddedDocumentListField(StateOfferHistory)
     remote = db.BooleanField(default=False)
+    cv_required = db.BooleanField(default=False)
 
     def save(self, *args, **kwargs):
         self.states_history.create(state=self.state.name, user=user_helper.get_user_from_jwt(keys='user_account'))
