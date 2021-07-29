@@ -1,5 +1,6 @@
-from datetime import datetime
+from datetime import datetime, date
 
+from flask_jwt_extended import jwt_required
 from flask_restful import Resource
 
 from database.models.notification import Notification
@@ -17,6 +18,7 @@ NOTIFICATION_DAYS_WINDOW = 5
 
 class GenerateNotificationsApi(Resource):
 
+    @jwt_required(optional=True)
     def get(self):
         # Suggest information completion
         for user in CommonUser.objects(state='active'):
@@ -75,9 +77,10 @@ class GenerateNotificationsApi(Resource):
 
 class ExpireOffersApi(Resource):
 
+    @jwt_required(optional=True)
     def get(self):
         for offer in Offer.objects(state='active'):
-            if (datetime.today() - offer.publication_date).days > 30:
+            if (datetime.today() - offer.publication_date).days > 29:
                 offer.update(state=StateOffer.objects.get(name='finished'))
 
         return Message.ok()
@@ -85,9 +88,10 @@ class ExpireOffersApi(Resource):
 
 class ExpireServicesApi(Resource):
 
+    @jwt_required(optional=True)
     def get(self):
         for service in Service.objects(state='active'):
-            if (datetime.today() - service.publication_date).days > 30:
+            if (datetime.today() - service.publication_date).days > 29:
                 service.update(state=StateService.objects.get(name='finished'))
 
         return Message.ok()
@@ -95,9 +99,10 @@ class ExpireServicesApi(Resource):
 
 class PublishProgrammedOffersApi(Resource):
 
+    @jwt_required(optional=True)
     def get(self):
         for offer in Offer.objects(state='programmed'):
-            if (datetime.today() - offer.publication_date).days == 0:
+            if (date.today() - offer.publication_date.date()).days >= 0:
                 offer.update(state=StateOffer.objects.get(name='active'))
 
         return Message.ok()

@@ -14,10 +14,8 @@ SMTP_PORT = 587
 
 COMMON_IMAGES = {
     'logo_takent': 'logo_takent.png',
-    'icon_twitter': 'logo_twitter.png',
     'icon_facebook': 'logo_facebook.png',
-    'icon_instagram': 'logo_instagram.png',
-    'background_takent': 'background_takent.jpg'
+    'icon_instagram': 'logo_instagram.png'
 }
 
 IMAGES = {
@@ -27,9 +25,7 @@ IMAGES = {
     'email_recovery': {
         'button_activation': 'button_activation.jpeg'
     },
-    'email_change_password': {
-        'button_change_password': 'button_change_password.jpeg'
-    },
+    'email_change_password': {},
     'email_delete_admin': {
         'button_be_admin': 'button_be_admin.jpeg'
     },
@@ -54,8 +50,8 @@ SUBJECTS = {
     'email_change_password': 'Cambio de clave de acceso - Takent',
     'email_delete_admin': 'Asignación de nuevo admin - Takent',
     'email_contacted': 'Hola {}, la empresa {} quiere contactarse con vos',
-    'email_preselected': 'Respuesta a la postulación',
-    'email_discarded': 'Respuesta a la postulación'
+    'email_preselected': 'Respuesta a la postulación: {}',
+    'email_discarded': 'Respuesta a la postulación: {}'
 }
 
 
@@ -76,7 +72,10 @@ class Email(ABC):
         """
         Método que inicializa el email
         """
-        self.root_message['Subject'] = SUBJECTS.get(self.email_type)
+        subject = SUBJECTS.get(self.email_type)
+        if isinstance(self, EmailPreselected) or isinstance(self, EmailDiscarded):
+            subject = subject.format(self.enterprise_name)
+        self.root_message['Subject'] = subject
         self.root_message['From'] = ProjectVars.get_project_var('TAKENT_EMAIL')
         self.root_message['To'] = self.destination_email
         self.root_message.preamble = 'This is a multi-part message in MIME format.'

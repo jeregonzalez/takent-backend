@@ -1,6 +1,7 @@
 from threading import Thread
 
 from flask import request
+from flask_jwt_extended import jwt_required
 from flask_restful import Resource, abort
 from mongoengine import FieldDoesNotExist, ValidationError, DoesNotExist
 
@@ -165,6 +166,7 @@ class PasswordRecoverApi(Resource):
         new_password = password_helper.get_random_alphanumeric_string(10)
         user = user_helper.get_user(user_account=user_account)
         user.update_password(new_password=auth_helper.hash_password(new_password))
+        user.update(auth=user.auth + 1)
         Thread(target=lambda: EmailChangePassword(destination_email=user_account,
                                                   new_password=new_password).send_email()).start()
         return {'message': 'New password generated'}, 200
@@ -181,7 +183,9 @@ class ChangePasswordApi(Resource):
         if not new_password:
             raise MissingRequiredFieldsException
         new_password = auth_helper.hash_password(new_password)
-        user_helper.get_user_from_jwt().update_password(new_password=new_password)
+        user = user_helper.get_user_from_jwt()
+        user.update_password(new_password=new_password)
+        user.update(auth=user.auth + 1)
         return {'message': 'Password changed correctly'}, 200
 
 

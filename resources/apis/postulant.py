@@ -67,11 +67,14 @@ class PostulateApi(Resource):
     }
 
     def post(self, id_offer=None):
+        user = user_helper.get_user_from_jwt()
         offer = Offer.objects.get(id=id_offer)
-        if any(postulant.postulant == user_helper.get_user_from_jwt() for postulant in offer.postulants):
+        if offer.cv_required and not user.curriculum:
+            abort(400, message='curriculum required')
+        if any(postulant.postulant == user for postulant in offer.postulants):
             abort(400, message='Already postulated')
         postulant_info = {
-            'postulant': user_helper.get_user_from_jwt()
+            'postulant': user
         }
         try:
             postulant = Postulant(**postulant_info)
@@ -103,10 +106,11 @@ class StatePostulantApi(Resource):
         postulant = Postulant.objects.get(id=id_postulant)
         enterprise = enterprise_helper.get_enterprise()
         state_manager = PostulantStateManager(postulant, enterprise)
-        try:
-            state_manager.change(state=state)
-        except Exception as e:
-            raise SaveException(e)
+        if not(action == 'contact' and postulant.state.name in ('discarded', 'contacted')):
+            try:
+                state_manager.change(state=state)
+            except Exception as e:
+                raise SaveException(e)
         if action == 'pre_select':
             target = lambda: EmailPreselected(destination_email=postulant.postulant.id,
                                               enterprise_name=enterprise.fantasy_name,
@@ -127,7 +131,8 @@ class StatePostulantApi(Resource):
         Thread(target=target).start()
 
         if state in ('pre_selected', 'contacted', 'discarded') and notifications_config_helper \
-                .is_notification_active(postulant.postulant, 'state_postulation_changed'):
+                .is_notification_active(postulant.postulant, 'state_postulation_changed') and \
+                not(action == 'contact' and postulant.state.name in ('discarded', 'contacted')):
             StatePostulationChangedNotification(entity=postulant.id,
                                                 user=postulant.postulant,
                                                 offer_name=offer.title,

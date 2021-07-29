@@ -1,9 +1,0 @@
-server {
-    listen 5000;
-    server_name takent.tk www.takent.tk;
-
-    location / {
-        include uwsgi_params;
-        uwsgi_pass unix:/home/ubuntu/repositories/takent-backend/app.sock;
-    }
-}

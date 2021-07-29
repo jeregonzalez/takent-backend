@@ -1,6 +1,9 @@
 from abc import ABC
+from datetime import datetime
+from typing import Union
 
 from database.models import notification
+from database.models.user import User
 
 
 class Notification(ABC):
@@ -10,20 +13,25 @@ class Notification(ABC):
     title = None
     description = None
     entity = None
+    info = None
 
-    def __init__(self, user, entity=''):
+    def __init__(self, user, entity=None):
         self.user = user
-        self.entity = entity if type(entity) == str else str(entity)
+        self.entity = entity
 
     def save(self):
         if not isinstance(self.user, list):
             self.user = [self.user]
+        attributes = {
+            'type': self.type,
+            'title': self.title,
+            'description': self.description,
+            'entity': self.entity if isinstance(self.entity, str) else str(self.entity),
+            'info': self.info
+        }
+        attributes = {key: value for key, value in attributes.items() if value is not None}
         for user in self.user:
-            notification.Notification(user=user,
-                                      type=self.type,
-                                      title=self.title,
-                                      description=self.description,
-                                      entity=self.entity).save()
+            notification.Notification(user=user, **attributes).save()
 
 
 class RequestedServiceNotification(Notification):
@@ -147,3 +155,48 @@ class SuggestOfferNotification(Notification):
     type = 'suggest_offer'
     title = 'Búsqueda recomendada'
     description = 'foo'
+
+
+class NearOffersNotification(Notification):
+
+    type = 'near_offers'
+    title = 'Ofertas cercanas a tu ubicación'
+    description = 'Se han publicado {} ofertas cercanas a tu ubicación, relacionadas a tus rubros preferidos. ' \
+                  'Hacé click para conocer cuáles son!'
+
+    def __init__(self, user, info):
+        self.description = self.description.format(info.get('quantity'))
+        self.info = info
+        super().__init__(user=user)
+
+
+class NearServicesNotification(Notification):
+    type = 'near_services'
+    title = 'Servicios cerca tuyo'
+    description = 'Tenés {} servicios cerca!'
+
+    def __init__(self, user, info):
+        self.description = self.description.format(info.get('quantity'))
+        self.info = info
+        super().__init__(user=user)
+
+
+def get_days_from_last_notification(user: User, notification_type: str) -> Union[int, None]:
+    last_notification = notification.Notification.objects(
+        user=user,
+        type=notification_type
+    ).order_by('-date').first()
+    if not last_notification:
+        return None
+    return abs((last_notification.date - datetime.today()).days)
+
+
+def get_location_from_last_notification(user: User, notification_type: str) -> Union[tuple, None]:
+    last_notification: notification.Notification = notification.Notification.objects(
+        user=user,
+        type=notification_type
+    ).order_by('-date').first()
+    if not last_notification:
+        return None
+    params: dict = last_notification.info.get('params')
+    return params.get('latitude'), params.get('longitude')

@@ -20,3 +20,4 @@ class Enterprise(db.Document):
     member_users = db.ListField(db.ReferenceField(EnterpriseUser))
     enterprise_type = db.StringField()
     sector = db.StringField()
+    verified = db.BooleanField(default=False)

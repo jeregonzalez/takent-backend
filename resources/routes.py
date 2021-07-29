@@ -1,27 +1,28 @@
+from resources.apis.authentication import AuthenticationApi
 from resources.apis.common_user import AssessmentStatisticsApi
-from resources.apis.enterprise_statistics import StatisticsApi
-from resources.apis.member_user import MemberUserApi, UsersByEnterprise
+from resources.apis.development import MongoApi
 from resources.apis.education import EducationLevelApi
 from resources.apis.enterprise import EnterpriseApi, ProfilePhotoEnterpriseApi, EnterpriseImagesApi
-from resources.apis.authentication import AuthenticationApi
+from resources.apis.enterprise_statistics import StatisticsApi
 from resources.apis.enterprise_type import EnterpriseTypeApi
+from resources.apis.feedbacks import FeedbackApi
+from resources.apis.geolocation import GeolocationApi
 from resources.apis.language import LanguageApi, LanguageLevelApi
+from resources.apis.member_user import MemberUserApi, UsersByEnterprise
 from resources.apis.mercadopago import MercadoPagoApi, OfferPackApi, MPNotificationsApi, PreferredServiceApi
-from resources.apis.development import MongoApi
 from resources.apis.notification import NotificationApi, NotificationsConfigurationApi
+from resources.apis.offer import OfferApi, OfferImagesApi
 from resources.apis.place import CountriesApi, ProvincesApi, CitiesApi
 from resources.apis.postulant import PostulantApi, PostulateApi, StatePostulantApi
 from resources.apis.postulation import PostulationApi
-from resources.apis.sector import SectorApi
 from resources.apis.profession import ProfessionApi
+from resources.apis.sector import SectorApi
 from resources.apis.service import ServiceApi, ServiceImagesApi
 from resources.apis.service_request import ServiceRequestApi, NewServiceRequestApi, \
     MyServiceRequestsApi
 from resources.apis.task import GenerateNotificationsApi, ExpireOffersApi, ExpireServicesApi, PublishProgrammedOffersApi
 from resources.apis.user import ImageApi, CurriculumApi, UserApi, PasswordRecoverApi, \
-    ChangePasswordApi, \
-    UserExistsValidationApi, ActivateAccountApi, UserAttributesListApi, RecoverAccountApi, DoAdminApi
-from resources.apis.offer import OfferApi, OfferImagesApi
+    ChangePasswordApi, UserExistsValidationApi, ActivateAccountApi, UserAttributesListApi, RecoverAccountApi, DoAdminApi
 from resources.apis.user_and_enterprise import UserAndEnterpriseApi
 
 
@@ -104,3 +105,7 @@ def initialize_routes(api):
     api.add_resource(ExpireOffersApi, '/api/v1/task/expire_offers')
     api.add_resource(ExpireServicesApi, '/api/v1/task/expire_services')
     api.add_resource(PublishProgrammedOffersApi, '/api/v1/task/publish_programmed_offers')
+    # Geolocation
+    api.add_resource(GeolocationApi, '/api/v1/geolocation/<obj_type>')
+    # Feedback
+    api.add_resource(FeedbackApi, '/api/v1/feedback')

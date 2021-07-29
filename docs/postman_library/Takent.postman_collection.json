@@ -2399,7 +2399,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{host}}/offer?sort=random",
+							"raw": "{{host}}/offer?sort=random&location=-31.456480,-64.22723,5000&filter_by_preference=false",
 							"host": [
 								"{{host}}"
 							],
@@ -2486,6 +2486,15 @@
 								{
 									"key": "sort",
 									"value": "random"
+								},
+								{
+									"key": "location",
+									"value": "-31.456480,-64.22723,5000",
+									"description": "latitude, longitude, ratio (meters)"
+								},
+								{
+									"key": "filter_by_preference",
+									"value": "false"
 								}
 							]
 						}
@@ -2911,7 +2920,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{host}}/service",
+							"raw": "{{host}}/service?sort=random&location=-31.456480,-64.22723,30000&exclude_mine=true",
 							"host": [
 								"{{host}}"
 							],
@@ -2963,12 +2972,25 @@
 								{
 									"key": "sort",
 									"value": "random",
-									"description": "asc, desc, random",
-									"disabled": true
+									"description": "asc, desc, random"
 								},
 								{
 									"key": "address.province",
 									"value": "La Rioja",
+									"disabled": true
+								},
+								{
+									"key": "location",
+									"value": "-31.456480,-64.22723,30000",
+									"description": "latitude,longitude,ratio(meters)"
+								},
+								{
+									"key": "exclude_mine",
+									"value": "true"
+								},
+								{
+									"key": "filter_by_preference",
+									"value": "true",
 									"disabled": true
 								}
 							]
@@ -3870,7 +3892,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"state_postulation_changed\": false\n}",
+							"raw": "{\n    \"near_offers\": false\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -3962,6 +3984,136 @@
 							"path": [
 								"task",
 								"expire_services"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Geolocation",
+			"item": [
+				{
+					"name": "Geolocation offers",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{user_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/geolocation/offers?latitude=-31.456480&longitude=-64.227238&radius=5000&filter_by_preferred=False",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"geolocation",
+								"offers"
+							],
+							"query": [
+								{
+									"key": "latitude",
+									"value": "-31.456480"
+								},
+								{
+									"key": "longitude",
+									"value": "-64.227238"
+								},
+								{
+									"key": "radius",
+									"value": "5000",
+									"description": "in meters"
+								},
+								{
+									"key": "filter_by_preferred",
+									"value": "False"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Geolocation services",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{user_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/geolocation/services?latitude=-31.456480&longitude=-64.227238&radius=30000&filter_by_preferred=False",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"geolocation",
+								"services"
+							],
+							"query": [
+								{
+									"key": "latitude",
+									"value": "-31.456480"
+								},
+								{
+									"key": "longitude",
+									"value": "-64.227238"
+								},
+								{
+									"key": "radius",
+									"value": "30000"
+								},
+								{
+									"key": "filter_by_preferred",
+									"value": "False",
+									"description": "in meters"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Feedback",
+			"item": [
+				{
+					"name": "Feedback",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"jereegonzalez@gmail.com\",\n    \"text\": \"Una aplicación del orto, la verdad no me sirvió ni para limpiarme el ojete\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/feedback",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"feedback"
 							]
 						}
 					},
